@@ -21,10 +21,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andresual.dev.tms.Activity.Adapter.SebelumnyaListAdapter;
 import com.andresual.dev.tms.Activity.Manager.SessionKendaraan;
 import com.andresual.dev.tms.Activity.Manager.SessionManager;
 import com.andresual.dev.tms.Activity.Maps.DirectionFinder;
 import com.andresual.dev.tms.Activity.Maps.DirectionFinderListener;
+import com.andresual.dev.tms.Activity.Model.JobOrder2Model;
 import com.andresual.dev.tms.Activity.Model.PassingLocationModel;
 import com.andresual.dev.tms.Activity.Model.RouteModel;
 import com.andresual.dev.tms.R;
@@ -83,6 +85,8 @@ public class MapsOrderActivity extends FragmentActivity implements OnMapReadyCal
     public static String lng;
     String latitude, longitude;
 
+    JobOrder2Model modelData;
+
     public PassingLocationModel getPassingLocationModel() {
         return passingLocationModel;
     }
@@ -97,11 +101,18 @@ public class MapsOrderActivity extends FragmentActivity implements OnMapReadyCal
         setContentView(R.layout.activity_maps_order);
 
         //PASSING//
-        pickLat = this.getIntent().getStringExtra("latitude");
-        pickLng = this.getIntent().getStringExtra("longitude");
-        delivLat = this.getIntent().getStringExtra("delivLat");
-        delivLng = this.getIntent().getStringExtra("delivLng");
-        jobType = this.getIntent().getIntExtra("jobType", 0);
+        modelData = getIntent().getParcelableExtra(SebelumnyaListAdapter.INTENT_DATA);
+
+        pickLat = modelData.getJobPickupLatitude();
+        pickLng = modelData.getJobPickupLongitude();
+        delivLat = modelData.getJobDeliverLatitude();
+        delivLng = modelData.getJobDeliverLongitude();
+        jobType = modelData.getJobType();
+//        pickLat = this.getIntent().getStringExtra("latitude");
+//        pickLng = this.getIntent().getStringExtra("longitude");
+//        delivLat = this.getIntent().getStringExtra("delivLat");
+//        delivLng = this.getIntent().getStringExtra("delivLng");
+//        jobType = this.getIntent().getIntExtra("jobType", 0);
         ///////////
 
         Dialog dialog = new AlertDialog.Builder(this)
@@ -133,9 +144,9 @@ public class MapsOrderActivity extends FragmentActivity implements OnMapReadyCal
         idDriver = user.get(SessionManager.ID_DRIVER);
         email = user.get(SessionManager.EMAIL_DRIVER);
 
-        jobId = this.getIntent().getIntExtra("jobId", 0);
-        latitude = this.getIntent().getStringExtra("latitude");
-        longitude = this.getIntent().getStringExtra("longitude");
+        jobId = modelData.getJobId();
+        latitude =modelData.getJobPickupLatitude();
+        longitude = modelData.getJobPickupLongitude();
 
 //        btnFindPath = (Button) findViewById(R.id.btnFindPath);
         Button btnJemput = (Button) findViewById(R.id.btn_terima);

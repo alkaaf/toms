@@ -41,6 +41,7 @@ public class AuthController {
     Context context;
 
     private static AuthController mInstance;
+
     public static AuthController getmInstance() {
         if (mInstance == null) {
             mInstance = new AuthController();
@@ -51,6 +52,7 @@ public class AuthController {
     String id;
 
     public static String emailPass;
+
     public static String getEmail() {
         return emailPass;
     }
@@ -100,7 +102,7 @@ public class AuthController {
         params.put("id", "1");
         params.put("password", registerModel.getPassword());
 //        params.put("tokenreg", registerModel.getRegtoken());
-        Log.i("signup",params.toString());
+        Log.i("signup", params.toString());
 
         RequestQueue queue = Volley.newRequestQueue(registerActivity);
         StringRequest sr = new StringRequest(Request.Method.POST, "http://manajemenkendaraan.com/tms/byamik.asp",
@@ -133,7 +135,7 @@ public class AuthController {
             }
         }) {
             @Override
-            protected Map<String,String> getParams(){
+            protected Map<String, String> getParams() {
                 return params;
             }
         };
@@ -146,7 +148,7 @@ public class AuthController {
         params.put("email", driverActive.getEmail());
         params.put("password", driverActive.getPassword());
         params.put("tokenreg", driverActive.getToken());
-        Log.i("signin",params.toString());
+        Log.i("signin", params.toString());
 
         RequestQueue queue = Volley.newRequestQueue(mainActivity);
         StringRequest sr = new StringRequest(Request.Method.POST, "http://manajemenkendaraan.com/tms/byamik.asp",
@@ -164,15 +166,15 @@ public class AuthController {
                                 Log.i("salah", String.valueOf(returnModel.getStatusCode()));
                             }
 
-                                if (returnModel.getStatusCode() == 200) {
-                                    System.out.println("token" + obj.getString("token"));
-                                    String token = obj.getString("token");
-                                    driverActive.setToken(token);
+                            if (returnModel.getStatusCode() == 200) {
+                                System.out.println("token" + obj.getString("token"));
+                                String token = obj.getString("token");
+                                driverActive.setToken(token);
 
-                                    JSONObject data = obj.getJSONObject("data");
-                                    driverModelArrayList = new ArrayList<>();
+                                JSONObject data = obj.getJSONObject("data");
+                                driverModelArrayList = new ArrayList<>();
 
-                                    for (int i = 0; i < data.length(); i++) {
+                                for (int i = 0; i < data.length(); i++) {
                                     driverActive.setId(data.getInt("id"));
                                     driverActive.setEmail(data.getString("email"));
                                     driverActive.setPassword(data.getString("password"));
@@ -185,10 +187,10 @@ public class AuthController {
                                     driverActive.setUsername(data.getString("nama"));
                                     driverModelArrayList.add(driverActive);
                                     id = data.getString("id_driver");
-                                    }
                                 }
-                                mainActivity.handleSignIn(returnModel);
-                                emailPass = driverActive.getEmail();
+                            }
+                            mainActivity.handleSignIn(returnModel);
+                            emailPass = driverActive.getEmail();
 
                             Log.i("driverss", id);
                             Intent intent = new Intent(context, BerandaFragment.class);
@@ -205,22 +207,22 @@ public class AuthController {
 //                Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
 //                VolleyLog.d(TAG, "Error: " + error.getMessage());
             }
-        }){
+        }) {
             @Override
-            protected Map<String,String> getParams(){
+            protected Map<String, String> getParams() {
                 return params;
             }
         };
         queue.add(sr);
     }
 
-    public String trimMessage(String json, String key){
+    public String trimMessage(String json, String key) {
         String trimmedString = null;
 
-        try{
+        try {
             JSONObject obj = new JSONObject(json);
             trimmedString = obj.getString(key);
-        } catch(JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
             return null;
         }
@@ -228,7 +230,7 @@ public class AuthController {
         return trimmedString;
     }
 
-    public void displayMessage(String toastString){
+    public void displayMessage(String toastString) {
         Toast.makeText(context, toastString, Toast.LENGTH_LONG).show();
     }
 }

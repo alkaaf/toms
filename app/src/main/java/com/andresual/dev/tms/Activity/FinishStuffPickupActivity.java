@@ -8,8 +8,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.andresual.dev.tms.Activity.Adapter.SebelumnyaListAdapter;
 import com.andresual.dev.tms.Activity.Manager.SessionKendaraan;
 import com.andresual.dev.tms.Activity.Manager.SessionManager;
+import com.andresual.dev.tms.Activity.Model.JobOrder2Model;
 import com.andresual.dev.tms.R;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -31,12 +33,12 @@ public class FinishStuffPickupActivity extends FragmentActivity {
     SessionKendaraan sessionKendaraan;
     String idDriver, email, idKendaraan;
     String delivLat, delivLng;
-
+    JobOrder2Model modelData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finish_stuff_pickup);
-
+        modelData = getIntent().getParcelableExtra(SebelumnyaListAdapter.INTENT_DATA);
         Button btnFinishStuff = findViewById(R.id.btn_finish_to_stuff_pickup);
         Button btnTolak = findViewById(R.id.btn_tolak);
 
@@ -52,11 +54,16 @@ public class FinishStuffPickupActivity extends FragmentActivity {
         idDriver = user.get(SessionManager.ID_DRIVER);
         email = user.get(SessionManager.EMAIL_DRIVER);
 
-        jobId = this.getIntent().getIntExtra("jobId", 0);
-        pickLat = this.getIntent().getStringExtra("latitude");
-        pickLong = this.getIntent().getStringExtra("longitude");
-        delivLat = this.getIntent().getStringExtra("delivLat");
-        delivLng = this.getIntent().getStringExtra("delivLng");
+//        jobId = this.getIntent().getIntExtra("jobId", 0);
+//        pickLat = this.getIntent().getStringExtra("latitude");
+//        pickLong = this.getIntent().getStringExtra("longitude");
+//        delivLat = this.getIntent().getStringExtra("delivLat");
+//        delivLng = this.getIntent().getStringExtra("delivLng");
+        jobId = modelData.getJobId();
+        pickLat = modelData.getJobPickupLatitude();
+        pickLong =modelData.getJobPickupLongitude();
+        delivLat = modelData.getJobDeliverLatitude();
+        delivLng = modelData.getJobDeliverLongitude();
 
         btnFinishStuff.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,11 +92,12 @@ public class FinishStuffPickupActivity extends FragmentActivity {
                             Log.i("messages", obj.getString("message"));
 
                             Intent intent = new Intent(FinishStuffPickupActivity.this, MengantarActivity.class);
-                            intent.putExtra("jobId", jobId);
-                            intent.putExtra("latitude", pickLat);
-                            intent.putExtra("longitude", pickLong);
-                            intent.putExtra("delivLat", delivLat);
-                            intent.putExtra("delivLng", delivLng);
+                            intent.putExtra(SebelumnyaListAdapter.INTENT_DATA, modelData);
+//                            intent.putExtra("jobId", jobId);
+//                            intent.putExtra("latitude", pickLat);
+//                            intent.putExtra("longitude", pickLong);
+//                            intent.putExtra("delivLat", delivLat);
+//                            intent.putExtra("delivLng", delivLng);
                             startActivity(intent);
                             finish();
                         } catch (Throwable t) {

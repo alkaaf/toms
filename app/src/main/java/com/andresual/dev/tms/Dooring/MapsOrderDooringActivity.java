@@ -21,12 +21,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andresual.dev.tms.Activity.Adapter.SebelumnyaListAdapter;
 import com.andresual.dev.tms.Activity.DashboardActivity;
 import com.andresual.dev.tms.Activity.Manager.SessionKendaraan;
 import com.andresual.dev.tms.Activity.Manager.SessionManager;
 import com.andresual.dev.tms.Activity.Maps.DirectionFinder;
 import com.andresual.dev.tms.Activity.Maps.DirectionFinderListener;
 import com.andresual.dev.tms.Activity.MapsController;
+import com.andresual.dev.tms.Activity.Model.JobOrder2Model;
 import com.andresual.dev.tms.Activity.Model.PassingLocationModel;
 import com.andresual.dev.tms.Activity.Model.RouteModel;
 import com.andresual.dev.tms.Activity.SiapAntarActivity;
@@ -85,7 +87,7 @@ public class MapsOrderDooringActivity extends FragmentActivity implements OnMapR
     public static String lat;
     public static String lng;
     String latitude, longitude;
-
+    JobOrder2Model modelData;
     public PassingLocationModel getPassingLocationModel() {
         return passingLocationModel;
     }
@@ -98,12 +100,17 @@ public class MapsOrderDooringActivity extends FragmentActivity implements OnMapR
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_order);
-
+        modelData = getIntent().getParcelableExtra(SebelumnyaListAdapter.INTENT_DATA);
+        jobId = modelData.getJobId();
+        pickLat = modelData.getJobPickupLatitude();
+        pickLng =modelData.getJobPickupLongitude();
+        delivLat = modelData.getJobDeliverLatitude();
+        delivLng = modelData.getJobDeliverLongitude();
         //PASSING//
-        pickLat = this.getIntent().getStringExtra("latitude");
-        pickLng = this.getIntent().getStringExtra("longitude");
-        delivLat = this.getIntent().getStringExtra("delivLat");
-        delivLng = this.getIntent().getStringExtra("delivLng");
+//        pickLat = this.getIntent().getStringExtra("latitude");
+//        pickLng = this.getIntent().getStringExtra("longitude");
+//        delivLat = this.getIntent().getStringExtra("delivLat");
+//        delivLng = this.getIntent().getStringExtra("delivLng");
         ///////////
 
         Dialog dialog = new AlertDialog.Builder(this)
@@ -135,9 +142,9 @@ public class MapsOrderDooringActivity extends FragmentActivity implements OnMapR
         idDriver = user.get(SessionManager.ID_DRIVER);
         email = user.get(SessionManager.EMAIL_DRIVER);
 
-        jobId = this.getIntent().getIntExtra("jobId", 0);
-        latitude = this.getIntent().getStringExtra("latitude");
-        longitude = this.getIntent().getStringExtra("longitude");
+        jobId = modelData.getJobId();
+        latitude = modelData.getJobPickupLatitude();
+        longitude = modelData.getJobPickupLongitude();
 
 //        btnFindPath = (Button) findViewById(R.id.btnFindPath);
         Button btnJemput = (Button) findViewById(R.id.btn_terima);
@@ -200,8 +207,8 @@ public class MapsOrderDooringActivity extends FragmentActivity implements OnMapR
     }
 
     private void sendRequest() {
-        pickLat = this.getIntent().getStringExtra("latitude");
-        pickLng = this.getIntent().getStringExtra("longitude");
+//        pickLat = this.getIntent().getStringExtra("latitude");
+//        pickLng = this.getIntent().getStringExtra("longitude");
         String origin = lat + "," + lng;
         String destination = pickLat + "," + pickLng;
 

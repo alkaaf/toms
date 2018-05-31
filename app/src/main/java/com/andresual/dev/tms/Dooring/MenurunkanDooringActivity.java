@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andresual.dev.tms.Activity.Adapter.SebelumnyaListAdapter;
 import com.andresual.dev.tms.Activity.DashboardActivity;
 import com.andresual.dev.tms.Activity.Manager.SessionKendaraan;
 import com.andresual.dev.tms.Activity.Manager.SessionManager;
@@ -26,6 +27,7 @@ import com.andresual.dev.tms.Activity.Maps.DirectionFinder;
 import com.andresual.dev.tms.Activity.Maps.DirectionFinderListener;
 import com.andresual.dev.tms.Activity.MapsController;
 import com.andresual.dev.tms.Activity.MapsOrderActivity;
+import com.andresual.dev.tms.Activity.Model.JobOrder2Model;
 import com.andresual.dev.tms.Activity.Model.PassingLocationModel;
 import com.andresual.dev.tms.Activity.Model.RouteModel;
 import com.andresual.dev.tms.R;
@@ -88,12 +90,13 @@ public class MenurunkanDooringActivity extends FragmentActivity implements OnMap
     LatLng latLng;
     List<LatLng> decodedPath;
     Location location;
+    JobOrder2Model modelData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menurunkan);
-
+        modelData = getIntent().getParcelableExtra(SebelumnyaListAdapter.INTENT_DATA);
         googleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
@@ -112,9 +115,15 @@ public class MenurunkanDooringActivity extends FragmentActivity implements OnMap
         idDriver = user.get(SessionManager.ID_DRIVER);
         email = user.get(SessionManager.EMAIL_DRIVER);
 
-        jobId = this.getIntent().getIntExtra("jobId", 0);
-        final String delivLat = this.getIntent().getStringExtra("delivLat");
-        final String delivLong = this.getIntent().getStringExtra("delivLng");
+        jobId = modelData.getJobId();
+        pickLat = modelData.getJobPickupLatitude();
+        pickLong =modelData.getJobPickupLongitude();
+        delivLat = modelData.getJobDeliverLatitude();
+        delivLong = modelData.getJobDeliverLongitude();
+
+//        jobId = this.getIntent().getIntExtra("jobId", 0);
+//        final String delivLat = this.getIntent().getStringExtra("delivLat");
+//        final String delivLong = this.getIntent().getStringExtra("delivLng");
 
         Button btnMenurunkan = (Button) findViewById(R.id.btn_menurunkan);
         btnMenurunkan.setOnClickListener(new View.OnClickListener() {
@@ -242,9 +251,9 @@ public class MenurunkanDooringActivity extends FragmentActivity implements OnMap
 
     private void sendRequest() {
 
-        jobId = this.getIntent().getIntExtra("jobId", 0);
-        delivLat = this.getIntent().getStringExtra("delivLat");
-        delivLong = this.getIntent().getStringExtra("delivLng");
+//        jobId = this.getIntent().getIntExtra("jobId", 0);
+//        delivLat = this.getIntent().getStringExtra("delivLat");
+//        delivLong = this.getIntent().getStringExtra("delivLng");
         String origin = lat + "," + lng;
 //        String destination = this.getIntent().getStringExtra("delivLat") + "," + this.getIntent().getStringExtra("delivLng");
         String destination = delivLat + "," + delivLong;

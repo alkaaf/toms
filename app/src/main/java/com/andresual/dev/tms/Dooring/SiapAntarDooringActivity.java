@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andresual.dev.tms.Activity.Adapter.SebelumnyaListAdapter;
 import com.andresual.dev.tms.Activity.DashboardActivity;
 import com.andresual.dev.tms.Activity.MainActivity;
 import com.andresual.dev.tms.Activity.Manager.SessionKendaraan;
@@ -30,6 +31,7 @@ import com.andresual.dev.tms.Activity.Maps.DirectionFinderListener;
 import com.andresual.dev.tms.Activity.MapsController;
 import com.andresual.dev.tms.Activity.MapsOrderActivity;
 import com.andresual.dev.tms.Activity.MengantarActivity;
+import com.andresual.dev.tms.Activity.Model.JobOrder2Model;
 import com.andresual.dev.tms.Activity.Model.PassingLocationModel;
 import com.andresual.dev.tms.Activity.Model.RouteModel;
 import com.andresual.dev.tms.Activity.TolakOrderActivity;
@@ -122,6 +124,7 @@ public class SiapAntarDooringActivity extends FragmentActivity implements
     private GeofencingClient mGeofencingClient;
 
     private static final String NOTIFICATION_MSG = "NOTIFICATION MSG";
+    JobOrder2Model modelData;
 
     // Create a Intent send by the notification
     public static Intent makeNotificationIntent(Context context, String msg) {
@@ -134,7 +137,7 @@ public class SiapAntarDooringActivity extends FragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_siap_antar);
-
+        modelData = getIntent().getParcelableExtra(SebelumnyaListAdapter.INTENT_DATA);
         mGeofenceList = new ArrayList<Geofence>();
 
         googleApiClient = new GoogleApiClient.Builder(this)
@@ -157,11 +160,17 @@ public class SiapAntarDooringActivity extends FragmentActivity implements
         idDriver = user.get(SessionManager.ID_DRIVER);
         email = user.get(SessionManager.EMAIL_DRIVER);
 
-        jobId = this.getIntent().getIntExtra("jobId", 0);
-        pickLat = this.getIntent().getStringExtra("latitude");
-        pickLong = this.getIntent().getStringExtra("longitude");
-        delivLat = this.getIntent().getStringExtra("delivLat");
-        delivLng = this.getIntent().getStringExtra("delivLng");
+        jobId = modelData.getJobId();
+        pickLat = modelData.getJobPickupLatitude();
+        pickLong =modelData.getJobPickupLongitude();
+        delivLat = modelData.getJobDeliverLatitude();
+        delivLng = modelData.getJobDeliverLongitude();
+
+//        jobId = this.getIntent().getIntExtra("jobId", 0);
+//        pickLat = this.getIntent().getStringExtra("latitude");
+//        pickLong = this.getIntent().getStringExtra("longitude");
+//        delivLat = this.getIntent().getStringExtra("delivLat");
+//        delivLng = this.getIntent().getStringExtra("delivLng");
 
         btnTolak = findViewById(R.id.btn_tolak);
         btnSiapAntar = findViewById(R.id.btn_siap_antar);
@@ -304,9 +313,12 @@ public class SiapAntarDooringActivity extends FragmentActivity implements
 
     private void sendRequest() {
 
-        jobId = this.getIntent().getIntExtra("jobId", 0);
-        pickLat = this.getIntent().getStringExtra("latitude");
-        pickLong = this.getIntent().getStringExtra("longitude");
+//        jobId = this.getIntent().getIntExtra("jobId", 0);
+//        pickLat = this.getIntent().getStringExtra("latitude");
+//        pickLong = this.getIntent().getStringExtra("longitude");
+        jobId = modelData.getJobId();
+        pickLat = modelData.getJobPickupLatitude();
+        pickLong = modelData.getJobPickupLongitude();
         String origin = lat + "," + lng;
         String destination = pickLat + "," + pickLong;
 

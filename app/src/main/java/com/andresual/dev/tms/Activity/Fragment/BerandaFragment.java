@@ -36,6 +36,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -219,22 +220,22 @@ public class BerandaFragment extends Fragment {
                             for (int i = 0; i < job.length(); i++) {
                                 JSONObject hasil = job.getJSONObject(i);
                                 Log.i("haha", hasil.toString());
-                                JobOrder2Model jobOrder2Model = new JobOrder2Model();
-                                jobOrder2Model.setOrderNo(hasil.getString("order_id"));
-                                jobOrder2Model.setTanggal(hasil.getString("job_blast"));
-                                jobOrder2Model.setContainerNo(hasil.getString("container_no"));
-                                jobOrder2Model.setContainerName(hasil.getString("container_name"));
-                                jobOrder2Model.setComodity(hasil.getString("container_cargo_name"));
-                                jobOrder2Model.setJobName(hasil.getString("job_pickup_name"));
-                                jobOrder2Model.setOrigin(hasil.getString("job_pickup_address"));
-                                jobOrder2Model.setDestination(hasil.getString("job_deliver_address"));
-                                jobOrder2Model.setJobId(hasil.getInt("id"));
-                                jobOrder2Model.setJobDeliverStatus(hasil.getInt("job_deliver_status"));
-                                jobOrder2Model.setJobPickupLatitude(hasil.getString("job_pickup_latitude"));
-                                jobOrder2Model.setJobPickupLongitude(hasil.getString("job_pickup_longitude"));
-                                jobOrder2Model.setJobDeliverLatitude(hasil.getString("job_deliver_latitude"));
-                                jobOrder2Model.setJobDeliverLongitude(hasil.getString("job_deliver_longitude"));
-                                jobOrder2Model.setJobType(hasil.getInt("job_type"));
+                                JobOrder2Model jobOrder2Model = new Gson().fromJson(hasil.toString(),JobOrder2Model.class);
+//                                jobOrder2Model.setOrderNo(hasil.getString("order_id"));
+//                                jobOrder2Model.setTanggal(hasil.getString("job_blast"));
+//                                jobOrder2Model.setContainerNo(hasil.getString("container_no"));
+//                                jobOrder2Model.setContainerName(hasil.getString("container_name"));
+//                                jobOrder2Model.setComodity(hasil.getString("container_cargo_name"));
+//                                jobOrder2Model.setJobName(hasil.getString("job_pickup_name"));
+//                                jobOrder2Model.setOrigin(hasil.getString("job_pickup_address"));
+//                                jobOrder2Model.setDestination(hasil.getString("job_deliver_address"));
+//                                jobOrder2Model.setJobId(hasil.getInt("id"));
+//                                jobOrder2Model.setJobDeliverStatus(hasil.getInt("job_deliver_status"));
+//                                jobOrder2Model.setJobPickupLatitude(hasil.getString("job_pickup_latitude"));
+//                                jobOrder2Model.setJobPickupLongitude(hasil.getString("job_pickup_longitude"));
+//                                jobOrder2Model.setJobDeliverLatitude(hasil.getString("job_deliver_latitude"));
+//                                jobOrder2Model.setJobDeliverLongitude(hasil.getString("job_deliver_longitude"));
+//                                jobOrder2Model.setJobType(hasil.getInt("job_type"));
                                 Log.i("onResponse:", jobOrder2Model.getJobType().toString());
                                 jobOrder2ModelArrayList.add(jobOrder2Model);
                                 Log.i("array", jobOrder2ModelArrayList.toString());
@@ -298,26 +299,26 @@ public class BerandaFragment extends Fragment {
                         try {
                             JSONObject obj = new JSONObject(response);
                             JSONObject data = obj.getJSONObject("data");
-                            dashboardPointModelArrayList = new ArrayList<>();
-                            for (int i = 0; i < data.length(); i++) {
-                                Log.i("point", data.toString());
-                                DashboardPointModel dashboardPointModel = new DashboardPointModel();
-                                dashboardPointModel.setBulanIni(data.getString("bulan_ini"));
-                                bulanIni = dashboardPointModel.getBulanIni();
-                                dashboardPointModel.setHariIni(data.getString("hari_ini"));
-                                hariIni = dashboardPointModel.getHariIni();
-                                dashboardPointModel.setSelesai(data.getString("selesai"));
-                                selesai = dashboardPointModel.getSelesai();
-                                dashboardPointModel.setPoin(data.getString("poin"));
-                                point = dashboardPointModel.getPoin();
-                                Log.i("onResponsepoin:", dashboardPointModel.getHariIni());
-                                dashboardPointModelArrayList.add(dashboardPointModel);
-
+//                            dashboardPointModelArrayList = new ArrayList<>();
+//                            for (int i = 0; i < data.length(); i++) {
+//                                Log.i("point", data.toString());
+//                                DashboardPointModel dashboardPointModel = new DashboardPointModel();
+//                                dashboardPointModel.setBulanIni(data.getString("bulan_ini"));
+//                                bulanIni = dashboardPointModel.getBulanIni();
+//                                dashboardPointModel.setHariIni(data.getString("hari_ini"));
+//                                hariIni = dashboardPointModel.getHariIni();
+//                                dashboardPointModel.setSelesai(data.getString("selesai"));
+//                                selesai = dashboardPointModel.getSelesai();
+//                                dashboardPointModel.setPoin(data.getString("poin"));
+//                                point = dashboardPointModel.getPoin();
+//                                Log.i("onResponsepoin:", dashboardPointModel.getHariIni());
+//                                dashboardPointModelArrayList.add(dashboardPointModel);
+                                DashboardPointModel dashboardPointModel = new Gson().fromJson(data.toString(),DashboardPointModel.class);
                                 tvBulanIni.setText("0" + dashboardPointModel.getBulanIni());
                                 tvHariIni.setText("0" + dashboardPointModel.getHariIni());
                                 tvSelesai.setText("0" +dashboardPointModel.getSelesai());
                                 tvPoint.setText("0" + dashboardPointModel.getPoin());
-                            }
+//                            }
 
                         } catch (Throwable t) {
                             Log.i("tms", "Could not parse malformed JSON: \"" + response + "\"");

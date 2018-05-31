@@ -178,7 +178,7 @@ public class DashboardActivity extends AppCompatActivity implements OnMapReadyCa
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
-            System.exit(0);
+//            System.exit(0);
         }
 
         twice = true;

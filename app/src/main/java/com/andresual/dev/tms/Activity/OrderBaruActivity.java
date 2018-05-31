@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andresual.dev.tms.Activity.Adapter.SebelumnyaListAdapter;
 import com.andresual.dev.tms.Activity.Controller.OperationalController;
 import com.andresual.dev.tms.Activity.Manager.SessionKendaraan;
 import com.andresual.dev.tms.Activity.Manager.SessionManager;
@@ -78,10 +79,12 @@ public class OrderBaruActivity extends AppCompatActivity implements OnMapReadyCa
     private List<Marker> destinationMarkers = new ArrayList<>();
     private List<Polyline> polylinePaths = new ArrayList<>();
     String latitude, longitude;
-
+    JobOrder2Model modelData;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_baru);
+        // fetch data from SebelumnyaListAdapter
+        modelData = getIntent().getParcelableExtra(SebelumnyaListAdapter.INTENT_DATA);
 
         sendRequest();
 
@@ -99,6 +102,8 @@ public class OrderBaruActivity extends AppCompatActivity implements OnMapReadyCa
         idDriver = user.get(SessionManager.ID_DRIVER);
         email = user.get(SessionManager.EMAIL_DRIVER);
 
+
+
         tvOrderNo = findViewById(R.id.tv_order_no1);
         tvPelanggan = findViewById(R.id.tv_pelanggan1);
         tvTanggal = findViewById(R.id.tv_waktu);
@@ -108,16 +113,26 @@ public class OrderBaruActivity extends AppCompatActivity implements OnMapReadyCa
         tvContSize = findViewById(R.id.tv_container_size);
         tvContType = findViewById(R.id.container_type);
         tvComodity = findViewById(R.id.tv_comodity);
+//  Deprecated
+//        tvOrderNo.setText(this.getIntent().getStringExtra("orderNo"));
+//        tvPelanggan.setText(this.getIntent().getStringExtra("pelanggan"));
+//        tvOrigin.setText(this.getIntent().getStringExtra("origin"));
+//        tvTanggal.setText(this.getIntent().getStringExtra("tanggal"));
+//        tvContSize.setText(this.getIntent().getStringExtra("containerNo"));
+//        tvContType.setText(this.getIntent().getStringExtra("containerName"));
+//        tvComodity.setText(this.getIntent().getStringExtra("comodity"));
+//        jobId = this.getIntent().getIntExtra("jobId", 0);
+//        jobType = this.getIntent().getIntExtra("jobType", 0);
 
-        tvOrderNo.setText(this.getIntent().getStringExtra("orderNo"));
-        tvPelanggan.setText(this.getIntent().getStringExtra("pelanggan"));
-        tvOrigin.setText(this.getIntent().getStringExtra("origin"));
-        tvTanggal.setText(this.getIntent().getStringExtra("tanggal"));
-        tvContSize.setText(this.getIntent().getStringExtra("containerNo"));
-        tvContType.setText(this.getIntent().getStringExtra("containerName"));
-        tvComodity.setText(this.getIntent().getStringExtra("comodity"));
-        jobId = this.getIntent().getIntExtra("jobId", 0);
-        jobType = this.getIntent().getIntExtra("jobType", 0);
+        tvOrderNo.setText(modelData.getOrderNo());
+        tvPelanggan.setText(modelData.getPelanggan());
+        tvOrigin.setText(modelData.getOrigin());
+        tvTanggal.setText(modelData.getTanggal());
+        tvContSize.setText(modelData.getContainerNo());
+        tvContType.setText(modelData.getContainerName());
+        tvComodity.setText(modelData.getComodity());
+        jobId = modelData.getJobId();
+        jobType = modelData.getJobType();
 
         if (jobType == 1) {
             tvContSize.setVisibility(View.INVISIBLE);
@@ -126,10 +141,15 @@ public class OrderBaruActivity extends AppCompatActivity implements OnMapReadyCa
         }
 
         //PASSING//
-        latitude = this.getIntent().getStringExtra("latitude");
-        longitude = this.getIntent().getStringExtra("longitude");
-        final String delivLat = this.getIntent().getStringExtra("delivLat");
-        final String delivLng = this.getIntent().getStringExtra("delivLng");
+//        latitude = this.getIntent().getStringExtra("latitude");
+//        longitude = this.getIntent().getStringExtra("longitude");
+//        final String delivLat = this.getIntent().getStringExtra("delivLat");
+//        final String delivLng = this.getIntent().getStringExtra("delivLng");
+//
+        latitude = modelData.getJobPickupLatitude();
+        longitude = modelData.getJobPickupLongitude();
+        final String delivLat = modelData.getJobDeliverLatitude();
+        final String delivLng = modelData.getJobDeliverLongitude();
         Log.i("onCreate: ", delivLat + delivLng);
         ///////////
         Log.i("jobId", jobId.toString());
@@ -271,8 +291,10 @@ public class OrderBaruActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     private void sendRequest() {
-        pickLat = this.getIntent().getStringExtra("latitude");
-        pickLng = this.getIntent().getStringExtra("longitude");
+        pickLat = modelData.getJobPickupLatitude();
+        pickLng = modelData.getJobPickupLongitude();
+//        pickLat = this.getIntent().getStringExtra("latitude");
+//        pickLng = this.getIntent().getStringExtra("longitude");
         String origin = lat + "," + lng;
         String destination = pickLat + "," + pickLng;
 

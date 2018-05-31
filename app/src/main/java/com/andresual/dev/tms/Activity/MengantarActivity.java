@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.andresual.dev.tms.Activity.Adapter.BerandaListAdapter;
+import com.andresual.dev.tms.Activity.Adapter.SebelumnyaListAdapter;
 import com.andresual.dev.tms.Activity.Controller.AuthController;
 import com.andresual.dev.tms.Activity.Controller.OperationalController;
 import com.andresual.dev.tms.Activity.Fragment.BerandaFragment;
@@ -96,18 +97,23 @@ public class MengantarActivity extends FragmentActivity implements OnMapReadyCal
     public static String lat;
     public static String lng;
     private Button btnFindPath;
+    JobOrder2Model modelData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mengantar);
-
+        modelData = getIntent().getParcelableExtra(SebelumnyaListAdapter.INTENT_DATA);
         fetchJobOrder();
 
-        jobId = this.getIntent().getIntExtra("jobId", 0);
-        delivLat = this.getIntent().getStringExtra("delivLat");
-        delivLong = this.getIntent().getStringExtra("delivLng");
+//        jobId = this.getIntent().getIntExtra("jobId", 0);
+//        delivLat = this.getIntent().getStringExtra("delivLat");
+//        delivLong = this.getIntent().getStringExtra("delivLng");
         Log.i("onCreate: ", delivLat);
+
+        jobId = modelData.getJobId();
+        delivLat = modelData.getJobDeliverLatitude();
+        delivLong = modelData.getJobDeliverLongitude();
 
         Dialog dialog = new AlertDialog.Builder(this)
                 .setMessage("Cari lokasi pengantaran ?")
@@ -138,9 +144,9 @@ public class MengantarActivity extends FragmentActivity implements OnMapReadyCal
         idDriver = user.get(SessionManager.ID_DRIVER);
         email = user.get(SessionManager.EMAIL_DRIVER);
 
-        jobId = this.getIntent().getIntExtra("jobId", 0);
-        final String delivLat = this.getIntent().getStringExtra("delivLat");
-        final String delivLong = this.getIntent().getStringExtra("delivLng");
+//        jobId = this.getIntent().getIntExtra("jobId", 0);
+//        final String delivLat = this.getIntent().getStringExtra("delivLat");
+//        final String delivLong = this.getIntent().getStringExtra("delivLng");
 
         Button btnTolak = findViewById(R.id.btn_tolak);
         Button btnMengantar = (Button) findViewById(R.id.btn_mengantar);
@@ -215,12 +221,12 @@ public class MengantarActivity extends FragmentActivity implements OnMapReadyCal
 //
 //            dialog.show();
 
-//        } else {
-            jobId = this.getIntent().getIntExtra("jobId", 0);
-            delivLat = this.getIntent().getStringExtra("delivLat");
-            delivLong = this.getIntent().getStringExtra("delivLng");
+////        } else {
+//            jobId = this.getIntent().getIntExtra("jobId", 0);
+//            delivLat = this.getIntent().getStringExtra("delivLat");
+//            delivLong = this.getIntent().getStringExtra("delivLng");
             String origin = lat + "," + lng;
-            String destination = this.getIntent().getStringExtra("delivLat") + "," + this.getIntent().getStringExtra("delivLng");
+            String destination = modelData.getJobDeliverLatitude() + "," + modelData.getJobDeliverLongitude();
 //            String destination = delivLat + "," + delivLong;
             try {
                 new DirectionFinder(this, origin, destination).execute();

@@ -1,5 +1,10 @@
 package com.andresual.dev.tms.Activity.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ServiceConfigurationError;
 
 import javax.xml.transform.sax.SAXResult;
@@ -8,24 +13,41 @@ import javax.xml.transform.sax.SAXResult;
  * Created by andresual on 2/15/2018.
  */
 
-public class JobOrder2Model {
+public class JobOrder2Model implements Parcelable {
 
+    @SerializedName("job_pickup_name")
     private String jobName;
+    @SerializedName("job_pickup_address")
     private String origin;
+    @SerializedName("job_deliver_address")
     private String destination;
+    @SerializedName("order_id")
     private String orderNo;
+    @SerializedName("pelanggan")
     private String pelanggan;
+    @SerializedName("job_blast")
     private String tanggal;
+    @SerializedName("container_name")
     private String containerName;
+    @SerializedName("container_no")
     private String containerNo;
+    @SerializedName("container_cargo_name")
     private String comodity;
+    @SerializedName("job_deliver_status")
     private Integer jobDeliverStatus;
+    @SerializedName("id")
     private Integer jobId;
+    @SerializedName("job_pickup_status")
     private Integer jobPickupStatus;
+    @SerializedName("job_pickup_latitude")
     private String jobPickupLatitude;
+    @SerializedName("job_pickup_longitude")
     private String jobPickupLongitude;
+    @SerializedName("job_deliver_latitude")
     private String jobDeliverLatitude;
+    @SerializedName("job_deliver_longitude")
     private String jobDeliverLongitude;
+    @SerializedName("job_type")
     private Integer jobType;
 
     public Integer getJobPickupStatus() {
@@ -163,4 +185,65 @@ public class JobOrder2Model {
     public void setComodity(String comodity) {
         this.comodity = comodity;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.jobName);
+        dest.writeString(this.origin);
+        dest.writeString(this.destination);
+        dest.writeString(this.orderNo);
+        dest.writeString(this.pelanggan);
+        dest.writeString(this.tanggal);
+        dest.writeString(this.containerName);
+        dest.writeString(this.containerNo);
+        dest.writeString(this.comodity);
+        dest.writeValue(this.jobDeliverStatus);
+        dest.writeValue(this.jobId);
+        dest.writeValue(this.jobPickupStatus);
+        dest.writeString(this.jobPickupLatitude);
+        dest.writeString(this.jobPickupLongitude);
+        dest.writeString(this.jobDeliverLatitude);
+        dest.writeString(this.jobDeliverLongitude);
+        dest.writeValue(this.jobType);
+    }
+
+    public JobOrder2Model() {
+    }
+
+    protected JobOrder2Model(Parcel in) {
+        this.jobName = in.readString();
+        this.origin = in.readString();
+        this.destination = in.readString();
+        this.orderNo = in.readString();
+        this.pelanggan = in.readString();
+        this.tanggal = in.readString();
+        this.containerName = in.readString();
+        this.containerNo = in.readString();
+        this.comodity = in.readString();
+        this.jobDeliverStatus = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.jobId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.jobPickupStatus = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.jobPickupLatitude = in.readString();
+        this.jobPickupLongitude = in.readString();
+        this.jobDeliverLatitude = in.readString();
+        this.jobDeliverLongitude = in.readString();
+        this.jobType = (Integer) in.readValue(Integer.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<JobOrder2Model> CREATOR = new Parcelable.Creator<JobOrder2Model>() {
+        @Override
+        public JobOrder2Model createFromParcel(Parcel source) {
+            return new JobOrder2Model(source);
+        }
+
+        @Override
+        public JobOrder2Model[] newArray(int size) {
+            return new JobOrder2Model[size];
+        }
+    };
 }

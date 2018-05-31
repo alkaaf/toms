@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andresual.dev.tms.Activity.Adapter.SebelumnyaListAdapter;
 import com.andresual.dev.tms.Activity.Controller.OperationalController;
 import com.andresual.dev.tms.Activity.Manager.SessionKendaraan;
 import com.andresual.dev.tms.Activity.Manager.SessionManager;
@@ -75,10 +76,11 @@ public class OrderBaruDooringActivity extends AppCompatActivity implements OnMap
 
     String latitude, longitude;
     String jobType;
-
+    JobOrder2Model modelData;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_baru);
+        modelData = getIntent().getParcelableExtra(SebelumnyaListAdapter.INTENT_DATA);
 
         sendRequest();
 
@@ -104,22 +106,35 @@ public class OrderBaruDooringActivity extends AppCompatActivity implements OnMap
         tvContType = findViewById(R.id.container_type);
         tvComodity = findViewById(R.id.tv_comodity);
 
-        tvOrderNo.setText(this.getIntent().getStringExtra("orderNo"));
-        tvPelanggan.setText(this.getIntent().getStringExtra("pelanggan"));
-        tvOrigin.setText(this.getIntent().getStringExtra("origin"));
-        tvTanggal.setText(this.getIntent().getStringExtra("tanggal"));
-        tvContSize.setText(this.getIntent().getStringExtra("containerNo"));
-        tvContType.setText(this.getIntent().getStringExtra("containerName"));
-        tvComodity.setText(this.getIntent().getStringExtra("comodity"));
-        jobId = this.getIntent().getIntExtra("jobId", 0);
+//        tvOrderNo.setText(this.getIntent().getStringExtra("orderNo"));
+//        tvPelanggan.setText(this.getIntent().getStringExtra("pelanggan"));
+//        tvOrigin.setText(this.getIntent().getStringExtra("origin"));
+//        tvTanggal.setText(this.getIntent().getStringExtra("tanggal"));
+//        tvContSize.setText(this.getIntent().getStringExtra("containerNo"));
+//        tvContType.setText(this.getIntent().getStringExtra("containerName"));
+//        tvComodity.setText(this.getIntent().getStringExtra("comodity"));
+//        jobId = this.getIntent().getIntExtra("jobId", 0);
+
+        tvOrderNo.setText(modelData.getOrderNo());
+        tvPelanggan.setText(modelData.getPelanggan());
+        tvOrigin.setText(modelData.getOrigin());
+        tvTanggal.setText(modelData.getTanggal());
+        tvContSize.setText(modelData.getContainerNo());
+        tvContType.setText(modelData.getContainerName());
+        tvComodity.setText(modelData.getComodity());
+        jobId = modelData.getJobId();
+        jobType = modelData.getJobType().toString();
 
         //PASSING//
-        latitude = this.getIntent().getStringExtra("latitude");
-        longitude = this.getIntent().getStringExtra("longitude");
-        final String delivLat = this.getIntent().getStringExtra("delivLat");
-        final String delivLng = this.getIntent().getStringExtra("delivLng");
-        jobType = this.getIntent().getStringExtra("jobType");
-
+//        latitude = this.getIntent().getStringExtra("latitude");
+//        longitude = this.getIntent().getStringExtra("longitude");
+//        final String delivLat = this.getIntent().getStringExtra("delivLat");
+//        final String delivLng = this.getIntent().getStringExtra("delivLng");
+//        jobType = this.getIntent().getStringExtra("jobType");
+        latitude = modelData.getJobPickupLatitude();
+        longitude = modelData.getJobPickupLongitude();
+        final String delivLat = modelData.getJobDeliverLatitude();
+        final String delivLng = modelData.getJobDeliverLongitude();
         Log.i("jobType", jobType);
 
         JobOrder2Model jobOrder2Model = new JobOrder2Model();
@@ -259,8 +274,10 @@ public class OrderBaruDooringActivity extends AppCompatActivity implements OnMap
     }
 
     private void sendRequest() {
-        pickLat = this.getIntent().getStringExtra("latitude");
-        pickLng = this.getIntent().getStringExtra("longitude");
+//        pickLat = this.getIntent().getStringExtra("latitude");
+//        pickLng = this.getIntent().getStringExtra("longitude");
+        pickLat = modelData.getJobPickupLatitude();
+        pickLng = modelData.getJobPickupLongitude();
         String origin = lat + "," + lng;
         String destination = pickLat + "," + pickLng;
         Log.i("sendRequest: ", origin);

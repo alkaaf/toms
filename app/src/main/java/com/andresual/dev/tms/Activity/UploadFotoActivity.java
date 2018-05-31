@@ -18,6 +18,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andresual.dev.tms.Activity.Adapter.SebelumnyaListAdapter;
+import com.andresual.dev.tms.Activity.Model.JobOrder2Model;
 import com.andresual.dev.tms.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,12 +44,13 @@ public class UploadFotoActivity extends AppCompatActivity {
     byte[] byteArray1, byteArray2;
     String encodedImage1, encodedImage2, idAdmin1, idAdmin2;
     String generatedFilePath;
-
+    JobOrder2Model modelData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        getActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_upload_foto);
+        modelData = getIntent().getParcelableExtra(SebelumnyaListAdapter.INTENT_DATA);
         initView();
 
         ivPhoto1.setOnClickListener(new View.OnClickListener() {
@@ -135,7 +138,7 @@ public class UploadFotoActivity extends AppCompatActivity {
 
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference storageReference = storage.getReference();
-            final StorageReference riversRef = storageReference.child("end_job/" + "container.jpg");
+            final StorageReference riversRef = storageReference.child("end_job/" + modelData.getJobId()+".jpg");
             riversRef.putBytes(byteArray1)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override

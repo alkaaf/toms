@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andresual.dev.tms.Activity.Adapter.SebelumnyaListAdapter;
 import com.andresual.dev.tms.Activity.DashboardActivity;
 import com.andresual.dev.tms.Activity.Manager.SessionKendaraan;
 import com.andresual.dev.tms.Activity.Manager.SessionManager;
@@ -89,17 +90,23 @@ public class MengantarDooringActivity extends FragmentActivity implements OnMapR
     public static String lat;
     public static String lng;
     private Button btnFindPath;
-
+    JobOrder2Model modelData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mengantar);
 
+        modelData = getIntent().getParcelableExtra(SebelumnyaListAdapter.INTENT_DATA);
         fetchJobOrder();
 
-        jobId = this.getIntent().getIntExtra("jobId", 0);
-        delivLat = this.getIntent().getStringExtra("delivLat");
-        delivLong = this.getIntent().getStringExtra("delivLng");
+        jobId = modelData.getJobId();
+        pickLat = modelData.getJobPickupLatitude();
+        pickLong =modelData.getJobPickupLongitude();
+        delivLat = modelData.getJobDeliverLatitude();
+        delivLong = modelData.getJobDeliverLongitude();
+//        jobId = this.getIntent().getIntExtra("jobId", 0);
+//        delivLat = this.getIntent().getStringExtra("delivLat");
+//        delivLong = this.getIntent().getStringExtra("delivLng");
         Log.i("onCreate: ", delivLat);
 
         Dialog dialog = new AlertDialog.Builder(this)
@@ -130,10 +137,10 @@ public class MengantarDooringActivity extends FragmentActivity implements OnMapR
         HashMap<String, String> user = sessionManager.getUserDetails();
         idDriver = user.get(SessionManager.ID_DRIVER);
         email = user.get(SessionManager.EMAIL_DRIVER);
-
-        jobId = this.getIntent().getIntExtra("jobId", 0);
-        final String delivLat = this.getIntent().getStringExtra("delivLat");
-        final String delivLong = this.getIntent().getStringExtra("delivLng");
+//
+//        jobId = this.getIntent().getIntExtra("jobId", 0);
+//        final String delivLat = this.getIntent().getStringExtra("delivLat");
+//        final String delivLong = this.getIntent().getStringExtra("delivLng");
 
         Button btnTolak = findViewById(R.id.btn_tolak);
         Button btnMengantar = (Button) findViewById(R.id.btn_mengantar);
@@ -208,12 +215,12 @@ public class MengantarDooringActivity extends FragmentActivity implements OnMapR
 //            dialog.show();
 
 //        } else {
-            jobId = this.getIntent().getIntExtra("jobId", 0);
-            delivLat = this.getIntent().getStringExtra("delivLat");
-            delivLong = this.getIntent().getStringExtra("delivLng");
+//            jobId = this.getIntent().getIntExtra("jobId", 0);
+//            delivLat = this.getIntent().getStringExtra("delivLat");
+//            delivLong = this.getIntent().getStringExtra("delivLng");
             String origin = lat + "," + lng;
-            String destination = this.getIntent().getStringExtra("delivLat") + "," + this.getIntent().getStringExtra("delivLng");
-//            String destination = delivLat + "," + delivLong;
+//            String destination = delivLat + "," + de;
+            String destination = delivLat + "," + delivLong;
             try {
                 new DirectionFinder(this, origin, destination).execute();
             } catch (UnsupportedEncodingException e) {
@@ -424,11 +431,12 @@ public class MengantarDooringActivity extends FragmentActivity implements OnMapR
                             Log.i("messages", obj.getString("message"));
 
                             Intent intent = new Intent(MengantarDooringActivity.this, MenurunkanDooringActivity.class);
-                            intent.putExtra("jobId", jobId);
-                            intent.putExtra("latitude", pickLat);
-                            intent.putExtra("longitude", pickLong);
-                            intent.putExtra("delivLat", delivLat);
-                            intent.putExtra("delivLng", delivLong);
+                            intent.putExtra(SebelumnyaListAdapter.INTENT_DATA, modelData);
+//                            intent.putExtra("jobId", jobId);
+//                            intent.putExtra("latitude", pickLat);
+//                            intent.putExtra("longitude", pickLong);
+//                            intent.putExtra("delivLat", delivLat);
+//                            intent.putExtra("delivLng", delivLong);
                             startActivity(intent);
                             finish();
 
