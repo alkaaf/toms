@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.andresual.dev.tms">
+
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the 'MyLocation' functionality. 
+    -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <application
+        android:name=".Activity.Controller.GoogleController"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".Activity.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Activity.ForgotPasswordActivity"
+            android:label="Forgot Password" />
+        <activity
+            android:name=".Activity.ResetConfirmationActivity"
+            android:label="Reset Password" />
+        <activity
+            android:name=".Activity.RegisterActivity"
+            android:label="Register" />
+        <activity
+            android:name=".Activity.RegisterConfirmationActivity"
+            android:label="Register" />
+        <activity
+            android:name=".Activity.DashboardActivity"
+            android:label="@string/title_activity_dashboard" />
+
+        <service
+            android:name=".Activity.Maps.LocationBroadcaster"
+            android:process=":LocationBroadcaster" />
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".Activity.MapsOrderActivity"
+            android:label="@string/title_activity_maps_order" />
+
+        <service android:name=".Activity.Util.FcmInstanceIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".Activity.Util.FcmMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <service android:name=".Activity.Geofence.GeofenceRegistrationService" />
+
+        <activity
+            android:name=".Activity.RiwayatScheduleActivity"
+            android:label="Schedule" />
+        <activity
+            android:name=".Activity.RiwayatCompleteActivity"
+            android:label="Completed" />
+        <activity
+            android:name=".Activity.OrderBaruActivity"
+            android:label="Order Baru" />
+        <activity
+            android:name=".Activity.TolakOrderActivity"
+            android:label="Tolak Order" />
+        <activity android:name=".Activity.SiapAntarActivity" />
+        <activity android:name=".Activity.MengantarActivity" />
+        <activity android:name=".Activity.MenurunkanActivity" />
+
+        <service
+            android:name=".Activity.Util.MyJobService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name=".Activity.OrderBaruNotificationActivity"
+            android:label="Order Baru" />
+        <activity
+            android:name=".Activity.PilihKendaraanActivity"
+            android:label="Pilih Kendaraan" />
+        <activity android:name=".Activity.Notification.JemputNotificationActivity" />
+        <activity android:name=".Activity.Notification.MengantarNotificationActivity" />
+        <activity android:name=".Activity.Notification.SiapAntarNotificationActivity" />
+        <activity android:name=".Activity.Notification.MenurunkanNotificationActivity" />
+        <activity android:name=".JobFinishedActivity" />
+        <activity
+            android:name=".Dooring.OrderBaruDooringActivity"
+            android:label="Order Baru Dooring" />
+        <activity android:name=".Dooring.MapsOrderDooringActivity" />
+        <activity android:name=".Dooring.MengantarDooringActivity" />
+        <activity android:name=".Dooring.MenurunkanDooringActivity" />
+        <activity
+            android:name=".Dooring.SiapAntarDooringActivity"
+            android:label="Siap Antar Dooring" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="e0f66a35ced004db4a14adf9f7dd694823182150" />
+
+        <activity
+            android:name=".Activity.UploadFotoActivity"
+            android:label="Upload Foto" />
+        <activity android:name=".Activity.ReadyToStuffPickupActivity" />
+        <activity android:name=".Activity.StartStuffPickupActivity" />
+        <activity android:name=".Activity.FinishStuffPickupActivity" />
+        <activity android:name=".Activity.ArriveDestinationActivity" />
+        <activity android:name=".Activity.StartDischargeActivity" />
+        <activity android:name=".Activity.FinishDischargeActivity" />
+        <activity
+            android:name=".Activity.ListDepoActivity"
+            android:label="List Depo" />
+        <activity
+            android:name=".Activity.ListDermagaActivity"
+            android:label="List Dermaga" />
+        <!--<activity-->
+            <!--android:name=".depocustomerport.OrderBaruDCPActivity"-->
+            <!--android:label="Order Baru DCP" />-->
+        <!--<activity android:name=".depocustomerport.MapsOrderDCPActivity" />-->
+        <activity android:name=".Activity.GoEmptyToDepoActivity" />
+        <activity android:name=".Activity.UploadEmptyToDepoActivity"></activity>
+        <activity android:name=".Activity.DCP.OrderBaruDCPActivity"/>
+        <activity android:name=".Activity.DCP.SiapAntarDCPActivity"/>
+        <activity android:name=".Activity.DCP.MapsOrderDCPActivity"/>
+    </application>
+
+</manifest>

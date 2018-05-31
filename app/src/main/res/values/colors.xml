@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1F2449</color>
+    <color name="colorPrimaryDark">#384267</color>
+    <color name="colorAccent">#373D4A</color>
+    <color name="colorTransparent">#50000000</color>
+    <color name="textColor1">#80ffffff</color>
+    <color name="textColor2">#95ffffff</color>
+    <color name="buttonColor">#c1cc5a</color>
+    <color name="colorCardView">#90EEEEEE</color>
+    <color name="backgroundProfile">#373D4A</color>
+</resources>
