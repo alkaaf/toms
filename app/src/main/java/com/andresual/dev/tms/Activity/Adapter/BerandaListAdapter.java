@@ -82,7 +82,7 @@ public class BerandaListAdapter extends RecyclerView.Adapter<BerandaListAdapter.
             //job type 1
             ////////////////////////////////////////////////////////////////////////////////////////
 
-                if (jobOrder2Model.getJobDeliverStatus() == 45 && jobOrder2Model.getJobType() == 1) {
+            if (jobOrder2Model.getJobDeliverStatus() == 45 && jobOrder2Model.getJobType() == 1) {
                 Intent intent = new Intent(this.ctx, OrderBaruActivity.class);
                 intent.putExtra("orderNo", jobOrder2Model.getOrderNo());
                 intent.putExtra("pelanggan", jobOrder2Model.getJobName());
@@ -102,42 +102,42 @@ public class BerandaListAdapter extends RecyclerView.Adapter<BerandaListAdapter.
                 this.ctx.startActivity(intent);
 
             } else if (jobOrder2Model.getJobDeliverStatus() == 1 && jobOrder2Model.getJobType() == 1) {
-                    Intent intent1 = new Intent(this.ctx, OrderBaruActivity.class);
-                    intent1.putExtra("orderNo", jobOrder2Model.getOrderNo());
-                    intent1.putExtra("pelanggan", jobOrder2Model.getJobName());
-                    intent1.putExtra("tanggal", jobOrder2Model.getTanggal());
-                    intent1.putExtra("containerNo", jobOrder2Model.getContainerNo());
-                    intent1.putExtra("containerName", jobOrder2Model.getContainerName());
-                    intent1.putExtra("comodity", jobOrder2Model.getComodity());
-                    intent1.putExtra("origin", jobOrder2Model.getOrigin());
-                    intent1.putExtra("dest", jobOrder2Model.getDestination());
-                    intent1.putExtra("jobId", jobOrder2Model.getJobId());
-                    intent1.putExtra("jobStatus", jobOrder2Model.getJobDeliverStatus());
-                    intent1.putExtra("latitude", jobOrder2Model.getJobPickupLatitude());
-                    intent1.putExtra("longitude", jobOrder2Model.getJobPickupLongitude());
-                    intent1.putExtra("delivLat", jobOrder2Model.getJobDeliverLatitude());
-                    intent1.putExtra("delivLng", jobOrder2Model.getJobDeliverLongitude());
-                    intent1.putExtra("jobType", jobOrder2Model.getJobType());
-                    this.ctx.startActivity(intent1);
+                Intent intent1 = new Intent(this.ctx, OrderBaruActivity.class);
+                intent1.putExtra("orderNo", jobOrder2Model.getOrderNo());
+                intent1.putExtra("pelanggan", jobOrder2Model.getJobName());
+                intent1.putExtra("tanggal", jobOrder2Model.getTanggal());
+                intent1.putExtra("containerNo", jobOrder2Model.getContainerNo());
+                intent1.putExtra("containerName", jobOrder2Model.getContainerName());
+                intent1.putExtra("comodity", jobOrder2Model.getComodity());
+                intent1.putExtra("origin", jobOrder2Model.getOrigin());
+                intent1.putExtra("dest", jobOrder2Model.getDestination());
+                intent1.putExtra("jobId", jobOrder2Model.getJobId());
+                intent1.putExtra("jobStatus", jobOrder2Model.getJobDeliverStatus());
+                intent1.putExtra("latitude", jobOrder2Model.getJobPickupLatitude());
+                intent1.putExtra("longitude", jobOrder2Model.getJobPickupLongitude());
+                intent1.putExtra("delivLat", jobOrder2Model.getJobDeliverLatitude());
+                intent1.putExtra("delivLng", jobOrder2Model.getJobDeliverLongitude());
+                intent1.putExtra("jobType", jobOrder2Model.getJobType());
+                this.ctx.startActivity(intent1);
 
             } else if (jobOrder2Model.getJobDeliverStatus() == 2 && jobOrder2Model.getJobType() == 1) {
-                    Intent intent1 = new Intent(this.ctx, OrderBaruActivity.class);
-                    intent1.putExtra("orderNo", jobOrder2Model.getOrderNo());
-                    intent1.putExtra("pelanggan", jobOrder2Model.getJobName());
-                    intent1.putExtra("tanggal", jobOrder2Model.getTanggal());
-                    intent1.putExtra("containerNo", jobOrder2Model.getContainerNo());
-                    intent1.putExtra("containerName", jobOrder2Model.getContainerName());
-                    intent1.putExtra("comodity", jobOrder2Model.getComodity());
-                    intent1.putExtra("origin", jobOrder2Model.getOrigin());
-                    intent1.putExtra("dest", jobOrder2Model.getDestination());
-                    intent1.putExtra("jobId", jobOrder2Model.getJobId());
-                    intent1.putExtra("jobStatus", jobOrder2Model.getJobDeliverStatus());
-                    intent1.putExtra("latitude", jobOrder2Model.getJobPickupLatitude());
-                    intent1.putExtra("longitude", jobOrder2Model.getJobPickupLongitude());
-                    intent1.putExtra("delivLat", jobOrder2Model.getJobDeliverLatitude());
-                    intent1.putExtra("delivLng", jobOrder2Model.getJobDeliverLongitude());
-                    intent1.putExtra("jobType", jobOrder2Model.getJobType());
-                    this.ctx.startActivity(intent1);
+                Intent intent1 = new Intent(this.ctx, OrderBaruActivity.class);
+                intent1.putExtra("orderNo", jobOrder2Model.getOrderNo());
+                intent1.putExtra("pelanggan", jobOrder2Model.getJobName());
+                intent1.putExtra("tanggal", jobOrder2Model.getTanggal());
+                intent1.putExtra("containerNo", jobOrder2Model.getContainerNo());
+                intent1.putExtra("containerName", jobOrder2Model.getContainerName());
+                intent1.putExtra("comodity", jobOrder2Model.getComodity());
+                intent1.putExtra("origin", jobOrder2Model.getOrigin());
+                intent1.putExtra("dest", jobOrder2Model.getDestination());
+                intent1.putExtra("jobId", jobOrder2Model.getJobId());
+                intent1.putExtra("jobStatus", jobOrder2Model.getJobDeliverStatus());
+                intent1.putExtra("latitude", jobOrder2Model.getJobPickupLatitude());
+                intent1.putExtra("longitude", jobOrder2Model.getJobPickupLongitude());
+                intent1.putExtra("delivLat", jobOrder2Model.getJobDeliverLatitude());
+                intent1.putExtra("delivLng", jobOrder2Model.getJobDeliverLongitude());
+                intent1.putExtra("jobType", jobOrder2Model.getJobType());
+                this.ctx.startActivity(intent1);
 
             } else if (jobOrder2Model.getJobDeliverStatus() == 3 && jobOrder2Model.getJobType() == 1) {
                 Intent intent1 = new Intent(this.ctx, MapsOrderActivity.class);
@@ -164,53 +164,53 @@ public class BerandaListAdapter extends RecyclerView.Adapter<BerandaListAdapter.
                 intent1.putExtra("delivLng", jobOrder2Model.getJobDeliverLongitude());
                 this.ctx.startActivity(intent1);
             } else if (jobOrder2Model.getJobDeliverStatus() == 6 && jobOrder2Model.getJobType() == 1) {
-                    Intent intent1 = new Intent(this.ctx, StartStuffPickupActivity.class);
-                    intent1.putExtra("jobId", jobOrder2Model.getJobId());
-                    intent1.putExtra("latitude", jobOrder2Model.getJobPickupLatitude());
-                    intent1.putExtra("longitude", jobOrder2Model.getJobPickupLongitude());
-                    intent1.putExtra("delivLat", jobOrder2Model.getJobDeliverLatitude());
-                    intent1.putExtra("delivLng", jobOrder2Model.getJobDeliverLongitude());
-                    this.ctx.startActivity(intent1);
+                Intent intent1 = new Intent(this.ctx, StartStuffPickupActivity.class);
+                intent1.putExtra("jobId", jobOrder2Model.getJobId());
+                intent1.putExtra("latitude", jobOrder2Model.getJobPickupLatitude());
+                intent1.putExtra("longitude", jobOrder2Model.getJobPickupLongitude());
+                intent1.putExtra("delivLat", jobOrder2Model.getJobDeliverLatitude());
+                intent1.putExtra("delivLng", jobOrder2Model.getJobDeliverLongitude());
+                this.ctx.startActivity(intent1);
             } else if (jobOrder2Model.getJobDeliverStatus() == 7 && jobOrder2Model.getJobType() == 1) {
-                    Intent intent1 = new Intent(this.ctx, FinishStuffPickupActivity.class);
-                    intent1.putExtra("jobId", jobOrder2Model.getJobId());
-                    intent1.putExtra("latitude", jobOrder2Model.getJobPickupLatitude());
-                    intent1.putExtra("longitude", jobOrder2Model.getJobPickupLongitude());
-                    intent1.putExtra("delivLat", jobOrder2Model.getJobDeliverLatitude());
-                    intent1.putExtra("delivLng", jobOrder2Model.getJobDeliverLongitude());
-                    this.ctx.startActivity(intent1);
+                Intent intent1 = new Intent(this.ctx, FinishStuffPickupActivity.class);
+                intent1.putExtra("jobId", jobOrder2Model.getJobId());
+                intent1.putExtra("latitude", jobOrder2Model.getJobPickupLatitude());
+                intent1.putExtra("longitude", jobOrder2Model.getJobPickupLongitude());
+                intent1.putExtra("delivLat", jobOrder2Model.getJobDeliverLatitude());
+                intent1.putExtra("delivLng", jobOrder2Model.getJobDeliverLongitude());
+                this.ctx.startActivity(intent1);
             } else if (jobOrder2Model.getJobDeliverStatus() == 8 && jobOrder2Model.getJobType() == 1) {
-                    Intent intent1 = new Intent(this.ctx, MengantarActivity.class);
-                    intent1.putExtra("jobId", jobOrder2Model.getJobId());
-                    intent1.putExtra("latitude", jobOrder2Model.getJobPickupLatitude());
-                    intent1.putExtra("longitude", jobOrder2Model.getJobPickupLongitude());
-                    intent1.putExtra("delivLat", jobOrder2Model.getJobDeliverLatitude());
-                    intent1.putExtra("delivLng", jobOrder2Model.getJobDeliverLongitude());
-                    this.ctx.startActivity(intent1);
+                Intent intent1 = new Intent(this.ctx, MengantarActivity.class);
+                intent1.putExtra("jobId", jobOrder2Model.getJobId());
+                intent1.putExtra("latitude", jobOrder2Model.getJobPickupLatitude());
+                intent1.putExtra("longitude", jobOrder2Model.getJobPickupLongitude());
+                intent1.putExtra("delivLat", jobOrder2Model.getJobDeliverLatitude());
+                intent1.putExtra("delivLng", jobOrder2Model.getJobDeliverLongitude());
+                this.ctx.startActivity(intent1);
             } else if (jobOrder2Model.getJobDeliverStatus() == 9 && jobOrder2Model.getJobType() == 1) {
-                    Intent intent1 = new Intent(this.ctx, ArriveDestinationActivity.class);
-                    intent1.putExtra("jobId", jobOrder2Model.getJobId());
-                    intent1.putExtra("latitude", jobOrder2Model.getJobPickupLatitude());
-                    intent1.putExtra("longitude", jobOrder2Model.getJobPickupLongitude());
-                    intent1.putExtra("delivLat", jobOrder2Model.getJobDeliverLatitude());
-                    intent1.putExtra("delivLng", jobOrder2Model.getJobDeliverLongitude());
-                    this.ctx.startActivity(intent1);
+                Intent intent1 = new Intent(this.ctx, ArriveDestinationActivity.class);
+                intent1.putExtra("jobId", jobOrder2Model.getJobId());
+                intent1.putExtra("latitude", jobOrder2Model.getJobPickupLatitude());
+                intent1.putExtra("longitude", jobOrder2Model.getJobPickupLongitude());
+                intent1.putExtra("delivLat", jobOrder2Model.getJobDeliverLatitude());
+                intent1.putExtra("delivLng", jobOrder2Model.getJobDeliverLongitude());
+                this.ctx.startActivity(intent1);
             } else if (jobOrder2Model.getJobDeliverStatus() == 10 && jobOrder2Model.getJobType() == 1) {
-                    Intent intent1 = new Intent(this.ctx, StartDischargeActivity.class);
-                    intent1.putExtra("jobId", jobOrder2Model.getJobId());
-                    intent1.putExtra("latitude", jobOrder2Model.getJobPickupLatitude());
-                    intent1.putExtra("longitude", jobOrder2Model.getJobPickupLongitude());
-                    intent1.putExtra("delivLat", jobOrder2Model.getJobDeliverLatitude());
-                    intent1.putExtra("delivLng", jobOrder2Model.getJobDeliverLongitude());
-                    this.ctx.startActivity(intent1);
+                Intent intent1 = new Intent(this.ctx, StartDischargeActivity.class);
+                intent1.putExtra("jobId", jobOrder2Model.getJobId());
+                intent1.putExtra("latitude", jobOrder2Model.getJobPickupLatitude());
+                intent1.putExtra("longitude", jobOrder2Model.getJobPickupLongitude());
+                intent1.putExtra("delivLat", jobOrder2Model.getJobDeliverLatitude());
+                intent1.putExtra("delivLng", jobOrder2Model.getJobDeliverLongitude());
+                this.ctx.startActivity(intent1);
             } else if (jobOrder2Model.getJobDeliverStatus() == 11 && jobOrder2Model.getJobType() == 1) {
-                    Intent intent1 = new Intent(this.ctx, FinishDischargeActivity.class);
-                    intent1.putExtra("jobId", jobOrder2Model.getJobId());
-                    intent1.putExtra("latitude", jobOrder2Model.getJobPickupLatitude());
-                    intent1.putExtra("longitude", jobOrder2Model.getJobPickupLongitude());
-                    intent1.putExtra("delivLat", jobOrder2Model.getJobDeliverLatitude());
-                    intent1.putExtra("delivLng", jobOrder2Model.getJobDeliverLongitude());
-                    this.ctx.startActivity(intent1);
+                Intent intent1 = new Intent(this.ctx, FinishDischargeActivity.class);
+                intent1.putExtra("jobId", jobOrder2Model.getJobId());
+                intent1.putExtra("latitude", jobOrder2Model.getJobPickupLatitude());
+                intent1.putExtra("longitude", jobOrder2Model.getJobPickupLongitude());
+                intent1.putExtra("delivLat", jobOrder2Model.getJobDeliverLatitude());
+                intent1.putExtra("delivLng", jobOrder2Model.getJobDeliverLongitude());
+                this.ctx.startActivity(intent1);
             }
 
             ////////////////////////////////////////////////////////////////////////////////////////
@@ -902,9 +902,7 @@ public class BerandaListAdapter extends RecyclerView.Adapter<BerandaListAdapter.
                 intent1.putExtra("delivLat", jobOrder2Model.getJobDeliverLatitude());
                 intent1.putExtra("delivLng", jobOrder2Model.getJobDeliverLongitude());
                 this.ctx.startActivity(intent1);
-            }
-
-            else if (jobOrder2Model.getJobDeliverStatus() == 13 && jobOrder2Model.getJobType() == 8) {
+            } else if (jobOrder2Model.getJobDeliverStatus() == 13 && jobOrder2Model.getJobType() == 8) {
                 Intent intent1 = new Intent(this.ctx, UploadEmptyToDepoActivity.class);
                 intent1.putExtra("jobId", jobOrder2Model.getJobId());
                 intent1.putExtra("latitude", jobOrder2Model.getJobPickupLatitude());
@@ -968,7 +966,8 @@ public class BerandaListAdapter extends RecyclerView.Adapter<BerandaListAdapter.
             holder.tvStatus.setText("Cancel job");
         } else if (jobOrder2Model.getJobDeliverStatus() == 19) {
             holder.tvStatus.setText("Reject job");
-        } if (jobOrder2Model.getJobType() == 1) {
+        }
+        if (jobOrder2Model.getJobType() == 1) {
             holder.tvTo.setVisibility(View.INVISIBLE);
             holder.tvto2.setVisibility(View.INVISIBLE);
         } else {

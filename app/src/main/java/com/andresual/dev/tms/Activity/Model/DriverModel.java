@@ -124,4 +124,8 @@ public class DriverModel {
         this.expiredToken = expiredToken;
     }
 
+    public String getInitial() {
+        return username.substring(0, 1);
+    }
+
 }

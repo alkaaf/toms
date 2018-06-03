@@ -1,15 +1,18 @@
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.andresual.dev.tms.Activity.Fragment.AkunFragment">
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:id="@+id/cl1"
-        android:layout_width="0dp"
-        android:layout_height="207dp"
-        android:background="@color/backgroundProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -32,40 +35,12 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:textColor="@color/textColor2"
             android:text="Bambang Susilo"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/iv_profile_picture"
             app:layout_constraintStart_toStartOf="@+id/iv_profile_picture"
             app:layout_constraintTop_toBottomOf="@+id/iv_profile_picture" />
-
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/ic_action_chat_white"
-            app:layout_constraintBottom_toTopOf="@+id/tv_name_profile"
-            app:layout_constraintEnd_toStartOf="@+id/iv_profile_picture"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/iv_profile_picture" />
-
-        <ImageView
-            android:id="@+id/imageView7"
-            android:layout_width="32dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/ic_action_settings_white"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_profile_picture"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv_profile_picture"
-            app:layout_constraintTop_toTopOf="@+id/iv_profile_picture" />
 
         <TextView
             android:id="@+id/tv_nopol"
@@ -75,218 +50,100 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="-"
-            android:textColor="@color/textColor2"
+            android:text="AB 12345 PKJ"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/tv_name_profile"
             app:layout_constraintStart_toStartOf="@+id/tv_name_profile"
             app:layout_constraintTop_toBottomOf="@+id/tv_name_profile" />
 
-    </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
+        android:padding="16dp"
         android:id="@+id/cl2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/backgroundProfile"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cl1"
-        app:layout_constraintVertical_weight="1">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/cl1"
+        android:orientation="vertical">
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/cv1"
+        <include layout="@layout/line_horizontal"/>
+        <LinearLayout
+            android:id="@+id/ll2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/colorCardView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:cardElevation="8dp">
+            android:padding="16dp">
 
-            <android.support.constraint.ConstraintLayout
-                android:id="@+id/cl3"
+            <TextView
+                android:drawableStart="@drawable/ic_email_black_24dp"
+                android:id="@+id/tv_email"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_gravity="center_vertical"
+                android:text="amikaja@gmail.com"
+                android:textAlignment="center" />
+        </LinearLayout>
+    <include layout="@layout/line_horizontal"/>
+        <LinearLayout
+            android:id="@+id/ll3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
 
-                <Button
-                    android:id="@+id/btn_logout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="8dp"
-                    android:text="Log out"
-                    android:textAllCaps="false"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_main_driver"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:text="SOPIR UTAMA"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_main_driver2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:drawableLeft="@drawable/ic_action_location"
-                    android:gravity="center"
-                    android:text="Surabaya, Jawa Timur"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_main_driver" />
-            </android.support.constraint.ConstraintLayout>
-
-        </android.support.v7.widget.CardView>
-
-        <android.support.v4.widget.NestedScrollView
-            android:id="@+id/nss1"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            <TextView
+                android:gravity="center"
+                android:drawableStart="@drawable/ic_local_phone_black_24dp"
+                android:id="@+id/tv_telp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:foregroundGravity="center"
+                android:text="081-4343-4343"
+                android:textAlignment="center" />
+        </LinearLayout>
+        <include layout="@layout/line_horizontal"/>
+        <LinearLayout
+            android:id="@+id/ll5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cv1">
+            app:layout_constraintTop_toBottomOf="@+id/ll2">
 
-            <LinearLayout
-                android:id="@+id/ll"
+            <TextView
+                android:drawableStart="@drawable/ic_home2_black_24dp"
+                android:id="@+id/tv_kota"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="vertical">
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:text="Surabaya"
+                android:textAlignment="center" />
+        </LinearLayout>
+        <include layout="@layout/line_horizontal"/>
+        <LinearLayout
+            android:id="@+id/ll6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ll2">
 
-                <LinearLayout
-                    android:id="@+id/ll2"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@color/colorPrimaryDark"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ll1">
+            <TextView
+                android:gravity="center"
+                android:drawableStart="@drawable/ic_location_city_black_24dp"
+                android:id="@+id/tv_alamat"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:foregroundGravity="center"
+                android:text="Surabaya"
+                android:textAlignment="center" />
+        </LinearLayout>
+        <include layout="@layout/line_horizontal"/>
+    </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/tv_email"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="32dp"
-                        android:layout_marginStart="32dp"
-                        android:layout_marginTop="16dp"
-                        android:foregroundGravity="center"
-                        android:text="amikaja@gmail.com"
-                        android:textAlignment="center"
-                        android:textColor="@color/textColor2"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/cv1" />
-                </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/ll3"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@color/colorPrimaryDark"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ll2">
-
-                    <TextView
-                        android:id="@+id/tv_telp"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="32dp"
-                        android:layout_marginStart="32dp"
-                        android:layout_marginTop="16dp"
-                        android:foregroundGravity="center"
-                        android:text="081-4343-4343"
-                        android:textAlignment="center"
-                        android:textColor="@color/textColor2"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/cv1" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ll5"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@color/colorPrimaryDark"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ll2">
-
-                    <TextView
-                        android:id="@+id/tv_kota"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="32dp"
-                        android:layout_marginStart="32dp"
-                        android:layout_marginTop="16dp"
-                        android:foregroundGravity="center"
-                        android:text="Surabaya"
-                        android:textAlignment="center"
-                        android:textColor="@color/textColor2"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/cv1" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ll6"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@color/colorPrimaryDark"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ll2">
-
-                    <TextView
-                        android:id="@+id/tv_alamat"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="32dp"
-                        android:layout_marginStart="32dp"
-                        android:layout_marginTop="16dp"
-                        android:foregroundGravity="center"
-                        android:text="Surabaya"
-                        android:textAlignment="center"
-                        android:textColor="@color/textColor2"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/cv1" />
-                </LinearLayout>
-
-            </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
-
-    </android.support.constraint.ConstraintLayout>
-
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

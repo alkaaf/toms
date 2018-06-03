@@ -50,7 +50,6 @@ public class BerandaFragment extends Fragment {
     BerandaListAdapter mAdapter;
     ArrayList<JobOrder2Model> jobList = new ArrayList<>();
     DashboardModel dashboardModel;
-    LocationManager manager;
     Pref pref;
     StringHashMap map = new StringHashMap();
     DriverModel driver;
@@ -84,15 +83,6 @@ public class BerandaFragment extends Fragment {
         pref = new Pref(getContext());
         driver = pref.getDriverModel();
         map.putMore("id_driver", driver.getIdDriver());
-        manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        boolean statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-        if (!statusOfGPS) {
-            buildAlertMessageNoGps();
-            getActivity().stopService(new Intent(getActivity(), LocationBroadcaster.class));
-        }
-
-        getActivity().startService(new Intent(getActivity(), LocationBroadcaster.class));
 
         //VIEW//
         tvBulanIni = view.findViewById(R.id.tv_bulan_ini);

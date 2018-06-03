@@ -1,53 +1,46 @@
 package com.andresual.dev.tms.Activity.Fragment;
 
-import android.content.Context;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.andresual.dev.tms.Activity.Controller.GoogleController;
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.andresual.dev.tms.Activity.DashboardActivity;
 import com.andresual.dev.tms.Activity.MainActivity;
-import com.andresual.dev.tms.Activity.Manager.SessionDriverInfo;
-import com.andresual.dev.tms.Activity.Manager.SessionKendaraan;
-import com.andresual.dev.tms.Activity.Manager.SessionManager;
-import com.andresual.dev.tms.Activity.RegisterActivity;
+import com.andresual.dev.tms.Activity.Model.DriverModel;
+import com.andresual.dev.tms.Activity.Model.KendaraanModel;
+import com.andresual.dev.tms.Activity.Util.Netter;
+import com.andresual.dev.tms.Activity.Util.Pref;
+import com.andresual.dev.tms.Activity.Util.StringHashMap;
 import com.andresual.dev.tms.R;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
+public class AkunFragment extends Fragment {
 
-public class AkunFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener{
-
-    SessionManager sessionManager;
-    SessionKendaraan sessionKendaraan;
-    SessionDriverInfo sessionDriverInfo;
-    TextView tvNamaProfil, tvNamaScroll, tvEmailScroll, tvTelpScroll, tvKotaScroll, tvAlamatScroll, tvNopol;
-    String idDriver, email, idKendaraan, nopol;
-    String infoEmail, infoAlamat, infoTelp, infoKota, infoNama;
-    GoogleApiClient mGoogleApiClient;
-
+    TextView tvNamaProfil, tvEmailScroll, tvTelpScroll, tvKotaScroll, tvAlamatScroll, tvNopol;
+    ImageView imgProfile;
+    Pref pref;
+    DriverModel driver;
+    KendaraanModel kendaraan;
+    ProgressDialog pd;
     public AkunFragment() {
         // Required empty public constructor
     }
@@ -58,155 +51,95 @@ public class AkunFragment extends Fragment implements GoogleApiClient.OnConnecti
     }
 
     @Override
-    public void onStart() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-        mGoogleApiClient.connect();
-        super.onStart();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_akun, container, false);
         ((DashboardActivity) getActivity())
                 .setActionBarTitle("Akun");
-
-        sessionManager = new SessionManager(getActivity().getApplicationContext());
-        sessionKendaraan = new SessionKendaraan(getActivity().getApplicationContext());
-        sessionDriverInfo = new SessionDriverInfo(getActivity().getApplicationContext());
-
-        sessionKendaraan = new SessionKendaraan(getContext());
-        HashMap<String, String> data = sessionKendaraan.getKendaraanDetails();
-        idKendaraan = data.get(SessionKendaraan.ID_KENDARAAN);
-        nopol = data.get(SessionKendaraan.NOPOL_KENDARAAN);
-
-        sessionManager = new SessionManager(getContext());
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        idDriver = user.get(SessionManager.ID_DRIVER);
-        email = user.get(SessionManager.EMAIL_DRIVER);
-
-        sessionDriverInfo = new SessionDriverInfo(getContext());
-        HashMap<String, String> driverInfo = sessionDriverInfo.getUserDetails();
-        infoAlamat = driverInfo.get(SessionDriverInfo.ALAMAT_DRIVER);
-        infoEmail = driverInfo.get(SessionDriverInfo.EMAIL_DRIVER);
-        infoKota = driverInfo.get(SessionDriverInfo.KOTA_DRIVER);
-        infoTelp = driverInfo.get(SessionDriverInfo.TELP_DRIVER);
-        infoNama = driverInfo.get(SessionDriverInfo.NAMA_DRIVER);
-
-        Log.i("idKendaraan", idKendaraan, null);
-        Log.i("idDriver", idDriver, null);
-        Log.i("email", email, null);
-
+        pref = new Pref(getContext());
+        driver = pref.getDriverModel();
+        kendaraan = pref.getKendaraan();
+        pd = new ProgressDialog(getContext());
+        pd.setMessage("Logging you out");
+        imgProfile = view.findViewById(R.id.iv_profile_picture);
         tvNamaProfil = view.findViewById(R.id.tv_name_profile);
-        tvNamaScroll = view.findViewById(R.id.tv_nama);
         tvEmailScroll = view.findViewById(R.id.tv_email);
         tvTelpScroll = view.findViewById(R.id.tv_telp);
         tvKotaScroll = view.findViewById(R.id.tv_kota);
         tvAlamatScroll = view.findViewById(R.id.tv_alamat);
         tvNopol = view.findViewById(R.id.tv_nopol);
 
-        tvNamaProfil.setText(infoNama);
-        tvKotaScroll.setText(infoKota);
-        tvEmailScroll.setText(infoEmail);
-        tvTelpScroll.setText(infoTelp);
-        tvAlamatScroll.setText(infoAlamat);
-        tvNopol.setText(nopol);
-
-        Button btnLogOut = view.findViewById(R.id.btn_logout);
-
-        btnLogOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                        new ResultCallback<Status>() {
-                            @Override
-                            public void onResult(Status status) {
-                                Intent login = new Intent(getActivity(), MainActivity.class);
-                                startActivity(login);
-                                getActivity().finish();
-                            }
-                        });
-                sessionManager.logoutUser();
-                sessionKendaraan.clearKendaraan();
-                sessionDriverInfo.clearDriverInfo();
-                logOut();
-            }
-        });
+        imgProfile.setImageDrawable(TextDrawable.builder()
+                .buildRound(driver.getInitial(), ColorGenerator.MATERIAL.getColor(driver.getIdDriver())));
+        tvNamaProfil.setText(driver.getUsername());
+        tvEmailScroll.setText(driver.getEmail());
+        tvTelpScroll.setText(driver.getTelp());
+        tvAlamatScroll.setText(driver.getAlamat());
+        tvNopol.setText(kendaraan.getIdNopol());
+        tvKotaScroll.setText(driver.getKota());
 
         return view;
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_logout, menu);
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mGoogleApiClient.disconnect();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        mGoogleApiClient.disconnect();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.action_logout){
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Keluar aplikasi")
+                    .setMessage("Apakah anda yakin ingin keluar aplikasi?")
+                    .setPositiveButton("YA", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            logOut();
+                        }
+                    })
+                    .setNegativeButton("TIDAK", null).show();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void logOut() {
-
-        Log.i("idKendaraan", idKendaraan, null);
-        Log.i("idDriver", idDriver, null);
-        Log.i("email", email, null);
-
-        final Map<String, String> params = new HashMap<>();
-        params.put("f", "getlogout");
-        params.put("email", email);
-        params.put("idkendaraan", idKendaraan);
-        params.put("iddriver", idDriver);
-        Log.i("logout",params.toString());
-
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-        StringRequest sr = new StringRequest(Request.Method.POST, "http://manajemenkendaraan.com/tms/byamik.asp",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.i("response", response);
-                        try {
-                            JSONObject obj = new JSONObject(response);
-                            Log.i("token", obj.getString("status"));
-                            Log.i("message", obj.getString("message"));
-                        } catch (Throwable t) {
-                            Log.i("tms", "Could not parse malformed JSON: \"" + response + "\"");
-                        }
+        pd.show();
+        StringHashMap shm = new StringHashMap()
+                .putMore("id_kendaraan", kendaraan.getIdKendaraan())
+                .putMore("id_driver", driver.getIdDriver());
+        new Netter(getContext()).byAmik(Request.Method.POST, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                pd.dismiss();
+                try {
+                    JSONObject obj = new JSONObject(response);
+                    int status = obj.getInt("status");
+                    String message = obj.getString("message");
+                    Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                    if(status == 200){
+                        pref.clearDriver();
+                        pref.clearKendaraan();
+                        startActivity(new Intent(getContext(),MainActivity.class));
+                        getActivity().finish();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-        }) {
+        }, Netter.getDefaultErrorListener(getContext(), new Runnable() {
             @Override
-            protected Map<String,String> getParams(){
-                return params;
+            public void run() {
+                pd.dismiss();
             }
-        };
-        queue.add(sr);
+        }), Netter.Byamik.GETLOGOUT, shm);
     }
 
     @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 }

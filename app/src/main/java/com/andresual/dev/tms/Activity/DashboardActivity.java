@@ -1,9 +1,11 @@
 package com.andresual.dev.tms.Activity;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -34,6 +36,7 @@ import com.andresual.dev.tms.Activity.Fragment.RingkasanFragment;
 import com.andresual.dev.tms.Activity.Fragment.RiwayatFragment;
 import com.andresual.dev.tms.Activity.Manager.SessionKendaraan;
 import com.andresual.dev.tms.Activity.Manager.SessionManager;
+import com.andresual.dev.tms.Activity.Maps.LocationBroadcaster;
 import com.andresual.dev.tms.Activity.Model.DriverModel;
 import com.andresual.dev.tms.Activity.Model.KendaraanModel;
 import com.andresual.dev.tms.Activity.Model.PassingLocationModel;
@@ -66,21 +69,25 @@ import java.util.TimerTask;
 
 import static android.support.v4.content.PermissionChecker.PERMISSION_GRANTED;
 
-public class DashboardActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class DashboardActivity extends BaseActivity /*implements*/ {
 
-    SessionManager sessionManager;
-    private GoogleMap mMap;
-    private GoogleApiClient googleApiClient;
     private static final int LOCATION_REQUEST_CODE = 101;
-    public Double lat, lng;
-    Integer jobId;
-    SessionKendaraan sessionKendaraan;
-    String idDriver, email, idKendaraan;
     LocationManager manager;
 
     DriverModel driverModel;
     KendaraanModel kendaraanModel;
     Pref pref;
+    IntentFilter filter;
+    BroadcastReceiver br = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(LocationBroadcaster.LOCATION_BROADCAST_ACTION)){
+                Location loc = intent.getParcelableExtra(LocationBroadcaster.LOCATION_DATA);
+            }
+        }
+    };
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,36 +96,24 @@ public class DashboardActivity extends AppCompatActivity implements OnMapReadyCa
         pref = new Pref(this);
         driverModel = pref.getDriverModel();
         kendaraanModel = pref.getKendaraan();
+        filter = new IntentFilter(LocationBroadcaster.LOCATION_BROADCAST_ACTION);
 
-        if(getSupportActionBar()!=null)getSupportActionBar().setSubtitle(driverModel.getUsername()+ " | "+kendaraanModel.getIdNopol());
+        if(getSupportActionBar()!=null){
+            getSupportActionBar().setSubtitle(driverModel.getUsername()+ " | "+kendaraanModel.getIdNopol());
+            getSupportActionBar().setElevation(0);
+        }
 
         manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
         if (!statusOfGPS) {
-            processStopLocation();
+//            processStopLocation();
             buildAlertMessageNoGps();
         }
 
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
+        Intent intent = new Intent(this, LocationBroadcaster.class);
+        startService(intent);
 
-//        checkLocationAndAddToMap();
-
-        sessionManager = new SessionManager(getApplicationContext());
-        sessionKendaraan = new SessionKendaraan(getApplicationContext());
-
-        sessionKendaraan = new SessionKendaraan(this);
-        HashMap<String, String> data = sessionKendaraan.getKendaraanDetails();
-        idKendaraan = data.get(SessionKendaraan.ID_KENDARAAN);
-
-        sessionManager = new SessionManager(this);
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        idDriver = user.get(SessionManager.ID_DRIVER);
-        email = user.get(SessionManager.EMAIL_DRIVER);
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView)
                 findViewById(R.id.navigation);
@@ -168,15 +163,17 @@ public class DashboardActivity extends AppCompatActivity implements OnMapReadyCa
     @Override
     public void onStart() {
         super.onStart();
-        googleApiClient.connect();
+//        googleApiClient.connect();
         isMockSettingsON(DashboardActivity.this);
         areThereMockPermissionApps(DashboardActivity.this);
+        registerReceiver(br,filter);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        googleApiClient.disconnect();
+        unregisterReceiver(br);
+//        googleApiClient.disconnect();
     }
 
     Boolean twice = false;
@@ -184,7 +181,7 @@ public class DashboardActivity extends AppCompatActivity implements OnMapReadyCa
     @Override
     public void onBackPressed() { //bisa dipake terus
 
-        if (twice == true) {
+        if (twice) {
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_HOME);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -204,141 +201,20 @@ public class DashboardActivity extends AppCompatActivity implements OnMapReadyCa
         }, 3000);
     }
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case LOCATION_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PERMISSION_GRANTED) {
-                    checkLocationAndAddToMap();
                 } else
                     Toast.makeText(this, "Locatiion Permission Denied", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
 
-    private void checkLocationAndAddToMap() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
-            return;
-        }
-
-        LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(3000);
-        locationRequest.setFastestInterval(3000);
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                .addLocationRequest(locationRequest);
-        builder.setAlwaysShow(true);
-
-        Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-        MarkerOptions markerOptions = new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title("You are here");
-        lat = location.getLatitude();
-        lng = location.getLongitude();
-        mMap.addMarker(markerOptions);
-        Log.i("here", lat.toString());
-
-        PassingLocationModel passingLocationModel = new PassingLocationModel();
-        passingLocationModel.setLat(lat.toString());
-        passingLocationModel.setLng(lng.toString());
-
-        MapsOrderActivity mapsOrderActivity = new MapsOrderActivity();
-        mapsOrderActivity.setPassingLocationModel(passingLocationModel);
-        Log.i("passing", passingLocationModel.getLat());
-
-        postLocation();
-        timer();
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        checkLocationAndAddToMap();
-    }
-
-    public void postLocation() {
-        final Map<String, String> params = new HashMap<>();
-        params.put("f", "UpdateLokasiDriver");
-        params.put("email", email);
-        params.put("lat", lat.toString());
-        params.put("lng", lng.toString());
-        params.put("idkendaraan", idKendaraan);
-        params.put("statusdriver", "1");
-        Log.i("postlocation", params.toString());
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-        StringRequest sr = new StringRequest(Request.Method.POST, "http://manajemenkendaraan.com/tms/webservice.asp",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.i("response", response);
-                        try {
-                            JSONObject obj = new JSONObject(response);
-                            Log.i("status", obj.getString("status"));
-                            Log.i("messages", obj.getString("message"));
-                        } catch (Throwable t) {
-                            Log.i("tms", "Could not parse malformed JSON: \"" + response + "\"");
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                return params;
-            }
-        };
-        queue.add(sr);
-    }
-
-    private void processStopLocation() {
-        if (googleApiClient != null) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, (com.google.android.gms.location.LocationListener) this);
-        } else {
-            //no need to stop updates - we are no longer connected to location service anyway
-        }
-    }
-
-    public void timer() {
-        Timer postLocationPeriodic = new Timer();
-        postLocationPeriodic.schedule(new TimerTask() {
-
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        postLocation();
-                    }
-                });
-            }
-        }, 60000);
-    }
-
     public static boolean isMockSettingsON(Context context) {
-        // returns true if mock location enabled, false if not enabled.
-//        if (Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0"))
-//            return true;
-//        else return false;
+
         return !Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0");
     }
 
@@ -375,18 +251,7 @@ public class DashboardActivity extends AppCompatActivity implements OnMapReadyCa
         return false;
     }
 
-//    public void disableGps() {
-//
-//        LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
-//        try {
-//            Log.d("oke" ,"Removing Test providers");
-//            lm.(LocationManager.GPS_PROVIDER);
-//        } catch (IllegalArgumentException error) {
-//            Log.d("oke","Got exception in removing test provider");
-//        }
-//
-//        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
-//    }
+
 
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);

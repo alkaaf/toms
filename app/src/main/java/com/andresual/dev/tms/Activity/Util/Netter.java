@@ -19,7 +19,7 @@ public class Netter {
     public static final String WS = "webservice.asp";
     Context context;
 
-    public static enum Byamik {
+    public enum Byamik {
         LOGINAPP("loginapp"),
         GETLOGOUT("getlogout");
         String func;
@@ -29,12 +29,14 @@ public class Netter {
         }
     }
 
-    public static enum Webservice {
+    public enum Webservice {
+        UPDATELOKASIDRIVER("UpdateLokasiDriver"),
         GETLISTKENDARAANDRIVER("getListKendaraanDriver"),
         POSTPILIHKENDARAAN("PostPilihKendaraan"),
         GETDASHBOARDDRIVER("GetDashboardDriver"),
         GETJOBHARIINI("getDetailJobOrderHariIni"),
         GETJOBPAST("getDetailJobOrderPast");
+
         String func;
 
         Webservice(String s) {

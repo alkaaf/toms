@@ -13,6 +13,16 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
+import com.andresual.dev.tms.Activity.Model.DriverModel;
+import com.andresual.dev.tms.Activity.Model.KendaraanModel;
+import com.andresual.dev.tms.Activity.Util.Netter;
+import com.andresual.dev.tms.Activity.Util.Pref;
+import com.andresual.dev.tms.Activity.Util.StringHashMap;
+import com.android.volley.Request;
+import com.android.volley.Response;
+
+import java.lang.reflect.Method;
+
 /**
  * Created by andresual on 2/24/2018.
  */
@@ -23,36 +33,67 @@ public class LocationBroadcaster extends Service {
     private LocationManager locationManager = null;
     private static final int LOCATION_INTERVAL = 100;
     private static final float LOCATION_DISTANCE = 10f;
+    public static final String LOCATION_DATA = "location_Data";
+    public static final String LOCATION_BROADCAST_ACTION = "location.broadcast.action";
+    private static Location location;
+
+    public static Location getLocation() {
+        return location;
+    }
+
+    public void updateDriverLocation() {
+        Pref pref = new Pref(this);
+        DriverModel driverModel = pref.getDriverModel();
+        KendaraanModel kendaraanModel = pref.getKendaraan();
+        if (driverModel != null) {
+            new Netter(this).webService(Request.Method.POST, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.e("UPDATE_LOC",response);
+                        }
+                    }, Netter.getDefaultErrorListener(this, null), Netter.Webservice.UPDATELOKASIDRIVER,
+                    new StringHashMap().putMore("idkendaraan", kendaraanModel.getIdKendaraan())
+                            .putMore("email", driverModel.getEmail())
+                            .putMore("lat", Double.toString(getLocation().getLatitude()))
+                            .putMore("lng", Double.toString(getLocation().getLongitude()))
+            );
+        }
+    }
 
     private class LocationListener implements android.location.LocationListener {
 
         Location mLastLocation;
 
         public LocationListener(String provider) {
-            Log.e(TAG, "LocationListener " + provider);
+            Log.i(TAG, "LocationListener " + provider);
             mLastLocation = new Location(provider);
         }
 
         @Override
         public void onLocationChanged(Location location) {
-            Log.e(TAG, "onLocationChanged: " + location);
+            Log.i(TAG, "onLocationChanged: " + location);
+            Log.i(TAG, "onLocationChanged: broadcasting");
+            Intent intent = new Intent(LOCATION_BROADCAST_ACTION);
+            intent.putExtra(LOCATION_DATA, location);
+            sendBroadcast(intent);
             mLastLocation.set(location);
-
+            LocationBroadcaster.location = location;
+            updateDriverLocation();
         }
 
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {
-            Log.e(TAG, "onStatusChanged: " + provider);
+            Log.i(TAG, "onStatusChanged: " + provider);
         }
 
         @Override
         public void onProviderEnabled(String provider) {
-            Log.e(TAG, "onProviderEnabled: " + provider);
+            Log.i(TAG, "onProviderEnabled: " + provider);
         }
 
         @Override
         public void onProviderDisabled(String provider) {
-            Log.e(TAG, "onProviderDisabled: " + provider);
+            Log.i(TAG, "onProviderDisabled: " + provider);
         }
     }
 
@@ -69,7 +110,7 @@ public class LocationBroadcaster extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.e(TAG, "onStartCommand");
+        Log.i(TAG, "onStartCommand");
         super.onStartCommand(intent, flags, startId);
         return START_STICKY;
     }
@@ -77,7 +118,7 @@ public class LocationBroadcaster extends Service {
     @Override
     public void onCreate() {
 
-        Log.e(TAG, "onCreate");
+        Log.i(TAG, "onCreate");
         initializeLocationManager();
         try {
             locationManager.requestLocationUpdates(
@@ -101,7 +142,7 @@ public class LocationBroadcaster extends Service {
 
     @Override
     public void onDestroy() {
-        Log.e(TAG, "onDestroy");
+        Log.i(TAG, "onDestroy");
         super.onDestroy();
         if (locationManager != null) {
             for (int i = 0; i < mLocationListener.length; i++) {
@@ -115,7 +156,7 @@ public class LocationBroadcaster extends Service {
     }
 
     private void initializeLocationManager() {
-        Log.e(TAG, "initializeLocationManager");
+        Log.i(TAG, "initializeLocationManager");
         if (locationManager == null) {
             locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         }
