@@ -1,6 +1,7 @@
 package com.andresual.dev.tms.Activity.Controller;
 
 import android.app.Application;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 
 import com.andresual.dev.tms.R;
@@ -17,6 +18,7 @@ public class GoogleController extends Application {
     private GoogleApiClient mGoogleApiClient;
     private GoogleSignInOptions gso;
     public AppCompatActivity activity;
+
 
     public GoogleSignInOptions getGoogleSignInOptions() {
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

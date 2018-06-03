@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 
 import com.andresual.dev.tms.Activity.DashboardActivity;
 import com.andresual.dev.tms.Activity.MainActivity;
+import com.andresual.dev.tms.Activity.Model.DriverModel;
 
 import java.util.HashMap;
 
@@ -62,6 +63,8 @@ public class SessionManager {
         System.out.println("hashmap kosong tora ? " + val);
         return token;
     }
+
+
 
     public void logoutUser() {
         editor.clear();

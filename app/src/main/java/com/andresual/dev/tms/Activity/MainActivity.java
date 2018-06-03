@@ -30,6 +30,9 @@ import com.andresual.dev.tms.Activity.Manager.SessionDriverInfo;
 import com.andresual.dev.tms.Activity.Manager.SessionManager;
 import com.andresual.dev.tms.Activity.Model.DriverModel;
 import com.andresual.dev.tms.Activity.Model.ReturnModel;
+import com.andresual.dev.tms.Activity.Util.Netter;
+import com.andresual.dev.tms.Activity.Util.Pref;
+import com.andresual.dev.tms.Activity.Util.StringHashMap;
 import com.andresual.dev.tms.R;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -51,18 +54,24 @@ import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 
 import io.fabric.sdk.android.Fabric;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.android.volley.VolleyLog.TAG;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
+public class MainActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     SessionManager sessionManager;
     SessionDriverInfo sessionDriverInfo;
@@ -76,15 +85,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     String tokens, msg, idToken;
     ProgressDialog progressDialog;
 
-    private GoogleApiClient mGoogleApiClient;
+    //    private GoogleApiClient mGoogleApiClient;
     private ProgressDialog mProgressDialog;
-    private GoogleSignInOptions gso;
+//    private GoogleSignInOptions gso;
 
     Integer ide;
     String idDriver, nama, email, password, alamat, kode, telp, kota, expiredToken, tokenServer;
     DriverModel driverActive;
     ArrayList<DriverModel> driverModelArrayList = new ArrayList<>();
-    String googleEmail, googleUsername;
+//    String googleEmail, googleUsername;
 
     private static final int RC_SIGN_IN = 007;
 
@@ -101,13 +110,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         actionBar.hide();
         setContentView(R.layout.activity_main);
 
-        gso = ((GoogleController) getApplication()).getGoogleSignInOptions();
-        mGoogleApiClient = ((GoogleController) getApplication()).getGoogleApiClient(MainActivity.this, this);
+//        gso = ((GoogleController) getApplication()).getGoogleSignInOptions();
+//        mGoogleApiClient = ((GoogleController) getApplication()).getGoogleApiClient(MainActivity.this, this);
 
-        LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE );
+        LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-        if(!statusOfGPS) // Before show message to turn on GPS be sure it is turned off.
+        if (!statusOfGPS) // Before show message to turn on GPS be sure it is turned off.
         {
             buildAlertMessageNoGps();
         }
@@ -118,16 +127,24 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+//                Log.d(TAG, "onAuthStateChanged:signed_in:" );
             }
         };
+        mAuth.addAuthStateListener(mAuthListener);
 
-        //cek login session
-        sessionManager = new SessionManager(getApplicationContext());
-        sessionManager.checkLogin();
+//        //cek login session
+//        sessionManager = new SessionManager(getApplicationContext());
+//        sessionManager.checkLogin();
+//
+//        sessionDriverInfo = new SessionDriverInfo(getApplicationContext());
+//        sessionDriverInfo.checkLogin();
 
-        sessionDriverInfo = new SessionDriverInfo(getApplicationContext());
-        sessionDriverInfo.checkLogin();
+        // session check
+        Pref pref = new Pref(this);
+        if(pref.checkDriver()){
+            startActivity(new Intent(this, PilihKendaraanActivity.class));
+            finish();
+        }
 
         btnSignIn = findViewById(R.id.btn_login);
         tvForgotPassword = findViewById(R.id.tv_forgot_password);
@@ -135,9 +152,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         etEmail = findViewById(R.id.et_username);
         etPassword = findViewById(R.id.et_password);
         btnLoginGoogle = findViewById(R.id.btn_login_google);
+        progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setMessage("Signing you in...");
 
-        btnLoginGoogle.setSize(SignInButton.SIZE_STANDARD);
-        btnLoginGoogle.setScopes(gso.getScopeArray());
+//        btnLoginGoogle.setSize(SignInButton.SIZE_STANDARD);
+//        btnLoginGoogle.setScopes(gso.getScopeArray());
 
         if (getIntent().getExtras() != null) {
             for (String key : getIntent().getExtras().keySet()) {
@@ -146,12 +165,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         }
 
-        btnLoginGoogle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signInGoogle();
-            }
-        });
+//        btnLoginGoogle.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                signInGoogle();
+//            }
+//        });
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,8 +181,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     Toast.makeText(MainActivity.this, "Insert password", Toast.LENGTH_SHORT).show();
                 } else {
 
-                    progressDialog = new ProgressDialog(MainActivity.this);
-                    progressDialog.setMessage("Signing you in...");
                     progressDialog.show();
 
                     DriverModel driverSignIn = new DriverModel();
@@ -173,10 +190,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
                     String email = etEmail.getText().toString();
                     String pass = etPassword.getText().toString();
-                    mAuth.signInWithEmailAndPassword(email,pass);
+                    String token = FirebaseInstanceId.getInstance().getToken();
+                    mAuth.signInWithEmailAndPassword(email, pass);
+//                    AuthController.getmInstance().setDriverActive(driverSignIn);
+//                    AuthController.getmInstance().signInApi(MainActivity.this);
 
-                    AuthController.getmInstance().setDriverActive(driverSignIn);
-                    AuthController.getmInstance().signInApi(MainActivity.this);
+                    signIn(email, pass, token);
                 }
             }
         });
@@ -198,23 +217,59 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         });
     }
 
-    private void signInGoogle() {
-        Intent intent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(intent, RC_SIGN_IN);
+    private void signIn(String email, String password, String token) {
+        StringHashMap shm = new StringHashMap()
+                .putMore("email", email)
+                .putMore("password", password)
+                .putMore("tokenreg", token);
+        new Netter(this).byAmik(Request.Method.POST, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressDialog.dismiss();
+                try {
+                    JSONObject obj = new JSONObject(response);
+                    int status = obj.getInt("status");
+                    String message = obj.getString("message");
+                    toast(message);
+                    if(status == 200){
+                        String token = obj.getString("token");
+                        // save login data
+                        DriverModel driver = new Gson().fromJson(obj.getString("data"), DriverModel.class);
+                        driver.setToken(token);
+                        new Pref(MainActivity.this).putModelDriver(driver);
+                        startActivity(new Intent(MainActivity.this,PilihKendaraanActivity.class));
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, Netter.getDefaultErrorListener(this, new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.dismiss();
+            }
+        }), Netter.Byamik.LOGINAPP, shm);
+        //        queue.add(new StringRequest());
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+//    private void signInGoogle() {
+//        Intent intent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+//        startActivityForResult(intent, RC_SIGN_IN);
+//    }
 
-        //hasil mengembalikan dari launching intent dari google sign in api.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        //hasil mengembalikan dari launching intent dari google sign in api.getSignInIntent(...);
+//        if (requestCode == RC_SIGN_IN) {
+//            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+//            handleSignInResult(result);
+//        }
+//    }
 
-    private void handleSignInResult(GoogleSignInResult result) {
+  /*  private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
             GoogleSignInAccount userAccount = result.getSignInAccount();
@@ -225,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             final Map<String, String> params = new HashMap<>();
             params.put("f", "savelogingoogle");
             params.put("email", googleEmail);
-            Log.i("signingoogle",params.toString());
+            Log.i("signingoogle", params.toString());
 
             RequestQueue queue = Volley.newRequestQueue(this);
             StringRequest sr = new StringRequest(Request.Method.POST, "http://manajemenkendaraan.com/tms/byamik.asp",
@@ -247,10 +302,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                                     System.out.println("token" + obj.getString("token"));
                                     tokenServer = obj.getString("token");
 //                                    driverActive.setToken(token);
-                                    Log.i( "onResponse: ", tokenServer);
+                                    Log.i("onResponse: ", tokenServer);
 
                                     JSONObject data = obj.getJSONObject("data");
-                                    Log.i( "onResponse: ", data.toString());
+                                    Log.i("onResponse: ", data.toString());
 //                                    driverModelArrayList = new ArrayList<>();
 
                                     for (int i = 0; i < data.length(); i++) {
@@ -263,7 +318,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                                         kota = data.getString("kota");
                                         expiredToken = data.getString("expiredtoken");
                                         idDriver = data.getString("id_driver");
-                                        nama= data.getString("nama");
+                                        nama = data.getString("nama");
                                     }
                                 }
                                 handleSignInGoogle(returnModel);
@@ -278,9 +333,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 //                Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
 //                VolleyLog.d(TAG, "Error: " + error.getMessage());
                 }
-            }){
+            }) {
                 @Override
-                protected Map<String,String> getParams(){
+                protected Map<String, String> getParams() {
                     return params;
                 }
             };
@@ -291,7 +346,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 //            intent.putExtra("email", userEmail);
 //            startActivity(intent);
         }
-    }
+    }*/
 
     public void handleSignIn(ReturnModel returnModel) {
         Log.e("handle", "status code = " + returnModel.getStatusCode());
@@ -311,7 +366,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     AuthController.getmInstance().getDriverActive().getKota());
             Intent intent = new Intent(MainActivity.this, PilihKendaraanActivity.class);
             startActivity(intent);
-        } else if (returnModel.getStatusCode() == 101){
+        } else if (returnModel.getStatusCode() == 101) {
             progressDialog.dismiss();
             Toast.makeText(MainActivity.this, "Wrong Email or Password", Toast.LENGTH_SHORT).show();
         } else if (returnModel.getStatusCode() == 300) {
@@ -328,7 +383,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             Toast.makeText(MainActivity.this, returnModel.getMessage(), Toast.LENGTH_SHORT).show();
             //masukkan data ke shared preferences
             sessionManager.createLoginSession(
-                   tokenServer,
+                    tokenServer,
                     idDriver,
                     email);
             sessionDriverInfo.createLoginSession(
@@ -340,7 +395,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             Intent intent = new Intent(MainActivity.this, PilihKendaraanActivity.class);
             startActivity(intent);
             finish();
-        } else if (returnModel.getStatusCode() == 101){
+        } else if (returnModel.getStatusCode() == 101) {
             noRegisterAlert();
 //            Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
 //            intent.putExtra("email", googleEmail);

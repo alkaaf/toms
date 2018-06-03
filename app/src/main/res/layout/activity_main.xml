@@ -1,29 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bglogin"
+    android:orientation="vertical"
     tools:context="com.andresual.dev.tms.Activity.MainActivity"
+    android:gravity="center_vertical"
     tools:layout_editor_absoluteY="81dp">
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorTransparent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </RelativeLayout>
 
     <ImageView
+        android:tint="@color/colorAccent"
         android:id="@+id/imageView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:layout_marginEnd="80dp"
         android:layout_marginStart="80dp"
@@ -36,12 +27,10 @@
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/tv_username"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginStart="24dp"
-        android:background="@drawable/layout_bg"
+
         android:elevation="4dp"
         android:padding="4dp"
         app:layout_constraintBottom_toTopOf="@+id/tv_password"
@@ -57,15 +46,14 @@
             android:hint="Email"
             android:inputType="textEmailAddress"
             android:singleLine="true"
-            android:textColor="@color/textColor2" />
+            />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/tv_password"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:background="@drawable/layout_bg"
         android:elevation="4dp"
         android:padding="4dp"
         app:layout_constraintBottom_toTopOf="@+id/tv_forgot_password"
@@ -83,10 +71,11 @@
             android:hint="Password"
             android:inputType="textPassword"
             android:singleLine="true"
-            android:textColor="@color/textColor2" />
+            />
     </android.support.design.widget.TextInputLayout>
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/tv_forgot_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -97,6 +86,7 @@
         app:layout_constraintEnd_toEndOf="@+id/tv_password" />
 
     <com.google.android.gms.common.SignInButton
+        android:visibility="gone"
         android:id="@+id/btn_login_google"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -108,11 +98,13 @@
         app:layout_constraintStart_toStartOf="@+id/btn_login" />
 
     <Button
+        android:layout_marginEnd="34dp"
+        android:layout_marginStart="34dp"
         android:id="@+id/btn_login"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:backgroundTint="@color/buttonColor"
+        style="@style/Base.Widget.AppCompat.Button.Colored"
         android:text="Sign In"
         android:textAllCaps="false"
         android:textColor="@color/textColor2"
@@ -149,4 +141,4 @@
         app:layout_constraintEnd_toEndOf="@+id/btn_login_google"
         app:layout_constraintStart_toStartOf="@+id/btn_login_google" />
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

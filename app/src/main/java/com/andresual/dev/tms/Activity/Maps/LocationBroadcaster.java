@@ -37,6 +37,7 @@ public class LocationBroadcaster extends Service {
         public void onLocationChanged(Location location) {
             Log.e(TAG, "onLocationChanged: " + location);
             mLastLocation.set(location);
+
         }
 
         @Override

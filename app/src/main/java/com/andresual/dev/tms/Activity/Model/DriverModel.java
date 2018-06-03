@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.android.volley.toolbox.StringRequest;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by andresual on 1/30/2018.
@@ -12,16 +13,27 @@ import com.android.volley.toolbox.StringRequest;
 
 public class DriverModel {
 
+    @SerializedName("nama")
     String username;
+    @SerializedName("password")
     String password;
+    @SerializedName("token")
     String token;
+    @SerializedName("id")
     Integer id;
+    @SerializedName("email")
     String email;
+    @SerializedName("alamat")
     String alamat;
+    @SerializedName("kode")
     String kode;
+    @SerializedName("telp")
     String telp;
+    @SerializedName("expiredtoken")
     String expiredToken;
+    @SerializedName("id_driver")
     String idDriver;
+    @SerializedName("kota")
     String kota;
 
     public String getKota() {

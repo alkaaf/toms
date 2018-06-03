@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by andresual on 2/28/2018.
  */
-
+@Deprecated
 public class DashboardPointModel implements Parcelable {
 
     @SerializedName("bulan_ini")

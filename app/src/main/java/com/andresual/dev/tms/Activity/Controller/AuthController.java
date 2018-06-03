@@ -210,6 +210,7 @@ public class AuthController {
         }) {
             @Override
             protected Map<String, String> getParams() {
+                Log.i("OldParam", params.toString());
                 return params;
             }
         };

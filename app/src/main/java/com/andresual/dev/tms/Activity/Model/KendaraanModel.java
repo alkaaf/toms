@@ -12,10 +12,31 @@ import com.google.gson.annotations.SerializedName;
 public class KendaraanModel implements Parcelable {
 
     private String idDriver;
-    @SerializedName("idkendaraan")
+    @SerializedName("id_kendaraan")
     private String idKendaraan;
     @SerializedName("nopol")
     private String idNopol;
+    @SerializedName("kode")
+    String kode;
+    @SerializedName("status_driver")
+    String statusDriver;
+
+    public String getKode() {
+        return kode;
+    }
+
+    public void setKode(String kode) {
+        this.kode = kode;
+    }
+
+    public String getStatusDriver() {
+        return statusDriver;
+    }
+
+    public void setStatusDriver(String statusDriver) {
+        this.statusDriver = statusDriver;
+    }
+
 
     public String getIdDriver() {
         return idDriver;
@@ -41,6 +62,9 @@ public class KendaraanModel implements Parcelable {
         this.idNopol = idNopol;
     }
 
+    public KendaraanModel() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -51,18 +75,19 @@ public class KendaraanModel implements Parcelable {
         dest.writeString(this.idDriver);
         dest.writeString(this.idKendaraan);
         dest.writeString(this.idNopol);
-    }
-
-    public KendaraanModel() {
+        dest.writeString(this.kode);
+        dest.writeString(this.statusDriver);
     }
 
     protected KendaraanModel(Parcel in) {
         this.idDriver = in.readString();
         this.idKendaraan = in.readString();
         this.idNopol = in.readString();
+        this.kode = in.readString();
+        this.statusDriver = in.readString();
     }
 
-    public static final Parcelable.Creator<KendaraanModel> CREATOR = new Parcelable.Creator<KendaraanModel>() {
+    public static final Creator<KendaraanModel> CREATOR = new Creator<KendaraanModel>() {
         @Override
         public KendaraanModel createFromParcel(Parcel source) {
             return new KendaraanModel(source);
