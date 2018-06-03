@@ -34,7 +34,10 @@ import com.andresual.dev.tms.Activity.Fragment.RingkasanFragment;
 import com.andresual.dev.tms.Activity.Fragment.RiwayatFragment;
 import com.andresual.dev.tms.Activity.Manager.SessionKendaraan;
 import com.andresual.dev.tms.Activity.Manager.SessionManager;
+import com.andresual.dev.tms.Activity.Model.DriverModel;
+import com.andresual.dev.tms.Activity.Model.KendaraanModel;
 import com.andresual.dev.tms.Activity.Model.PassingLocationModel;
+import com.andresual.dev.tms.Activity.Util.Pref;
 import com.andresual.dev.tms.R;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -75,10 +78,19 @@ public class DashboardActivity extends AppCompatActivity implements OnMapReadyCa
     String idDriver, email, idKendaraan;
     LocationManager manager;
 
+    DriverModel driverModel;
+    KendaraanModel kendaraanModel;
+    Pref pref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+
+        pref = new Pref(this);
+        driverModel = pref.getDriverModel();
+        kendaraanModel = pref.getKendaraan();
+
+        if(getSupportActionBar()!=null)getSupportActionBar().setSubtitle(driverModel.getUsername()+ " | "+kendaraanModel.getIdNopol());
 
         manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
