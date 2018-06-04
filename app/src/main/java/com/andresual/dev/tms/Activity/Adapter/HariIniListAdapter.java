@@ -18,6 +18,10 @@ import com.andresual.dev.tms.Activity.MapsOrderActivity;
 import com.andresual.dev.tms.Activity.MengantarActivity;
 import com.andresual.dev.tms.Activity.Model.SimpleJob;
 import com.andresual.dev.tms.Activity.OrderBaruActivity;
+import com.andresual.dev.tms.Activity.ProsesActivity.ActivityProses1And2;
+import com.andresual.dev.tms.Activity.ProsesActivity.ActivityProses3;
+import com.andresual.dev.tms.Activity.ProsesActivity.ActivityProsesFrom4To7;
+import com.andresual.dev.tms.Activity.ProsesActivity.ActivityProsesMoreThan8;
 import com.andresual.dev.tms.Activity.ReadyToStuffPickupActivity;
 import com.andresual.dev.tms.Activity.SiapAntarActivity;
 import com.andresual.dev.tms.Activity.StartDischargeActivity;
@@ -72,195 +76,14 @@ public class HariIniListAdapter extends RecyclerView.Adapter<HariIniListAdapter.
             int position = getAdapterPosition();
 //            SimpleJob simpleJob = OperationalController.getmInstance().getSimpleJobArrayList().get(position);
             SimpleJob simpleJob = simpleJobList.get(position);
-            if (simpleJob.getJobDeliverStatus() == 45 && simpleJob.getJobType() != 4) {
-                Intent intent = new Intent(this.ctx, OrderBaruActivity.class);
-                intent.putExtra("orderNo", simpleJob.getOrderNo());
-                intent.putExtra("pelanggan", simpleJob.getJobName());
-                intent.putExtra("tanggal", simpleJob.getTanggal());
-                intent.putExtra("containerNo", simpleJob.getContainerNo());
-                intent.putExtra("containerName", simpleJob.getContainerName());
-                intent.putExtra("comodity", simpleJob.getComodity());
-                intent.putExtra("origin", simpleJob.getOrigin());
-                intent.putExtra("dest", simpleJob.getDestination());
-                intent.putExtra("jobId", simpleJob.getJobId());
-                intent.putExtra("jobStatus", simpleJob.getJobDeliverStatus());
-                intent.putExtra("latitude", simpleJob.getJobPickupLatitude());
-                intent.putExtra("longitude", simpleJob.getJobPickupLongitude());
-                intent.putExtra("delivLat", simpleJob.getJobDeliverLatitude());
-                intent.putExtra("delivLng", simpleJob.getJobDeliverLongitude());
-                intent.putExtra("jobType", simpleJob.getJobType());
-                this.ctx.startActivity(intent);
-
-            } else if (simpleJob.getJobDeliverStatus() == 1 && simpleJob.getJobType() != 4) {
-                Intent intent1 = new Intent(this.ctx, OrderBaruActivity.class);
-                intent1.putExtra("orderNo", simpleJob.getOrderNo());
-                intent1.putExtra("pelanggan", simpleJob.getJobName());
-                intent1.putExtra("tanggal", simpleJob.getTanggal());
-                intent1.putExtra("containerNo", simpleJob.getContainerNo());
-                intent1.putExtra("containerName", simpleJob.getContainerName());
-                intent1.putExtra("comodity", simpleJob.getComodity());
-                intent1.putExtra("origin", simpleJob.getOrigin());
-                intent1.putExtra("dest", simpleJob.getDestination());
-                intent1.putExtra("jobId", simpleJob.getJobId());
-                intent1.putExtra("jobStatus", simpleJob.getJobDeliverStatus());
-                intent1.putExtra("latitude", simpleJob.getJobPickupLatitude());
-                intent1.putExtra("longitude", simpleJob.getJobPickupLongitude());
-                intent1.putExtra("delivLat", simpleJob.getJobDeliverLatitude());
-                intent1.putExtra("delivLng", simpleJob.getJobDeliverLongitude());
-                intent1.putExtra("jobType", simpleJob.getJobType());
-                this.ctx.startActivity(intent1);
-            } else if (simpleJob.getJobDeliverStatus() == 2 && simpleJob.getJobType() != 4) {
-                Intent intent1 = new Intent(this.ctx, OrderBaruActivity.class);
-                intent1.putExtra("orderNo", simpleJob.getOrderNo());
-                intent1.putExtra("pelanggan", simpleJob.getJobName());
-                intent1.putExtra("tanggal", simpleJob.getTanggal());
-                intent1.putExtra("containerNo", simpleJob.getContainerNo());
-                intent1.putExtra("containerName", simpleJob.getContainerName());
-                intent1.putExtra("comodity", simpleJob.getComodity());
-                intent1.putExtra("origin", simpleJob.getOrigin());
-                intent1.putExtra("dest", simpleJob.getDestination());
-                intent1.putExtra("jobId", simpleJob.getJobId());
-                intent1.putExtra("jobStatus", simpleJob.getJobDeliverStatus());
-                intent1.putExtra("latitude", simpleJob.getJobPickupLatitude());
-                intent1.putExtra("longitude", simpleJob.getJobPickupLongitude());
-                intent1.putExtra("delivLat", simpleJob.getJobDeliverLatitude());
-                intent1.putExtra("delivLng", simpleJob.getJobDeliverLongitude());
-                intent1.putExtra("jobType", simpleJob.getJobType());
-                this.ctx.startActivity(intent1);
-            } else if (simpleJob.getJobDeliverStatus() == 3 && simpleJob.getJobType() != 4) {
-                Intent intent1 = new Intent(this.ctx, MapsOrderActivity.class);
-                intent1.putExtra("jobId", simpleJob.getJobId());
-                intent1.putExtra("latitude", simpleJob.getJobPickupLatitude());
-                intent1.putExtra("longitude", simpleJob.getJobPickupLongitude());
-                intent1.putExtra("delivLat", simpleJob.getJobDeliverLatitude());
-                intent1.putExtra("delivLng", simpleJob.getJobDeliverLongitude());
-                this.ctx.startActivity(intent1);
-            } else if (simpleJob.getJobDeliverStatus() == 4 && simpleJob.getJobType() != 4) {
-                Intent intent1 = new Intent(this.ctx, SiapAntarActivity.class);
-                intent1.putExtra("jobId", simpleJob.getJobId());
-                intent1.putExtra("latitude", simpleJob.getJobPickupLatitude());
-                intent1.putExtra("longitude", simpleJob.getJobPickupLongitude());
-                intent1.putExtra("delivLat", simpleJob.getJobDeliverLatitude());
-                intent1.putExtra("delivLng", simpleJob.getJobDeliverLongitude());
-                this.ctx.startActivity(intent1);
-            } else if (simpleJob.getJobDeliverStatus() == 5 && simpleJob.getJobType() != 4) {
-                Intent intent1 = new Intent(this.ctx, ReadyToStuffPickupActivity.class);
-                intent1.putExtra("jobId", simpleJob.getJobId());
-                intent1.putExtra("latitude", simpleJob.getJobPickupLatitude());
-                intent1.putExtra("longitude", simpleJob.getJobPickupLongitude());
-                intent1.putExtra("delivLat", simpleJob.getJobDeliverLatitude());
-                intent1.putExtra("delivLng", simpleJob.getJobDeliverLongitude());
-                this.ctx.startActivity(intent1);
-            } else if (simpleJob.getJobDeliverStatus() == 6 && simpleJob.getJobType() != 4) {
-                Intent intent1 = new Intent(this.ctx, StartStuffPickupActivity.class);
-                intent1.putExtra("jobId", simpleJob.getJobId());
-                intent1.putExtra("latitude", simpleJob.getJobPickupLatitude());
-                intent1.putExtra("longitude", simpleJob.getJobPickupLongitude());
-                intent1.putExtra("delivLat", simpleJob.getJobDeliverLatitude());
-                intent1.putExtra("delivLng", simpleJob.getJobDeliverLongitude());
-                this.ctx.startActivity(intent1);
-            } else if (simpleJob.getJobDeliverStatus() == 7 && simpleJob.getJobType() != 4) {
-                Intent intent1 = new Intent(this.ctx, FinishStuffPickupActivity.class);
-                intent1.putExtra("jobId", simpleJob.getJobId());
-                intent1.putExtra("latitude", simpleJob.getJobPickupLatitude());
-                intent1.putExtra("longitude", simpleJob.getJobPickupLongitude());
-                intent1.putExtra("delivLat", simpleJob.getJobDeliverLatitude());
-                intent1.putExtra("delivLng", simpleJob.getJobDeliverLongitude());
-                this.ctx.startActivity(intent1);
-            } else if (simpleJob.getJobDeliverStatus() == 8 && simpleJob.getJobType() != 4) {
-                Intent intent1 = new Intent(this.ctx, MengantarActivity.class);
-                intent1.putExtra("jobId", simpleJob.getJobId());
-                intent1.putExtra("latitude", simpleJob.getJobPickupLatitude());
-                intent1.putExtra("longitude", simpleJob.getJobPickupLongitude());
-                intent1.putExtra("delivLat", simpleJob.getJobDeliverLatitude());
-                intent1.putExtra("delivLng", simpleJob.getJobDeliverLongitude());
-                this.ctx.startActivity(intent1);
-            } else if (simpleJob.getJobDeliverStatus() == 9 && simpleJob.getJobType() != 4) {
-                Intent intent1 = new Intent(this.ctx, ArriveDestinationActivity.class);
-                intent1.putExtra("jobId", simpleJob.getJobId());
-                intent1.putExtra("latitude", simpleJob.getJobPickupLatitude());
-                intent1.putExtra("longitude", simpleJob.getJobPickupLongitude());
-                intent1.putExtra("delivLat", simpleJob.getJobDeliverLatitude());
-                intent1.putExtra("delivLng", simpleJob.getJobDeliverLongitude());
-                this.ctx.startActivity(intent1);
-            } else if (simpleJob.getJobDeliverStatus() == 10 && simpleJob.getJobType() != 4) {
-                Intent intent1 = new Intent(this.ctx, StartDischargeActivity.class);
-                intent1.putExtra("jobId", simpleJob.getJobId());
-                intent1.putExtra("latitude", simpleJob.getJobPickupLatitude());
-                intent1.putExtra("longitude", simpleJob.getJobPickupLongitude());
-                intent1.putExtra("delivLat", simpleJob.getJobDeliverLatitude());
-                intent1.putExtra("delivLng", simpleJob.getJobDeliverLongitude());
-                this.ctx.startActivity(intent1);
-            } else if (simpleJob.getJobDeliverStatus() == 11 && simpleJob.getJobType() != 4) {
-                Intent intent1 = new Intent(this.ctx, FinishDischargeActivity.class);
-                intent1.putExtra("jobId", simpleJob.getJobId());
-                intent1.putExtra("latitude", simpleJob.getJobPickupLatitude());
-                intent1.putExtra("longitude", simpleJob.getJobPickupLongitude());
-                intent1.putExtra("delivLat", simpleJob.getJobDeliverLatitude());
-                intent1.putExtra("delivLng", simpleJob.getJobDeliverLongitude());
-                this.ctx.startActivity(intent1);
-            }
-
-            if (simpleJob.getJobDeliverStatus() == 9 && simpleJob.getJobType() == 4) {
-                Intent intent = new Intent(this.ctx, OrderBaruDooringActivity.class);
-                intent.putExtra("orderNo", simpleJob.getOrderNo());
-                intent.putExtra("pelanggan", simpleJob.getJobName());
-                intent.putExtra("tanggal", simpleJob.getTanggal());
-                intent.putExtra("containerNo", simpleJob.getContainerNo());
-                intent.putExtra("containerName", simpleJob.getContainerName());
-                intent.putExtra("comodity", simpleJob.getComodity());
-                intent.putExtra("origin", simpleJob.getOrigin());
-                intent.putExtra("dest", simpleJob.getDestination());
-                intent.putExtra("jobId", simpleJob.getJobId());
-                intent.putExtra("jobStatus", simpleJob.getJobDeliverStatus());
-                intent.putExtra("latitude", simpleJob.getJobPickupLatitude());
-                intent.putExtra("longitude", simpleJob.getJobPickupLongitude());
-                intent.putExtra("delivLat", simpleJob.getJobDeliverLatitude());
-                intent.putExtra("delivLng", simpleJob.getJobDeliverLongitude());
-                this.ctx.startActivity(intent);
-
-            } else if (simpleJob.getJobDeliverStatus() == 1 && simpleJob.getJobType() == 4) {
-                Intent intent1 = new Intent(this.ctx, OrderBaruDooringActivity.class);
-                intent1.putExtra("jobId", simpleJob.getJobId());
-                intent1.putExtra("latitude", simpleJob.getJobPickupLatitude());
-                intent1.putExtra("longitude", simpleJob.getJobPickupLongitude());
-                this.ctx.startActivity(intent1);
-            } else if (simpleJob.getJobDeliverStatus() == 2 && simpleJob.getJobType() == 4) {
-                Intent intent1 = new Intent(this.ctx, MapsOrderDooringActivity.class);
-                intent1.putExtra("jobId", simpleJob.getJobId());
-                intent1.putExtra("latitude", simpleJob.getJobPickupLatitude());
-                intent1.putExtra("longitude", simpleJob.getJobPickupLongitude());
-                this.ctx.startActivity(intent1);
-            } else if (simpleJob.getJobDeliverStatus() == 3 && simpleJob.getJobType() == 4) {
-                Intent intent1 = new Intent(this.ctx, SiapAntarDooringActivity.class);
-                intent1.putExtra("jobId", simpleJob.getJobId());
-                intent1.putExtra("latitude", simpleJob.getJobPickupLatitude());
-                intent1.putExtra("longitude", simpleJob.getJobPickupLongitude());
-                intent1.putExtra("delivLat", simpleJob.getJobDeliverLatitude());
-                intent1.putExtra("delivLng", simpleJob.getJobDeliverLongitude());
-                this.ctx.startActivity(intent1);
-            } else if (simpleJob.getJobDeliverStatus() == 4 && simpleJob.getJobType() == 4) {
-                Intent intent1 = new Intent(this.ctx, MengantarDooringActivity.class);
-                intent1.putExtra("jobId", simpleJob.getJobId());
-                intent1.putExtra("latitude", simpleJob.getJobPickupLatitude());
-                intent1.putExtra("longitude", simpleJob.getJobPickupLongitude());
-                intent1.putExtra("delivLat", simpleJob.getJobDeliverLatitude());
-                intent1.putExtra("delivLng", simpleJob.getJobDeliverLongitude());
-                this.ctx.startActivity(intent1);
-            } else if (simpleJob.getJobDeliverStatus() == 5 && simpleJob.getJobType() == 4) {
-                Intent intent1 = new Intent(this.ctx, MenurunkanDooringActivity.class);
-                intent1.putExtra("jobId", simpleJob.getJobId());
-                intent1.putExtra("latitude", simpleJob.getJobPickupLatitude());
-                intent1.putExtra("longitude", simpleJob.getJobPickupLongitude());
-                intent1.putExtra("delivLat", simpleJob.getJobDeliverLatitude());
-                intent1.putExtra("delivLng", simpleJob.getJobDeliverLongitude());
-                this.ctx.startActivity(intent1);
-            } else if (simpleJob.getJobDeliverStatus() == 7 && simpleJob.getJobType() == 4) {
-                Intent intent1 = new Intent(this.ctx, JobFinishedActivity.class);
-                intent1.putExtra("jobId", simpleJob.getJobId());
-                intent1.putExtra("latitude", simpleJob.getJobPickupLatitude());
-                intent1.putExtra("longitude", simpleJob.getJobPickupLongitude());
-                this.ctx.startActivity(intent1);
+            if (simpleJob.getJobType() <= 2) {
+                ActivityProses1And2.startProses(mContext, simpleJob);
+            } else if (simpleJob.getJobType() <= 3) {
+                ActivityProses3.startProses(mContext, simpleJob);
+            } else if (simpleJob.getJobType() <= 7) {
+                ActivityProsesFrom4To7.startProses(mContext, simpleJob);
+            } else {
+                ActivityProsesMoreThan8.startProses(mContext, simpleJob);
             }
         }
     }

@@ -1,11 +1,16 @@
 package com.andresual.dev.tms.Activity.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.SparseArray;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class RealJob {
+public class RealJob implements Parcelable {
     @SerializedName("message")
     @Expose
     private String message;
@@ -138,6 +143,7 @@ public class RealJob {
     @SerializedName("detailkontainer")
     @Expose
     private List<DetailKontainer> detailkontainer = null;
+
 
     public String getMessage() {
         return message;
@@ -322,7 +328,29 @@ public class RealJob {
     public void setJobDeliverFinishtime(String jobDeliverFinishtime) {
         this.jobDeliverFinishtime = jobDeliverFinishtime;
     }
-
+    public String getStringDeliverStatus(){
+        SparseArray<String> a = new SparseArray<>();
+        a.put(1, "Waiting");
+        a.put(2, "Assigned");
+        a.put(3, "Accepted");
+        a.put(4, "Go To Pickup");
+        a.put(5, "Waiting loading");
+        a.put(6, "Finish loading");
+        a.put(7, "start loading");
+        a.put(8, "Deliver");
+        a.put(9, "Arrive at Destination");
+        a.put(10, "Start Discarge");
+        a.put(11, "Finish Discarge");
+        a.put(12, "Go empty to depo");
+        a.put(13, "Upload empty to depo");
+        a.put(14, "Start empty depo discarge");
+        a.put(15, "Finish empty depo discarge");
+        a.put(16, "Finish job");
+        a.put(17, "Cancel pickup");
+        a.put(18, "Cancel job");
+        a.put(19, "Reject job");
+        return a.get(jobDeliverStatus);
+    }
     public Integer getJobDeliverStatus() {
         return jobDeliverStatus;
     }
@@ -491,4 +519,119 @@ public class RealJob {
         this.detailkontainer = detailkontainer;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.message);
+        dest.writeValue(this.status);
+        dest.writeString(this.orderId);
+        dest.writeValue(this.id);
+        dest.writeString(this.fleetDriverEmail);
+        dest.writeValue(this.jobType);
+        dest.writeString(this.jobTypeName);
+        dest.writeString(this.jobDescription);
+        dest.writeString(this.jobCreated);
+        dest.writeString(this.jobBlast);
+        dest.writeString(this.jobPickupName);
+        dest.writeString(this.jobPickupAddressId);
+        dest.writeString(this.jobPickupAddress);
+        dest.writeString(this.jobPickupLatitude);
+        dest.writeString(this.jobPickupLongitude);
+        dest.writeString(this.jobPickupDatetime);
+        dest.writeString(this.jobAcceptTime);
+        dest.writeString(this.jobDeliverAddressId);
+        dest.writeString(this.jobDeliverAddress);
+        dest.writeString(this.jobDeliverLatitude);
+        dest.writeString(this.jobDeliverLongitude);
+        dest.writeString(this.jobDeliverStarttime);
+        dest.writeString(this.jobDeliverFinishtime);
+        dest.writeValue(this.jobDeliverStatus);
+        dest.writeString(this.jobDeliverNamastatus);
+        dest.writeValue(this.jobDeliverDistance);
+        dest.writeString(this.jobDeliverDistancetext);
+        dest.writeValue(this.jobDeliverEstimatetime);
+        dest.writeString(this.jobDeliverEstimatetimetext);
+        dest.writeString(this.jobDeliverEstimatefinish);
+        dest.writeString(this.jobBalikAddressId);
+        dest.writeString(this.jobBalikAddress);
+        dest.writeString(this.jobBalikLatitude);
+        dest.writeString(this.jobBalikLongitude);
+        dest.writeString(this.jobBaliktipe);
+        dest.writeValue(this.fleetId);
+        dest.writeString(this.fleetNopol);
+        dest.writeString(this.fleetKode);
+        dest.writeValue(this.fleetDriverId);
+        dest.writeString(this.fleetDriverName);
+        dest.writeString(this.timeZone);
+        dest.writeValue(this.portorderid);
+        dest.writeString(this.jumlahbox);
+        dest.writeList(this.detailkontainer);
+    }
+
+    public RealJob() {
+    }
+
+    protected RealJob(Parcel in) {
+        this.message = in.readString();
+        this.status = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.orderId = in.readString();
+        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.fleetDriverEmail = in.readString();
+        this.jobType = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.jobTypeName = in.readString();
+        this.jobDescription = in.readString();
+        this.jobCreated = in.readString();
+        this.jobBlast = in.readString();
+        this.jobPickupName = in.readString();
+        this.jobPickupAddressId = in.readString();
+        this.jobPickupAddress = in.readString();
+        this.jobPickupLatitude = in.readString();
+        this.jobPickupLongitude = in.readString();
+        this.jobPickupDatetime = in.readString();
+        this.jobAcceptTime = in.readString();
+        this.jobDeliverAddressId = in.readString();
+        this.jobDeliverAddress = in.readString();
+        this.jobDeliverLatitude = in.readString();
+        this.jobDeliverLongitude = in.readString();
+        this.jobDeliverStarttime = in.readString();
+        this.jobDeliverFinishtime = in.readString();
+        this.jobDeliverStatus = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.jobDeliverNamastatus = in.readString();
+        this.jobDeliverDistance = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.jobDeliverDistancetext = in.readString();
+        this.jobDeliverEstimatetime = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.jobDeliverEstimatetimetext = in.readString();
+        this.jobDeliverEstimatefinish = in.readString();
+        this.jobBalikAddressId = in.readString();
+        this.jobBalikAddress = in.readString();
+        this.jobBalikLatitude = in.readString();
+        this.jobBalikLongitude = in.readString();
+        this.jobBaliktipe = in.readString();
+        this.fleetId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.fleetNopol = in.readString();
+        this.fleetKode = in.readString();
+        this.fleetDriverId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.fleetDriverName = in.readString();
+        this.timeZone = in.readString();
+        this.portorderid = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.jumlahbox = in.readString();
+        this.detailkontainer = new ArrayList<DetailKontainer>();
+        in.readList(this.detailkontainer, DetailKontainer.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<RealJob> CREATOR = new Parcelable.Creator<RealJob>() {
+        @Override
+        public RealJob createFromParcel(Parcel source) {
+            return new RealJob(source);
+        }
+
+        @Override
+        public RealJob[] newArray(int size) {
+            return new RealJob[size];
+        }
+    };
 }

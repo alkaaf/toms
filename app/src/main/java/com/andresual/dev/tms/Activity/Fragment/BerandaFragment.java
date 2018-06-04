@@ -19,6 +19,7 @@ import com.andresual.dev.tms.Activity.DashboardActivity;
 import com.andresual.dev.tms.Activity.Model.DashboardModel;
 import com.andresual.dev.tms.Activity.Model.DriverModel;
 import com.andresual.dev.tms.Activity.Model.SimpleJob;
+import com.andresual.dev.tms.Activity.ProsesActivity.ActivityProsesMap;
 import com.andresual.dev.tms.Activity.Util.Netter;
 import com.andresual.dev.tms.Activity.Util.Pref;
 import com.andresual.dev.tms.Activity.Util.StringHashMap;
@@ -83,6 +84,12 @@ public class BerandaFragment extends Fragment {
 
         //VIEW//
         tvBulanIni = view.findViewById(R.id.tv_bulan_ini);
+        tvBulanIni.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), ActivityProsesMap.class));
+            }
+        });
         tvHariIni = view.findViewById(R.id.tv_hari_ini);
         tvSelesai = view.findViewById(R.id.tv_selesai);
         tvProses = view.findViewById(R.id.tv_proses);

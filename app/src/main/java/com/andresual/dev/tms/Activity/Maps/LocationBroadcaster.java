@@ -31,8 +31,8 @@ public class LocationBroadcaster extends Service {
 
     private static final String TAG = "BROADCASTGPS";
     private LocationManager locationManager = null;
-    private static final int LOCATION_INTERVAL = 100;
-    private static final float LOCATION_DISTANCE = 10f;
+    private static final int LOCATION_INTERVAL = 30000;
+    private static final float LOCATION_DISTANCE = 0;
     public static final String LOCATION_DATA = "location_Data";
     public static final String LOCATION_BROADCAST_ACTION = "location.broadcast.action";
     private static Location location;
@@ -49,7 +49,7 @@ public class LocationBroadcaster extends Service {
             new Netter(this).webService(Request.Method.POST, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            Log.e("UPDATE_LOC",response);
+                            Log.e("UPDATE_LOC", response);
                         }
                     }, Netter.getDefaultErrorListener(this, null), Netter.Webservice.UPDATELOKASIDRIVER,
                     new StringHashMap().putMore("idkendaraan", kendaraanModel.getIdKendaraan())
@@ -112,6 +112,21 @@ public class LocationBroadcaster extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "onStartCommand");
         super.onStartCommand(intent, flags, startId);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+//            return ;
+        }
+//        locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, mLocationListener[0], null);
+//        locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER,mLocationListener[1],null);
+        Intent intentBc = new Intent(LOCATION_BROADCAST_ACTION);
+        intentBc.putExtra(LOCATION_DATA, location);
+        sendBroadcast(intent);
         return START_STICKY;
     }
 

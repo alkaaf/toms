@@ -151,6 +151,11 @@
         <activity android:name=".Activity.DCP.OrderBaruDCPActivity"/>
         <activity android:name=".Activity.DCP.SiapAntarDCPActivity"/>
         <activity android:name=".Activity.DCP.MapsOrderDCPActivity"/>
+        <activity android:name=".Activity.ProsesActivity.ActivityProsesMap"/>
+        <activity android:name=".Activity.ProsesActivity.ActivityProses3"/>
+        <activity android:name=".Activity.ProsesActivity.ActivityProses1And2"/>
+        <activity android:name=".Activity.ProsesActivity.ActivityProsesMoreThan8"/>
+        <activity android:name=".Activity.ProsesActivity.ActivityProsesFrom4To7"/>
     </application>
 
 </manifest>

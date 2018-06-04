@@ -30,6 +30,8 @@ public class Netter {
     }
 
     public enum Webservice {
+        JOB_ACCEPT("acceptjob"),
+        JOB_PICKUP("pickupjob"),
         DETAILPICKUP("getDetailPengangkutan"),
         REPORT("report_tocenter"),
         GETDEPO("GetListDepo"),

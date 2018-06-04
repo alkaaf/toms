@@ -21,15 +21,15 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-    /**
-     * Created by andresual on 2/23/2018.
-     */
+/**
+ * Created by andresual on 2/23/2018.
+ */
 
-    public class DirectionFinder {
+public class DirectionFinder {
 
-        private static final String DIRECTION_URL_API = "https://maps.googleapis.com/maps/api/directions/json?";
-        private static final String GOOGLE_API_KEY = "AIzaSyD5MFSKdKfj3UaL0ZSMSCzlkw5S-jmGZdM";
-        private DirectionFinderListener listener;
+    private static final String DIRECTION_URL_API = "https://maps.googleapis.com/maps/api/directions/json?";
+    private static final String GOOGLE_API_KEY = "AIzaSyD5MFSKdKfj3UaL0ZSMSCzlkw5S-jmGZdM";
+    private DirectionFinderListener listener;
     private String origin;
     private String destination;
 
@@ -37,6 +37,12 @@ import java.util.List;
         this.listener = listener;
         this.origin = origin;
         this.destination = destination;
+    }
+
+    public DirectionFinder(DirectionFinderListener listener, double slat, double slng, double dlat, double dlng) {
+        this.listener = listener;
+        this.destination= dlat+","+dlng;
+        this.origin = slat+","+slng;
     }
 
     public void execute() throws UnsupportedEncodingException {
