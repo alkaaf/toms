@@ -27,7 +27,7 @@ import com.andresual.dev.tms.Activity.Maps.DirectionFinder;
 import com.andresual.dev.tms.Activity.Maps.DirectionFinderListener;
 import com.andresual.dev.tms.Activity.MapsController;
 import com.andresual.dev.tms.Activity.MapsOrderActivity;
-import com.andresual.dev.tms.Activity.Model.JobOrder2Model;
+import com.andresual.dev.tms.Activity.Model.SimpleJob;
 import com.andresual.dev.tms.Activity.Model.PassingLocationModel;
 import com.andresual.dev.tms.Activity.Model.RouteModel;
 import com.andresual.dev.tms.R;
@@ -90,7 +90,7 @@ public class MenurunkanDooringActivity extends FragmentActivity implements OnMap
     LatLng latLng;
     List<LatLng> decodedPath;
     Location location;
-    JobOrder2Model modelData;
+    SimpleJob modelData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

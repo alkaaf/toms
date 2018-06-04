@@ -109,7 +109,8 @@ public class AkunFragment extends Fragment {
         pd.show();
         StringHashMap shm = new StringHashMap()
                 .putMore("id_kendaraan", kendaraan.getIdKendaraan())
-                .putMore("id_driver", driver.getIdDriver());
+                .putMore("id_driver", driver.getIdDriver())
+                .putMore("email", driver.getEmail())                ;
         new Netter(getContext()).byAmik(Request.Method.POST, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

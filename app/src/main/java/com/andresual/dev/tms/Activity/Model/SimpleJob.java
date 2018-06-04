@@ -5,15 +5,11 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ServiceConfigurationError;
-
-import javax.xml.transform.sax.SAXResult;
-
 /**
  * Created by andresual on 2/15/2018.
  */
 
-public class JobOrder2Model implements Parcelable {
+public class SimpleJob implements Parcelable {
 
     @SerializedName("job_pickup_name")
     private String jobName;
@@ -212,10 +208,10 @@ public class JobOrder2Model implements Parcelable {
         dest.writeValue(this.jobType);
     }
 
-    public JobOrder2Model() {
+    public SimpleJob() {
     }
 
-    protected JobOrder2Model(Parcel in) {
+    protected SimpleJob(Parcel in) {
         this.jobName = in.readString();
         this.origin = in.readString();
         this.destination = in.readString();
@@ -235,15 +231,15 @@ public class JobOrder2Model implements Parcelable {
         this.jobType = (Integer) in.readValue(Integer.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<JobOrder2Model> CREATOR = new Parcelable.Creator<JobOrder2Model>() {
+    public static final Parcelable.Creator<SimpleJob> CREATOR = new Parcelable.Creator<SimpleJob>() {
         @Override
-        public JobOrder2Model createFromParcel(Parcel source) {
-            return new JobOrder2Model(source);
+        public SimpleJob createFromParcel(Parcel source) {
+            return new SimpleJob(source);
         }
 
         @Override
-        public JobOrder2Model[] newArray(int size) {
-            return new JobOrder2Model[size];
+        public SimpleJob[] newArray(int size) {
+            return new SimpleJob[size];
         }
     };
 }

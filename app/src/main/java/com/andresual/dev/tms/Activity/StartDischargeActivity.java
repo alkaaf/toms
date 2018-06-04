@@ -15,7 +15,7 @@ import android.widget.Button;
 import com.andresual.dev.tms.Activity.Adapter.SebelumnyaListAdapter;
 import com.andresual.dev.tms.Activity.Manager.SessionKendaraan;
 import com.andresual.dev.tms.Activity.Manager.SessionManager;
-import com.andresual.dev.tms.Activity.Model.JobOrder2Model;
+import com.andresual.dev.tms.Activity.Model.SimpleJob;
 import com.andresual.dev.tms.Activity.Model.PassingLocationModel;
 import com.andresual.dev.tms.R;
 import com.android.volley.Request;
@@ -60,7 +60,7 @@ public class StartDischargeActivity extends FragmentActivity implements OnMapRea
     public static String lat;
     public static String lng;
     private Button btnFindPath;
-    JobOrder2Model modelData;
+    SimpleJob modelData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

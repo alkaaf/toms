@@ -15,6 +15,8 @@ import android.view.MenuItem;
 import com.andresual.dev.tms.Activity.Adapter.DepoListAdapter;
 import com.andresual.dev.tms.Activity.Controller.AuthController;
 import com.andresual.dev.tms.Activity.Model.DepoModel;
+import com.andresual.dev.tms.Activity.Util.Netter;
+import com.andresual.dev.tms.Activity.Util.StringHashMap;
 import com.andresual.dev.tms.R;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -22,16 +24,20 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ListDepoActivity extends AppCompatActivity {
-
+    public static final String INTENT_DATA = "data.depo";
     RecyclerView rvDepo;
     DepoListAdapter mAdapter;
     SearchView searchView;
@@ -42,62 +48,38 @@ public class ListDepoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_depo);
 
-        fetchDepo();
+
+        mAdapter = new DepoListAdapter(this, depoModelArrayList);
         rvDepo = findViewById(R.id.rv1);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rvDepo.setLayoutManager(mLayoutManager);
         rvDepo.setHasFixedSize(true);
+        rvDepo.setAdapter(mAdapter);
+        fetchDepo();
     }
 
     public void fetchDepo() {
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading data...");
-        progressDialog.show();
-
-        final HashMap<String, String> params = new HashMap<>();
-        params.put("f", "GetListDepo");
-        Log.i("fetchdepo", params.toString());
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-        StringRequest sr = new StringRequest(Request.Method.POST, "http://manajemenkendaraan.com/tms/webservice.asp",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.i("RESPONSE", response);
-                        progressDialog.dismiss();
-                        try {
-                            JSONObject obj = new JSONObject(response);
-                            JSONArray dermagaArray = obj.getJSONArray("dermaga");
-                            depoModelArrayList = new ArrayList<>();
-                            for (int i = 0; i < dermagaArray.length(); i++) {
-                                JSONObject hasil = dermagaArray.getJSONObject(i);
-                                Log.i("haha", hasil.toString());
-                                DepoModel depoModel = new DepoModel();
-                                depoModel.setId(hasil.getString("id"));
-                                depoModel.setNama(hasil.getString("nama"));
-                                depoModelArrayList.add(depoModel);
-                                Log.i("iddepo", depoModel.getId());
-
-                                mAdapter = new DepoListAdapter(ListDepoActivity.this, depoModelArrayList);
-                                rvDepo.setAdapter(mAdapter);
-                                mAdapter.notifyDataSetChanged();
-                            }
-                        } catch (Throwable t) {
-                            Log.i("tms", "Could not parse malformed JSON: \"" + response + "\"");
-                        }
-                    }
-                }, new Response.ErrorListener() {
+        new Netter(this).webService(Request.Method.POST, new Response.Listener<String>() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onResponse(String response) {
+                try {
+                    JSONObject obj = new JSONObject(response);
+                    ArrayList<DepoModel> temp = new Gson().fromJson(obj.getString("lokasi"), new TypeToken<List<DepoModel>>() {
+                    }.getType());
+                    depoModelArrayList.clear();
+                    depoModelArrayList.addAll(temp);
+                    mAdapter.notifyDataSetChanged();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, Netter.getDefaultErrorListener(this, new Runnable() {
+            @Override
+            public void run() {
 
             }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                return params;
-            }
-        };
-        queue.add(sr);
+        }), Netter.Webservice.GETDEPO, new StringHashMap());
     }
 
     @Override

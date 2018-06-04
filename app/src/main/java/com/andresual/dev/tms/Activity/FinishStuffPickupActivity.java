@@ -2,7 +2,6 @@ package com.andresual.dev.tms.Activity;
 
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,7 +10,7 @@ import android.widget.Button;
 import com.andresual.dev.tms.Activity.Adapter.SebelumnyaListAdapter;
 import com.andresual.dev.tms.Activity.Manager.SessionKendaraan;
 import com.andresual.dev.tms.Activity.Manager.SessionManager;
-import com.andresual.dev.tms.Activity.Model.JobOrder2Model;
+import com.andresual.dev.tms.Activity.Model.SimpleJob;
 import com.andresual.dev.tms.R;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -33,7 +32,7 @@ public class FinishStuffPickupActivity extends FragmentActivity {
     SessionKendaraan sessionKendaraan;
     String idDriver, email, idKendaraan;
     String delivLat, delivLng;
-    JobOrder2Model modelData;
+    SimpleJob modelData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

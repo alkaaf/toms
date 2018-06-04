@@ -11,11 +11,9 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,17 +21,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.andresual.dev.tms.Activity.Adapter.BerandaListAdapter;
 import com.andresual.dev.tms.Activity.Adapter.SebelumnyaListAdapter;
-import com.andresual.dev.tms.Activity.Controller.AuthController;
-import com.andresual.dev.tms.Activity.Controller.OperationalController;
-import com.andresual.dev.tms.Activity.Fragment.BerandaFragment;
 import com.andresual.dev.tms.Activity.Manager.SessionKendaraan;
 import com.andresual.dev.tms.Activity.Manager.SessionManager;
 import com.andresual.dev.tms.Activity.Maps.DirectionFinder;
 import com.andresual.dev.tms.Activity.Maps.DirectionFinderListener;
-import com.andresual.dev.tms.Activity.Model.JobOrder2Model;
-import com.andresual.dev.tms.Activity.Model.LocationModel;
+import com.andresual.dev.tms.Activity.Model.SimpleJob;
 import com.andresual.dev.tms.Activity.Model.PassingLocationModel;
 import com.andresual.dev.tms.Activity.Model.RouteModel;
 import com.andresual.dev.tms.R;
@@ -43,9 +36,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -75,8 +66,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-
 public class MengantarActivity extends FragmentActivity implements OnMapReadyCallback, DirectionFinderListener{
 
     private GoogleMap mMap;
@@ -97,7 +86,7 @@ public class MengantarActivity extends FragmentActivity implements OnMapReadyCal
     public static String lat;
     public static String lng;
     private Button btnFindPath;
-    JobOrder2Model modelData;
+    SimpleJob modelData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -490,32 +479,32 @@ public class MengantarActivity extends FragmentActivity implements OnMapReadyCal
                         try {
                             JSONObject obj = new JSONObject(response);
                             JSONArray job = obj.getJSONArray("job");
-//                            jobOrder2ModelArrayList = new ArrayList<>();
+//                            simpleJobArrayList = new ArrayList<>();
                             for (int i = 0; i < job.length(); i++) {
                                 JSONObject hasil = job.getJSONObject(i);
                                 Log.i("haha", hasil.toString());
-                                JobOrder2Model jobOrder2Model = new JobOrder2Model();
-                                jobOrder2Model.setOrderNo(hasil.getString("order_id"));
-                                jobOrder2Model.setTanggal(hasil.getString("job_blast"));
-                                jobOrder2Model.setContainerNo(hasil.getString("container_no"));
-                                jobOrder2Model.setContainerName(hasil.getString("container_name"));
-                                jobOrder2Model.setComodity(hasil.getString("container_cargo_name"));
-                                jobOrder2Model.setJobName(hasil.getString("job_pickup_name"));
-                                jobOrder2Model.setOrigin(hasil.getString("job_pickup_address"));
-                                jobOrder2Model.setDestination(hasil.getString("job_deliver_address"));
-                                jobOrder2Model.setJobId(hasil.getInt("id"));
-                                jobOrder2Model.setJobDeliverStatus(hasil.getInt("job_deliver_status"));
-                                jobOrder2Model.setJobPickupLatitude(hasil.getString("job_pickup_latitude"));
-                                jobOrder2Model.setJobPickupLongitude(hasil.getString("job_pickup_longitude"));
-                                jobOrder2Model.setJobDeliverLatitude(hasil.getString("job_deliver_latitude"));
+                                SimpleJob simpleJob = new SimpleJob();
+                                simpleJob.setOrderNo(hasil.getString("order_id"));
+                                simpleJob.setTanggal(hasil.getString("job_blast"));
+                                simpleJob.setContainerNo(hasil.getString("container_no"));
+                                simpleJob.setContainerName(hasil.getString("container_name"));
+                                simpleJob.setComodity(hasil.getString("container_cargo_name"));
+                                simpleJob.setJobName(hasil.getString("job_pickup_name"));
+                                simpleJob.setOrigin(hasil.getString("job_pickup_address"));
+                                simpleJob.setDestination(hasil.getString("job_deliver_address"));
+                                simpleJob.setJobId(hasil.getInt("id"));
+                                simpleJob.setJobDeliverStatus(hasil.getInt("job_deliver_status"));
+                                simpleJob.setJobPickupLatitude(hasil.getString("job_pickup_latitude"));
+                                simpleJob.setJobPickupLongitude(hasil.getString("job_pickup_longitude"));
+                                simpleJob.setJobDeliverLatitude(hasil.getString("job_deliver_latitude"));
                                 delivLat = hasil.getString("job_deliver_latitude");
-                                jobOrder2Model.setJobDeliverLongitude(hasil.getString("job_deliver_longitude"));
+                                simpleJob.setJobDeliverLongitude(hasil.getString("job_deliver_longitude"));
                                 delivLong = hasil.getString(hasil.getString("job_deliver_longitude"));
-                                Log.i("onResponses:", jobOrder2Model.getJobDeliverLongitude());
-//                                jobOrder2ModelArrayList.add(jobOrder2Model);
-//                                Log.i("array", jobOrder2ModelArrayList.toString());
+                                Log.i("onResponses:", simpleJob.getJobDeliverLongitude());
+//                                simpleJobArrayList.add(simpleJob);
+//                                Log.i("array", simpleJobArrayList.toString());
 
-//                                mAdapter = new BerandaListAdapter(getActivity(), jobOrder2ModelArrayList);
+//                                mAdapter = new BerandaListAdapter(getActivity(), simpleJobArrayList);
 //                                rvBeranda.setAdapter(mAdapter);
 //                                mAdapter.notifyDataSetChanged();
                             }

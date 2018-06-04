@@ -9,10 +9,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.andresual.dev.tms.Activity.Controller.NotificationController;
-import com.andresual.dev.tms.Activity.Model.JobOrder2Model;
-import com.andresual.dev.tms.Activity.Model.JobOrderModel;
+import com.andresual.dev.tms.Activity.Model.SimpleJob;
 import com.andresual.dev.tms.Activity.Notification.JemputNotificationActivity;
-import com.andresual.dev.tms.Activity.Util.FcmMessagingService;
 import com.andresual.dev.tms.R;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -20,7 +18,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.firebase.messaging.FirebaseMessagingService;
 
 import org.json.JSONObject;
 
@@ -33,27 +30,27 @@ import static com.andresual.dev.tms.Activity.Util.FcmMessagingService.id;
 
 public class OrderBaruNotificationActivity extends AppCompatActivity {
 
-    ArrayList<JobOrder2Model> jobOrder2ModelArrayList;
-    JobOrder2Model jobOrder2Model;
+    ArrayList<SimpleJob> simpleJobArrayList;
+    SimpleJob simpleJob;
     TextView tvOrderNo, tvPelanggan, tvTanggal, tvEstimasiJarak, tvEstimasiWaktu, tvOrigin, tvContSize, tvContType, tvComodity;
 
     //////////////////////////////getter setter////////////////////////////////////////////////////
 
 
-    public ArrayList<JobOrder2Model> getJobOrder2ModelArrayList() {
-        return jobOrder2ModelArrayList;
+    public ArrayList<SimpleJob> getSimpleJobArrayList() {
+        return simpleJobArrayList;
     }
 
-    public void setJobOrder2ModelArrayList(ArrayList<JobOrder2Model> jobOrder2ModelArrayList) {
-        this.jobOrder2ModelArrayList = jobOrder2ModelArrayList;
+    public void setSimpleJobArrayList(ArrayList<SimpleJob> simpleJobArrayList) {
+        this.simpleJobArrayList = simpleJobArrayList;
     }
 
-    public JobOrder2Model getJobOrder2Model() {
-        return jobOrder2Model;
+    public SimpleJob getSimpleJob() {
+        return simpleJob;
     }
 
-    public void setJobOrder2Model(JobOrder2Model jobOrder2Model) {
-        this.jobOrder2Model = jobOrder2Model;
+    public void setSimpleJob(SimpleJob simpleJob) {
+        this.simpleJob = simpleJob;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -111,25 +108,25 @@ public class OrderBaruNotificationActivity extends AppCompatActivity {
                                 Log.i("data", data.toString());
 //                                jobOrderModelArrayList = new ArrayList<>();
                                 for (int i = 0; i < data.length(); i++) {
-                                    JobOrder2Model jobOrder2Model = new JobOrder2Model();
-                                    jobOrder2Model.setOrderNo(data.getString("order_id"));
-                                    tvOrderNo.setText(jobOrder2Model.getOrderNo());
-                                    jobOrder2Model.setTanggal(data.getString("job_blast"));
-                                    jobOrder2Model.setContainerNo(data.getString("container_no"));
-                                    tvContType.setText(jobOrder2Model.getContainerNo());
-                                    jobOrder2Model.setContainerName(data.getString("container_name"));
-                                    tvContType.setText(jobOrder2Model.getContainerName());
-                                    jobOrder2Model.setComodity(data.getString("container_cargo_name"));
-                                    tvComodity.setText(jobOrder2Model.getComodity());
-                                    jobOrder2Model.setJobName(data.getString("job_pickup_name"));
-                                    tvPelanggan.setText(jobOrder2Model.getJobName());
-                                    jobOrder2Model.setOrigin(data.getString("job_pickup_address"));
-                                    tvOrigin.setText(jobOrder2Model.getOrigin());
-                                    jobOrder2Model.setDestination(data.getString("job_deliver_address"));
-                                    jobOrder2Model.setJobId(data.getInt("id"));
-                                    Log.i("onResponse:", jobOrder2Model.getJobId().toString());
-//                                    jobOrder2ModelArrayList.add(jobOrder2Model);
-//                                    Log.i("array", jobOrder2ModelArrayList.toString());
+                                    SimpleJob simpleJob = new SimpleJob();
+                                    simpleJob.setOrderNo(data.getString("order_id"));
+                                    tvOrderNo.setText(simpleJob.getOrderNo());
+                                    simpleJob.setTanggal(data.getString("job_blast"));
+                                    simpleJob.setContainerNo(data.getString("container_no"));
+                                    tvContType.setText(simpleJob.getContainerNo());
+                                    simpleJob.setContainerName(data.getString("container_name"));
+                                    tvContType.setText(simpleJob.getContainerName());
+                                    simpleJob.setComodity(data.getString("container_cargo_name"));
+                                    tvComodity.setText(simpleJob.getComodity());
+                                    simpleJob.setJobName(data.getString("job_pickup_name"));
+                                    tvPelanggan.setText(simpleJob.getJobName());
+                                    simpleJob.setOrigin(data.getString("job_pickup_address"));
+                                    tvOrigin.setText(simpleJob.getOrigin());
+                                    simpleJob.setDestination(data.getString("job_deliver_address"));
+                                    simpleJob.setJobId(data.getInt("id"));
+                                    Log.i("onResponse:", simpleJob.getJobId().toString());
+//                                    simpleJobArrayList.add(simpleJob);
+//                                    Log.i("array", simpleJobArrayList.toString());
 //                                    Log.i("onResponse:", jobOrderModelArrayList.toString());
                                 }
                             }

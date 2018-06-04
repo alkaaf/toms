@@ -23,10 +23,9 @@ import com.andresual.dev.tms.Activity.Manager.SessionManager;
 import com.andresual.dev.tms.Activity.Maps.DirectionFinder;
 import com.andresual.dev.tms.Activity.Maps.DirectionFinderListener;
 import com.andresual.dev.tms.Activity.MapsController;
-import com.andresual.dev.tms.Activity.Model.JobOrder2Model;
+import com.andresual.dev.tms.Activity.Model.SimpleJob;
 import com.andresual.dev.tms.Activity.Model.RouteModel;
 import com.andresual.dev.tms.Activity.TolakOrderActivity;
-import com.andresual.dev.tms.Dooring.MapsOrderDooringActivity;
 import com.andresual.dev.tms.R;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -120,10 +119,10 @@ public class OrderBaruDCPActivity extends AppCompatActivity implements OnMapRead
 
         Log.i("jobId", jobId.toString());
 
-        JobOrder2Model jobOrder2Model = new JobOrder2Model();
-        jobOrder2Model.setJobId(jobId);
+        SimpleJob simpleJob = new SimpleJob();
+        simpleJob.setJobId(jobId);
 
-        OperationalController.getmInstance().setJobOrder2Model(jobOrder2Model);
+        OperationalController.getmInstance().setSimpleJob(simpleJob);
 
         Button btnTerima = findViewById(R.id.btn_terima);
         Button btnTolak = findViewById(R.id.btn_tolak);

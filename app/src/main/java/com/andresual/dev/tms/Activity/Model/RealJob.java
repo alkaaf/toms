@@ -1,0 +1,494 @@
+package com.andresual.dev.tms.Activity.Model;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
+public class RealJob {
+    @SerializedName("message")
+    @Expose
+    private String message;
+    @SerializedName("status")
+    @Expose
+    private Integer status;
+    @SerializedName("order_id")
+    @Expose
+    private String orderId;
+    @SerializedName("id")
+    @Expose
+    private Integer id;
+    @SerializedName("fleet_driver_email")
+    @Expose
+    private String fleetDriverEmail;
+    @SerializedName("job_type")
+    @Expose
+    private Integer jobType;
+    @SerializedName("job_type_name")
+    @Expose
+    private String jobTypeName;
+    @SerializedName("job_description")
+    @Expose
+    private String jobDescription;
+    @SerializedName("job_created")
+    @Expose
+    private String jobCreated;
+    @SerializedName("job_blast")
+    @Expose
+    private String jobBlast;
+    @SerializedName("job_pickup_name")
+    @Expose
+    private String jobPickupName;
+    @SerializedName("job_pickup_address_id")
+    @Expose
+    private String jobPickupAddressId;
+    @SerializedName("job_pickup_address")
+    @Expose
+    private String jobPickupAddress;
+    @SerializedName("job_pickup_latitude")
+    @Expose
+    private String jobPickupLatitude;
+    @SerializedName("job_pickup_longitude")
+    @Expose
+    private String jobPickupLongitude;
+    @SerializedName("job_pickup_datetime")
+    @Expose
+    private String jobPickupDatetime;
+    @SerializedName("job_accept_time")
+    @Expose
+    private String jobAcceptTime;
+    @SerializedName("job_deliver_address_id")
+    @Expose
+    private String jobDeliverAddressId;
+    @SerializedName("job_deliver_address")
+    @Expose
+    private String jobDeliverAddress;
+    @SerializedName("job_deliver_latitude")
+    @Expose
+    private String jobDeliverLatitude;
+    @SerializedName("job_deliver_longitude")
+    @Expose
+    private String jobDeliverLongitude;
+    @SerializedName("job_deliver_starttime")
+    @Expose
+    private String jobDeliverStarttime;
+    @SerializedName("job_deliver_finishtime")
+    @Expose
+    private String jobDeliverFinishtime;
+    @SerializedName("job_deliver_status")
+    @Expose
+    private Integer jobDeliverStatus;
+    @SerializedName("job_deliver_namastatus")
+    @Expose
+    private String jobDeliverNamastatus;
+    @SerializedName("job_deliver_distance")
+    @Expose
+    private Integer jobDeliverDistance;
+    @SerializedName("job_deliver_distancetext")
+    @Expose
+    private String jobDeliverDistancetext;
+    @SerializedName("job_deliver_estimatetime")
+    @Expose
+    private Integer jobDeliverEstimatetime;
+    @SerializedName("job_deliver_estimatetimetext")
+    @Expose
+    private String jobDeliverEstimatetimetext;
+    @SerializedName("job_deliver_estimatefinish")
+    @Expose
+    private String jobDeliverEstimatefinish;
+    @SerializedName("job_balik_address_id")
+    @Expose
+    private String jobBalikAddressId;
+    @SerializedName("job_balik_address")
+    @Expose
+    private String jobBalikAddress;
+    @SerializedName("job_balik_latitude")
+    @Expose
+    private String jobBalikLatitude;
+    @SerializedName("job_balik_longitude")
+    @Expose
+    private String jobBalikLongitude;
+    @SerializedName("job_baliktipe")
+    @Expose
+    private String jobBaliktipe;
+    @SerializedName("fleet_id")
+    @Expose
+    private Integer fleetId;
+    @SerializedName("fleet_nopol")
+    @Expose
+    private String fleetNopol;
+    @SerializedName("fleet_kode")
+    @Expose
+    private String fleetKode;
+    @SerializedName("fleet_driver_id")
+    @Expose
+    private Integer fleetDriverId;
+    @SerializedName("fleet_driver_name")
+    @Expose
+    private String fleetDriverName;
+    @SerializedName("time_zone")
+    @Expose
+    private String timeZone;
+    @SerializedName("portorderid")
+    @Expose
+    private Integer portorderid;
+    @SerializedName("jumlahbox")
+    @Expose
+    private String jumlahbox;
+    @SerializedName("detailkontainer")
+    @Expose
+    private List<DetailKontainer> detailkontainer = null;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getFleetDriverEmail() {
+        return fleetDriverEmail;
+    }
+
+    public void setFleetDriverEmail(String fleetDriverEmail) {
+        this.fleetDriverEmail = fleetDriverEmail;
+    }
+
+    public Integer getJobType() {
+        return jobType;
+    }
+
+    public void setJobType(Integer jobType) {
+        this.jobType = jobType;
+    }
+
+    public String getJobTypeName() {
+        return jobTypeName;
+    }
+
+    public void setJobTypeName(String jobTypeName) {
+        this.jobTypeName = jobTypeName;
+    }
+
+    public String getJobDescription() {
+        return jobDescription;
+    }
+
+    public void setJobDescription(String jobDescription) {
+        this.jobDescription = jobDescription;
+    }
+
+    public String getJobCreated() {
+        return jobCreated;
+    }
+
+    public void setJobCreated(String jobCreated) {
+        this.jobCreated = jobCreated;
+    }
+
+    public String getJobBlast() {
+        return jobBlast;
+    }
+
+    public void setJobBlast(String jobBlast) {
+        this.jobBlast = jobBlast;
+    }
+
+    public String getJobPickupName() {
+        return jobPickupName;
+    }
+
+    public void setJobPickupName(String jobPickupName) {
+        this.jobPickupName = jobPickupName;
+    }
+
+    public String getJobPickupAddressId() {
+        return jobPickupAddressId;
+    }
+
+    public void setJobPickupAddressId(String jobPickupAddressId) {
+        this.jobPickupAddressId = jobPickupAddressId;
+    }
+
+    public String getJobPickupAddress() {
+        return jobPickupAddress;
+    }
+
+    public void setJobPickupAddress(String jobPickupAddress) {
+        this.jobPickupAddress = jobPickupAddress;
+    }
+
+    public String getJobPickupLatitude() {
+        return jobPickupLatitude;
+    }
+
+    public void setJobPickupLatitude(String jobPickupLatitude) {
+        this.jobPickupLatitude = jobPickupLatitude;
+    }
+
+    public String getJobPickupLongitude() {
+        return jobPickupLongitude;
+    }
+
+    public void setJobPickupLongitude(String jobPickupLongitude) {
+        this.jobPickupLongitude = jobPickupLongitude;
+    }
+
+    public String getJobPickupDatetime() {
+        return jobPickupDatetime;
+    }
+
+    public void setJobPickupDatetime(String jobPickupDatetime) {
+        this.jobPickupDatetime = jobPickupDatetime;
+    }
+
+    public String getJobAcceptTime() {
+        return jobAcceptTime;
+    }
+
+    public void setJobAcceptTime(String jobAcceptTime) {
+        this.jobAcceptTime = jobAcceptTime;
+    }
+
+    public String getJobDeliverAddressId() {
+        return jobDeliverAddressId;
+    }
+
+    public void setJobDeliverAddressId(String jobDeliverAddressId) {
+        this.jobDeliverAddressId = jobDeliverAddressId;
+    }
+
+    public String getJobDeliverAddress() {
+        return jobDeliverAddress;
+    }
+
+    public void setJobDeliverAddress(String jobDeliverAddress) {
+        this.jobDeliverAddress = jobDeliverAddress;
+    }
+
+    public String getJobDeliverLatitude() {
+        return jobDeliverLatitude;
+    }
+
+    public void setJobDeliverLatitude(String jobDeliverLatitude) {
+        this.jobDeliverLatitude = jobDeliverLatitude;
+    }
+
+    public String getJobDeliverLongitude() {
+        return jobDeliverLongitude;
+    }
+
+    public void setJobDeliverLongitude(String jobDeliverLongitude) {
+        this.jobDeliverLongitude = jobDeliverLongitude;
+    }
+
+    public String getJobDeliverStarttime() {
+        return jobDeliverStarttime;
+    }
+
+    public void setJobDeliverStarttime(String jobDeliverStarttime) {
+        this.jobDeliverStarttime = jobDeliverStarttime;
+    }
+
+    public String getJobDeliverFinishtime() {
+        return jobDeliverFinishtime;
+    }
+
+    public void setJobDeliverFinishtime(String jobDeliverFinishtime) {
+        this.jobDeliverFinishtime = jobDeliverFinishtime;
+    }
+
+    public Integer getJobDeliverStatus() {
+        return jobDeliverStatus;
+    }
+
+    public void setJobDeliverStatus(Integer jobDeliverStatus) {
+        this.jobDeliverStatus = jobDeliverStatus;
+    }
+
+    public String getJobDeliverNamastatus() {
+        return jobDeliverNamastatus;
+    }
+
+    public void setJobDeliverNamastatus(String jobDeliverNamastatus) {
+        this.jobDeliverNamastatus = jobDeliverNamastatus;
+    }
+
+    public Integer getJobDeliverDistance() {
+        return jobDeliverDistance;
+    }
+
+    public void setJobDeliverDistance(Integer jobDeliverDistance) {
+        this.jobDeliverDistance = jobDeliverDistance;
+    }
+
+    public String getJobDeliverDistancetext() {
+        return jobDeliverDistancetext;
+    }
+
+    public void setJobDeliverDistancetext(String jobDeliverDistancetext) {
+        this.jobDeliverDistancetext = jobDeliverDistancetext;
+    }
+
+    public Integer getJobDeliverEstimatetime() {
+        return jobDeliverEstimatetime;
+    }
+
+    public void setJobDeliverEstimatetime(Integer jobDeliverEstimatetime) {
+        this.jobDeliverEstimatetime = jobDeliverEstimatetime;
+    }
+
+    public String getJobDeliverEstimatetimetext() {
+        return jobDeliverEstimatetimetext;
+    }
+
+    public void setJobDeliverEstimatetimetext(String jobDeliverEstimatetimetext) {
+        this.jobDeliverEstimatetimetext = jobDeliverEstimatetimetext;
+    }
+
+    public String getJobDeliverEstimatefinish() {
+        return jobDeliverEstimatefinish;
+    }
+
+    public void setJobDeliverEstimatefinish(String jobDeliverEstimatefinish) {
+        this.jobDeliverEstimatefinish = jobDeliverEstimatefinish;
+    }
+
+    public String getJobBalikAddressId() {
+        return jobBalikAddressId;
+    }
+
+    public void setJobBalikAddressId(String jobBalikAddressId) {
+        this.jobBalikAddressId = jobBalikAddressId;
+    }
+
+    public String getJobBalikAddress() {
+        return jobBalikAddress;
+    }
+
+    public void setJobBalikAddress(String jobBalikAddress) {
+        this.jobBalikAddress = jobBalikAddress;
+    }
+
+    public String getJobBalikLatitude() {
+        return jobBalikLatitude;
+    }
+
+    public void setJobBalikLatitude(String jobBalikLatitude) {
+        this.jobBalikLatitude = jobBalikLatitude;
+    }
+
+    public String getJobBalikLongitude() {
+        return jobBalikLongitude;
+    }
+
+    public void setJobBalikLongitude(String jobBalikLongitude) {
+        this.jobBalikLongitude = jobBalikLongitude;
+    }
+
+    public String getJobBaliktipe() {
+        return jobBaliktipe;
+    }
+
+    public void setJobBaliktipe(String jobBaliktipe) {
+        this.jobBaliktipe = jobBaliktipe;
+    }
+
+    public Integer getFleetId() {
+        return fleetId;
+    }
+
+    public void setFleetId(Integer fleetId) {
+        this.fleetId = fleetId;
+    }
+
+    public String getFleetNopol() {
+        return fleetNopol;
+    }
+
+    public void setFleetNopol(String fleetNopol) {
+        this.fleetNopol = fleetNopol;
+    }
+
+    public String getFleetKode() {
+        return fleetKode;
+    }
+
+    public void setFleetKode(String fleetKode) {
+        this.fleetKode = fleetKode;
+    }
+
+    public Integer getFleetDriverId() {
+        return fleetDriverId;
+    }
+
+    public void setFleetDriverId(Integer fleetDriverId) {
+        this.fleetDriverId = fleetDriverId;
+    }
+
+    public String getFleetDriverName() {
+        return fleetDriverName;
+    }
+
+    public void setFleetDriverName(String fleetDriverName) {
+        this.fleetDriverName = fleetDriverName;
+    }
+
+    public String getTimeZone() {
+        return timeZone;
+    }
+
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
+    }
+
+    public Integer getPortorderid() {
+        return portorderid;
+    }
+
+    public void setPortorderid(Integer portorderid) {
+        this.portorderid = portorderid;
+    }
+
+    public String getJumlahbox() {
+        return jumlahbox;
+    }
+
+    public void setJumlahbox(String jumlahbox) {
+        this.jumlahbox = jumlahbox;
+    }
+
+    public List<DetailKontainer> getDetailkontainer() {
+        return detailkontainer;
+    }
+
+    public void setDetailkontainer(List<DetailKontainer> detailkontainer) {
+        this.detailkontainer = detailkontainer;
+    }
+
+}

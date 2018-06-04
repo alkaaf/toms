@@ -19,7 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.andresual.dev.tms.Activity.Adapter.SebelumnyaListAdapter;
-import com.andresual.dev.tms.Activity.Model.JobOrder2Model;
+import com.andresual.dev.tms.Activity.Model.SimpleJob;
 import com.andresual.dev.tms.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -44,7 +44,7 @@ public class UploadFotoActivity extends AppCompatActivity {
     byte[] byteArray1, byteArray2;
     String encodedImage1, encodedImage2, idAdmin1, idAdmin2;
     String generatedFilePath;
-    JobOrder2Model modelData;
+    SimpleJob modelData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

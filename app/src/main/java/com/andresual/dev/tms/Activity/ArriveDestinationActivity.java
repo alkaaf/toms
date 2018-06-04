@@ -9,7 +9,6 @@ import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,7 +17,7 @@ import android.widget.Button;
 import com.andresual.dev.tms.Activity.Adapter.SebelumnyaListAdapter;
 import com.andresual.dev.tms.Activity.Manager.SessionKendaraan;
 import com.andresual.dev.tms.Activity.Manager.SessionManager;
-import com.andresual.dev.tms.Activity.Model.JobOrder2Model;
+import com.andresual.dev.tms.Activity.Model.SimpleJob;
 import com.andresual.dev.tms.Activity.Model.PassingLocationModel;
 import com.andresual.dev.tms.R;
 import com.android.volley.Request;
@@ -64,7 +63,7 @@ public class ArriveDestinationActivity extends FragmentActivity implements OnMap
     public static String lat;
     public static String lng;
     private Button btnFindPath;
-    JobOrder2Model modelData;
+    SimpleJob modelData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -11,6 +11,8 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
+import com.andresual.dev.tms.Activity.ListDepoActivity;
+import com.andresual.dev.tms.Activity.ListDermagaActivity;
 import com.andresual.dev.tms.Activity.Model.DepoModel;
 import com.andresual.dev.tms.Activity.Model.DermagaModel;
 import com.andresual.dev.tms.R;
@@ -62,8 +64,7 @@ public class DermagaListAdapter extends RecyclerView.Adapter<DermagaListAdapter.
             int position = getAdapterPosition();
             DermagaModel dermagaModel = dermagaModelArrayListFlitered.get(position);
             Intent intent = new Intent();
-            intent.putExtra("iddermaga", dermagaModel.getId());
-            intent.putExtra("namadermaga", dermagaModel.getNama());
+            intent.putExtra(ListDermagaActivity.INTENT_DATA, dermagaModel);;
             ((Activity) mContext).setResult(Activity.RESULT_OK, intent);
             ((Activity) mContext).finish();
         }

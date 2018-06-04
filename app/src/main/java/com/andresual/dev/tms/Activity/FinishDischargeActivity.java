@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +15,7 @@ import android.widget.Button;
 import com.andresual.dev.tms.Activity.Adapter.SebelumnyaListAdapter;
 import com.andresual.dev.tms.Activity.Manager.SessionKendaraan;
 import com.andresual.dev.tms.Activity.Manager.SessionManager;
-import com.andresual.dev.tms.Activity.Model.JobOrder2Model;
+import com.andresual.dev.tms.Activity.Model.SimpleJob;
 import com.andresual.dev.tms.Activity.Model.PassingLocationModel;
 import com.andresual.dev.tms.R;
 import com.android.volley.Request;
@@ -32,7 +31,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
-import com.google.firebase.storage.UploadTask;
 
 import org.json.JSONObject;
 
@@ -62,7 +60,7 @@ public class FinishDischargeActivity extends FragmentActivity implements OnMapRe
     public static String lat;
     public static String lng;
     private Button btnFindPath;
-    private JobOrder2Model modelData;
+    private SimpleJob modelData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

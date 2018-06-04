@@ -1,17 +1,21 @@
 package com.andresual.dev.tms.Activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -96,10 +100,12 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
 //    String googleEmail, googleUsername;
 
     private static final int RC_SIGN_IN = 007;
+    public static final int PERM_REQ = 12;
 
     @Override
     protected void onStart() {
         super.onStart();
+
     }
 
     @Override
@@ -109,6 +115,9 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
         setContentView(R.layout.activity_main);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions( this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERM_REQ);
+        }
 
 //        gso = ((GoogleController) getApplication()).getGoogleSignInOptions();
 //        mGoogleApiClient = ((GoogleController) getApplication()).getGoogleApiClient(MainActivity.this, this);
@@ -132,16 +141,9 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
         };
         mAuth.addAuthStateListener(mAuthListener);
 
-//        //cek login session
-//        sessionManager = new SessionManager(getApplicationContext());
-//        sessionManager.checkLogin();
-//
-//        sessionDriverInfo = new SessionDriverInfo(getApplicationContext());
-//        sessionDriverInfo.checkLogin();
-
         // session check
         Pref pref = new Pref(this);
-        if(pref.checkDriver()){
+        if (pref.checkDriver()) {
             startActivity(new Intent(this, PilihKendaraanActivity.class));
             finish();
         }
@@ -155,9 +157,6 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
         progressDialog = new ProgressDialog(MainActivity.this);
         progressDialog.setMessage("Signing you in...");
 
-//        btnLoginGoogle.setSize(SignInButton.SIZE_STANDARD);
-//        btnLoginGoogle.setScopes(gso.getScopeArray());
-
         if (getIntent().getExtras() != null) {
             for (String key : getIntent().getExtras().keySet()) {
                 Object value = getIntent().getExtras().get(key);
@@ -165,12 +164,6 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
             }
         }
 
-//        btnLoginGoogle.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                signInGoogle();
-//            }
-//        });
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -217,6 +210,17 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
         });
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        for (int i = 0; i < grantResults.length; i++) {
+            if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Harap perbolehkan seluruh permisi untuk menggunakan aplikasi", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+    }
+
     private void signIn(String email, String password, String token) {
         StringHashMap shm = new StringHashMap()
                 .putMore("email", email)
@@ -231,13 +235,13 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
                     int status = obj.getInt("status");
                     String message = obj.getString("message");
                     toast(message);
-                    if(status == 200){
+                    if (status == 200) {
                         String token = obj.getString("token");
                         // save login data
                         DriverModel driver = new Gson().fromJson(obj.getString("data"), DriverModel.class);
                         driver.setToken(token);
                         new Pref(MainActivity.this).putModelDriver(driver);
-                        startActivity(new Intent(MainActivity.this,PilihKendaraanActivity.class));
+                        startActivity(new Intent(MainActivity.this, PilihKendaraanActivity.class));
                         finish();
                     }
                 } catch (JSONException e) {
@@ -252,6 +256,7 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
         }), Netter.Byamik.LOGINAPP, shm);
         //        queue.add(new StringRequest());
     }
+
 
 //    private void signInGoogle() {
 //        Intent intent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);

@@ -28,10 +28,9 @@ import com.andresual.dev.tms.Activity.Manager.SessionManager;
 import com.andresual.dev.tms.Activity.Maps.DirectionFinder;
 import com.andresual.dev.tms.Activity.Maps.DirectionFinderListener;
 import com.andresual.dev.tms.Activity.MapsController;
-import com.andresual.dev.tms.Activity.Model.JobOrder2Model;
+import com.andresual.dev.tms.Activity.Model.SimpleJob;
 import com.andresual.dev.tms.Activity.Model.PassingLocationModel;
 import com.andresual.dev.tms.Activity.Model.RouteModel;
-import com.andresual.dev.tms.Activity.SiapAntarActivity;
 import com.andresual.dev.tms.Activity.TolakOrderActivity;
 import com.andresual.dev.tms.R;
 import com.android.volley.Request;
@@ -87,7 +86,7 @@ public class MapsOrderDooringActivity extends FragmentActivity implements OnMapR
     public static String lat;
     public static String lng;
     String latitude, longitude;
-    JobOrder2Model modelData;
+    SimpleJob modelData;
     public PassingLocationModel getPassingLocationModel() {
         return passingLocationModel;
     }

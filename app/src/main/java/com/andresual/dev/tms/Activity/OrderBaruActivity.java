@@ -2,7 +2,6 @@ package com.andresual.dev.tms.Activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -26,7 +25,7 @@ import com.andresual.dev.tms.Activity.Manager.SessionKendaraan;
 import com.andresual.dev.tms.Activity.Manager.SessionManager;
 import com.andresual.dev.tms.Activity.Maps.DirectionFinder;
 import com.andresual.dev.tms.Activity.Maps.DirectionFinderListener;
-import com.andresual.dev.tms.Activity.Model.JobOrder2Model;
+import com.andresual.dev.tms.Activity.Model.SimpleJob;
 import com.andresual.dev.tms.Activity.Model.RouteModel;
 import com.andresual.dev.tms.R;
 import com.android.volley.Request;
@@ -35,16 +34,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -79,7 +73,7 @@ public class OrderBaruActivity extends AppCompatActivity implements OnMapReadyCa
     private List<Marker> destinationMarkers = new ArrayList<>();
     private List<Polyline> polylinePaths = new ArrayList<>();
     String latitude, longitude;
-    JobOrder2Model modelData;
+    SimpleJob modelData;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_baru);
@@ -154,10 +148,10 @@ public class OrderBaruActivity extends AppCompatActivity implements OnMapReadyCa
         ///////////
         Log.i("jobId", jobId.toString());
 
-        JobOrder2Model jobOrder2Model = new JobOrder2Model();
-        jobOrder2Model.setJobId(jobId);
+        SimpleJob simpleJob = new SimpleJob();
+        simpleJob.setJobId(jobId);
 
-        OperationalController.getmInstance().setJobOrder2Model(jobOrder2Model);
+        OperationalController.getmInstance().setSimpleJob(simpleJob);
 
         Button btnTerima = findViewById(R.id.btn_terima);
         Button btnTolak = findViewById(R.id.btn_tolak);

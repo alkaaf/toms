@@ -26,7 +26,7 @@ import com.andresual.dev.tms.Activity.Manager.SessionKendaraan;
 import com.andresual.dev.tms.Activity.Manager.SessionManager;
 import com.andresual.dev.tms.Activity.Maps.DirectionFinder;
 import com.andresual.dev.tms.Activity.Maps.DirectionFinderListener;
-import com.andresual.dev.tms.Activity.Model.JobOrder2Model;
+import com.andresual.dev.tms.Activity.Model.SimpleJob;
 import com.andresual.dev.tms.Activity.Model.PassingLocationModel;
 import com.andresual.dev.tms.Activity.Model.RouteModel;
 import com.andresual.dev.tms.R;
@@ -85,7 +85,7 @@ public class MapsOrderActivity extends FragmentActivity implements OnMapReadyCal
     public static String lng;
     String latitude, longitude;
 
-    JobOrder2Model modelData;
+    SimpleJob modelData;
 
     public PassingLocationModel getPassingLocationModel() {
         return passingLocationModel;

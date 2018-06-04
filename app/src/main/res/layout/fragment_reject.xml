@@ -7,171 +7,172 @@
     android:background="#e4e4e4"
     tools:context=".Activity.Fragment.RejectFragment">
 
-    <android.support.v4.widget.NestedScrollView
+    <ScrollView
         android:id="@+id/nss1"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.constraint.ConstraintLayout
+        <LinearLayout
+            android:padding="16dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <RadioGroup
-                android:id="@+id/rg1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" >
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-                <RadioButton
-                    android:id="@+id/rb_depo"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Depo" />
+                    android:orientation="vertical">
 
-                <RadioButton
-                    android:id="@+id/rb_dermaga"
-                    android:layout_width="wrap_content"
+                    <RadioGroup
+                        android:id="@+id/rg1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <RadioButton
+                            android:id="@+id/rb_depo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="20dp"
+                            android:gravity="center"
+                            android:text="Depo" />
+
+                        <RadioButton
+                            android:id="@+id/rb_dermaga"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:text="Dermaga" />
+                    </RadioGroup>
+
+                    <TextView
+                        android:id="@+id/tv_target"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:text="Depo bangunan"
+                        android:textAlignment="center"
+                        android:textSize="24sp"
+                        android:visibility="visible"
+                        app:layout_constraintEnd_toEndOf="@+id/rg1"
+                        app:layout_constraintStart_toStartOf="@+id/rg1"
+                        app:layout_constraintTop_toBottomOf="@+id/rg1" />
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Dermaga" />
-            </RadioGroup>
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-            <TextView
-                android:id="@+id/tv_depo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="24dp"
-                android:text="Depo >>"
-                android:textSize="24sp"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="@+id/rg1"
-                app:layout_constraintStart_toStartOf="@+id/rg1"
-                app:layout_constraintTop_toBottomOf="@+id/rg1" />
+                    <RadioGroup
+                        android:id="@+id/rg2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_dermaga">
 
-            <TextView
-                android:id="@+id/tv_dermaga"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:textSize="24sp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="24dp"
-                android:visibility="invisible"
-                android:text="Dermaga >>"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rg1" />
+                        <RadioButton
+                            android:id="@+id/rb1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_weight="1"
+                            android:checked="true"
+                            android:text="Alat Rusak" />
 
-            <RadioGroup
-                android:id="@+id/radioGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                        <RadioButton
+                            android:id="@+id/rb2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="10dp"
+
+                            android:text="Macet" />
+
+                        <RadioButton
+                            android:id="@+id/rb3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="10dp"
+
+                            android:text="Demo" />
+
+                        <RadioButton
+                            android:id="@+id/rb4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="10dp"
+
+                            android:text="Banjir" />
+
+                        <RadioButton
+                            android:id="@+id/rb5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="10dp"
+
+                            android:text="Tidak ada operator" />
+
+
+                        <RadioButton
+                            android:id="@+id/rb6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="10dp"
+
+                            android:text="Alasan Lainnya" />
+
+                    </RadioGroup>
+
+                    <EditText
+                        android:id="@+id/et_alasan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="textMultiLine"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/radioGroup"
+                        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+            <Button
                 android:layout_marginTop="16dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_dermaga">
-
-                <RadioButton
-                    android:id="@+id/rb6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_weight="1"
-                    android:text="Alat Rusak" />
-
-                <RadioButton
-                    android:id="@+id/rb1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="10dp"
-                    android:checked="true"
-                    android:text="Macet" />
-
-                <RadioButton
-                    android:id="@+id/rb2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="10dp"
-                    android:checked="true"
-                    android:text="Demo" />
-
-                <RadioButton
-                    android:id="@+id/rb3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="10dp"
-                    android:checked="true"
-                    android:text="Banjir" />
-
-                <RadioButton
-                    android:id="@+id/rb4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="10dp"
-                    android:checked="true"
-                    android:text="Tidak ada operator" />
-
-
-                <RadioButton
-                    android:id="@+id/rb5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="10dp"
-                    android:checked="true"
-                    android:text="Alasan Lainnya" />
-
-            </RadioGroup>
-
-            <EditText
-                android:id="@+id/et_alasan"
-                android:layout_width="0dp"
+                android:id="@+id/btn_kirim_laporan"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="24dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
-                android:ems="10"
-                android:inputType="textMultiLine"
-                android:visibility="invisible"
+                android:backgroundTint="@color/colorPrimary"
+                android:text="Kirim Laporan"
+                android:textColor="#fff"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/radioGroup"
-                app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
-        </android.support.constraint.ConstraintLayout>
-    </android.support.v4.widget.NestedScrollView>
+                app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/btn_kirim_laporan"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Kirim Laporan"
-        android:textColor="#fff"
-        android:backgroundTint="@color/colorPrimary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        </LinearLayout>
+    </ScrollView>
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:map="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        map:layout_constraintBottom_toTopOf="@+id/btn_menurunkan"
-        map:layout_constraintEnd_toEndOf="parent"
-        map:layout_constraintStart_toStartOf="parent"
-        map:layout_constraintTop_toTopOf="parent">
-    </fragment>
+
+
 </android.support.constraint.ConstraintLayout>

@@ -22,13 +22,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.andresual.dev.tms.Activity.Adapter.SebelumnyaListAdapter;
-import com.andresual.dev.tms.Activity.Geofence.Constants;
-import com.andresual.dev.tms.Activity.Geofence.GeofenceRegistrationService;
 import com.andresual.dev.tms.Activity.Manager.SessionKendaraan;
 import com.andresual.dev.tms.Activity.Manager.SessionManager;
 import com.andresual.dev.tms.Activity.Maps.DirectionFinder;
 import com.andresual.dev.tms.Activity.Maps.DirectionFinderListener;
-import com.andresual.dev.tms.Activity.Model.JobOrder2Model;
+import com.andresual.dev.tms.Activity.Model.SimpleJob;
 import com.andresual.dev.tms.Activity.Model.PassingLocationModel;
 import com.andresual.dev.tms.Activity.Model.RouteModel;
 import com.andresual.dev.tms.R;
@@ -39,13 +37,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
@@ -80,7 +74,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public class SiapAntarActivity extends FragmentActivity implements
         OnMapReadyCallback,
@@ -120,7 +113,7 @@ public class SiapAntarActivity extends FragmentActivity implements
     String delivLat, delivLng;
 
     private static final String NOTIFICATION_MSG = "NOTIFICATION MSG";
-    JobOrder2Model modelData;
+    SimpleJob modelData;
 
     // Create a Intent send by the notification
     public static Intent makeNotificationIntent(Context context, String msg) {

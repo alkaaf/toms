@@ -11,6 +11,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
+import com.andresual.dev.tms.Activity.ListDepoActivity;
 import com.andresual.dev.tms.Activity.Model.DepoModel;
 import com.andresual.dev.tms.R;
 
@@ -62,8 +63,7 @@ public class DepoListAdapter extends RecyclerView.Adapter<DepoListAdapter.ViewHo
             int position = getAdapterPosition();
             DepoModel depoModel = depoModelArrayListFiltered.get(position);
             Intent intent = new Intent();
-            intent.putExtra("iddepo", depoModel.getId());
-            intent.putExtra("namadepo", depoModel.getNama());
+            intent.putExtra(ListDepoActivity.INTENT_DATA, depoModel);
             ((Activity) mContext).setResult(Activity.RESULT_OK, intent);
             ((Activity) mContext).finish();
         }
@@ -80,7 +80,7 @@ public class DepoListAdapter extends RecyclerView.Adapter<DepoListAdapter.ViewHo
                 } else {
                     ArrayList<DepoModel> filteredList = new ArrayList<>();
                     for (DepoModel row : depoModelArrayList) {
-                        if (row.getNama().toLowerCase().contains(charString)){
+                        if (row.getNama().toLowerCase().contains(charString)) {
                             filteredList.add(row);
                         }
                     }

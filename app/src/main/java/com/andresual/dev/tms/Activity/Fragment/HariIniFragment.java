@@ -12,7 +12,7 @@ import android.widget.RelativeLayout;
 
 import com.andresual.dev.tms.Activity.Adapter.HariIniListAdapter;
 import com.andresual.dev.tms.Activity.Model.DriverModel;
-import com.andresual.dev.tms.Activity.Model.JobOrder2Model;
+import com.andresual.dev.tms.Activity.Model.SimpleJob;
 import com.andresual.dev.tms.Activity.Util.Netter;
 import com.andresual.dev.tms.Activity.Util.Pref;
 import com.andresual.dev.tms.Activity.Util.StringHashMap;
@@ -34,7 +34,7 @@ public class HariIniFragment extends Fragment {
     RelativeLayout clEmptyView;
     SwipeRefreshLayout swipe;
 
-    ArrayList<JobOrder2Model> jobList = new ArrayList<>();
+    ArrayList<SimpleJob> jobList = new ArrayList<>();
 
     Pref pref;
     DriverModel driverModel;
@@ -91,7 +91,7 @@ public class HariIniFragment extends Fragment {
                 swipe.setRefreshing(false);
                 try {
                     JSONObject obj = new JSONObject(response);
-                    ArrayList<JobOrder2Model> temp = new Gson().fromJson(obj.getString("job"), new TypeToken<ArrayList<JobOrder2Model>>() {
+                    ArrayList<SimpleJob> temp = new Gson().fromJson(obj.getString("job"), new TypeToken<ArrayList<SimpleJob>>() {
                     }.getType());
                     jobList.clear();
                     jobList.addAll(temp);

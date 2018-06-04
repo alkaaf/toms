@@ -24,8 +24,7 @@ import com.andresual.dev.tms.Activity.Manager.SessionManager;
 import com.andresual.dev.tms.Activity.Maps.DirectionFinder;
 import com.andresual.dev.tms.Activity.Maps.DirectionFinderListener;
 import com.andresual.dev.tms.Activity.MapsController;
-import com.andresual.dev.tms.Activity.MapsOrderActivity;
-import com.andresual.dev.tms.Activity.Model.JobOrder2Model;
+import com.andresual.dev.tms.Activity.Model.SimpleJob;
 import com.andresual.dev.tms.Activity.Model.RouteModel;
 import com.andresual.dev.tms.Activity.TolakOrderActivity;
 import com.andresual.dev.tms.R;
@@ -76,7 +75,7 @@ public class OrderBaruDooringActivity extends AppCompatActivity implements OnMap
 
     String latitude, longitude;
     String jobType;
-    JobOrder2Model modelData;
+    SimpleJob modelData;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_baru);
@@ -137,10 +136,10 @@ public class OrderBaruDooringActivity extends AppCompatActivity implements OnMap
         final String delivLng = modelData.getJobDeliverLongitude();
         Log.i("jobType", jobType);
 
-        JobOrder2Model jobOrder2Model = new JobOrder2Model();
-        jobOrder2Model.setJobId(jobId);
+        SimpleJob simpleJob = new SimpleJob();
+        simpleJob.setJobId(jobId);
 
-        OperationalController.getmInstance().setJobOrder2Model(jobOrder2Model);
+        OperationalController.getmInstance().setSimpleJob(simpleJob);
 
         Button btnTerima = findViewById(R.id.btn_terima);
         Button btnTolak = findViewById(R.id.btn_tolak);

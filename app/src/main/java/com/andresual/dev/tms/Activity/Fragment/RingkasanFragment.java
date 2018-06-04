@@ -61,7 +61,7 @@ public class RingkasanFragment extends Fragment {
         tvBulanIni = view.findViewById(R.id.tv_bulan_ini);
         tvHariIni = view.findViewById(R.id.tv_hari_ini);
         tvSelesai = view.findViewById(R.id.tv_selesai);
-        tvProses = view.findViewById(R.id.tv_proses);
+        tvProses = view.findViewById(R.id.tv_point);
         ////////////////////////
 
         return view;

@@ -1,9 +1,7 @@
 package com.andresual.dev.tms.Activity.Fragment;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -18,10 +16,9 @@ import android.widget.TextView;
 
 import com.andresual.dev.tms.Activity.Adapter.BerandaListAdapter;
 import com.andresual.dev.tms.Activity.DashboardActivity;
-import com.andresual.dev.tms.Activity.Maps.LocationBroadcaster;
 import com.andresual.dev.tms.Activity.Model.DashboardModel;
 import com.andresual.dev.tms.Activity.Model.DriverModel;
-import com.andresual.dev.tms.Activity.Model.JobOrder2Model;
+import com.andresual.dev.tms.Activity.Model.SimpleJob;
 import com.andresual.dev.tms.Activity.Util.Netter;
 import com.andresual.dev.tms.Activity.Util.Pref;
 import com.andresual.dev.tms.Activity.Util.StringHashMap;
@@ -48,7 +45,7 @@ public class BerandaFragment extends Fragment {
     SwipeRefreshLayout swipe;
 
     BerandaListAdapter mAdapter;
-    ArrayList<JobOrder2Model> jobList = new ArrayList<>();
+    ArrayList<SimpleJob> jobList = new ArrayList<>();
     DashboardModel dashboardModel;
     Pref pref;
     StringHashMap map = new StringHashMap();
@@ -133,14 +130,15 @@ public class BerandaFragment extends Fragment {
             @Override
             public void onResponse(String response) {
                 swipe.setRefreshing(false);
+                fetchDashboard();
                 try {
                     JSONObject obj = new JSONObject(response);
-                    ArrayList<JobOrder2Model> temp = new Gson().fromJson(obj.getString("job"), new TypeToken<ArrayList<JobOrder2Model>>() {
+                    ArrayList<SimpleJob> temp = new Gson().fromJson(obj.getString("job"), new TypeToken<ArrayList<SimpleJob>>() {
                     }.getType());
                     jobList.clear();
                     jobList.addAll(temp);
                     mAdapter.notifyDataSetChanged();
-                    fetchDashboard();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

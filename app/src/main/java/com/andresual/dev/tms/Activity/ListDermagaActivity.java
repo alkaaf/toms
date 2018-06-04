@@ -16,6 +16,8 @@ import com.andresual.dev.tms.Activity.Adapter.DepoListAdapter;
 import com.andresual.dev.tms.Activity.Adapter.DermagaListAdapter;
 import com.andresual.dev.tms.Activity.Model.DepoModel;
 import com.andresual.dev.tms.Activity.Model.DermagaModel;
+import com.andresual.dev.tms.Activity.Util.Netter;
+import com.andresual.dev.tms.Activity.Util.StringHashMap;
 import com.andresual.dev.tms.R;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -23,16 +25,21 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ListDermagaActivity extends AppCompatActivity {
-
+    public static final String INTENT_DATA = "data.dermaga";
     RecyclerView rvDermaga;
     DermagaListAdapter mAdapter;
     SearchView searchView;
@@ -43,62 +50,38 @@ public class ListDermagaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_dermaga);
 
-        fetchDermaga();
+
+        mAdapter = new DermagaListAdapter(this, dermagaModelArrayList);
         rvDermaga = findViewById(R.id.rv1);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rvDermaga.setLayoutManager(mLayoutManager);
         rvDermaga.setHasFixedSize(true);
+        rvDermaga.setAdapter(mAdapter);
+        fetchDermaga();
     }
 
     public void fetchDermaga() {
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading data...");
-        progressDialog.show();
-
-        final HashMap<String, String> params = new HashMap<>();
-        params.put("f", "GetListDermaga");
-        Log.i("fetchdermaga", params.toString());
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-        StringRequest sr = new StringRequest(Request.Method.POST, "http://manajemenkendaraan.com/tms/webservice.asp",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.i("RESPONSE", response);
-                        progressDialog.dismiss();
-                        try {
-                            JSONObject obj = new JSONObject(response);
-                            JSONArray dermagaArray = obj.getJSONArray("dermaga");
-                            dermagaModelArrayList = new ArrayList<>();
-                            for (int i = 0; i < dermagaArray.length(); i++) {
-                                JSONObject hasil = dermagaArray.getJSONObject(i);
-                                Log.i("haha", hasil.toString());
-                                DermagaModel dermagaModel = new DermagaModel();
-                                dermagaModel.setId(hasil.getString("id"));
-                                dermagaModel.setNama(hasil.getString("nama"));
-                                dermagaModelArrayList.add(dermagaModel);
-                                Log.i("iddepo", dermagaModel.getId());
-
-                                mAdapter = new DermagaListAdapter(ListDermagaActivity.this, dermagaModelArrayList);
-                                rvDermaga.setAdapter(mAdapter);
-                                mAdapter.notifyDataSetChanged();
-                            }
-                        } catch (Throwable t) {
-                            Log.i("tms", "Could not parse malformed JSON: \"" + response + "\"");
-                        }
-                    }
-                }, new Response.ErrorListener() {
+        new Netter(this).webService(Request.Method.POST, new Response.Listener<String>() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onResponse(String response) {
+                try {
+                    JSONObject obj = new JSONObject(response);
+                    ArrayList<DermagaModel> temp = new Gson().fromJson(obj.getString("lokasi"), new TypeToken<List<DermagaModel>>() {
+                    }.getType());
+                    dermagaModelArrayList.clear();
+                    dermagaModelArrayList.addAll(temp);
+                    mAdapter.notifyDataSetChanged();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, Netter.getDefaultErrorListener(this, new Runnable() {
+            @Override
+            public void run() {
 
             }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                return params;
-            }
-        };
-        queue.add(sr);
+        }), Netter.Webservice.GETDERMAGA, new StringHashMap());
     }
 
     @Override

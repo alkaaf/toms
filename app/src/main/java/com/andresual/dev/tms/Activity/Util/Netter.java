@@ -30,6 +30,10 @@ public class Netter {
     }
 
     public enum Webservice {
+        DETAILPICKUP("getDetailPengangkutan"),
+        REPORT("report_tocenter"),
+        GETDEPO("GetListDepo"),
+        GETDERMAGA("GetListDermaga"),
         UPDATELOKASIDRIVER("UpdateLokasiDriver"),
         GETLISTKENDARAANDRIVER("getListKendaraanDriver"),
         POSTPILIHKENDARAAN("PostPilihKendaraan"),

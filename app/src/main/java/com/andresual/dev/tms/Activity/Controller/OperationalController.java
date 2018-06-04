@@ -1,11 +1,8 @@
 package com.andresual.dev.tms.Activity.Controller;
 
 import android.app.Activity;
-import android.app.Application;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.util.Log;
 
 import com.andresual.dev.tms.Activity.Fragment.BerandaFragment;
@@ -18,7 +15,7 @@ import com.andresual.dev.tms.Activity.Model.AlasanModel;
 import com.andresual.dev.tms.Activity.Model.BerandaModel;
 import com.andresual.dev.tms.Activity.Model.CityModel;
 import com.andresual.dev.tms.Activity.Model.DriverModel;
-import com.andresual.dev.tms.Activity.Model.JobOrder2Model;
+import com.andresual.dev.tms.Activity.Model.SimpleJob;
 import com.andresual.dev.tms.Activity.Model.JobOrderModel;
 import com.andresual.dev.tms.Activity.Model.LocationModel;
 import com.andresual.dev.tms.Activity.Model.TerimaModel;
@@ -27,7 +24,6 @@ import com.andresual.dev.tms.Activity.OrderBaruActivity;
 import com.andresual.dev.tms.Activity.RegisterActivity;
 import com.andresual.dev.tms.Activity.SiapAntarActivity;
 import com.andresual.dev.tms.Activity.TolakOrderActivity;
-import com.andresual.dev.tms.Activity.Util.FcmMessagingService;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -40,7 +36,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -77,12 +72,12 @@ public class OperationalController {
     TolakModel tolakModel;
     JobOrderModel jobOrderModel;
     DriverModel driverModel;
-    JobOrder2Model jobOrder2Model;
+    SimpleJob simpleJob;
     LocationModel locationActive;
     AlasanModel alasanActive;
     ArrayList<CityModel> cityModelArrayList = new ArrayList<>();
     ArrayList<BerandaModel> jobOrderModelArrayList = new ArrayList<>();
-    ArrayList<JobOrder2Model> jobOrder2ModelArrayList= new ArrayList<>();
+    ArrayList<SimpleJob> simpleJobArrayList = new ArrayList<>();
     BerandaFragment berandaFragment = new BerandaFragment();
 
     public AlasanModel getAlasanActive() {
@@ -101,20 +96,20 @@ public class OperationalController {
         this.locationActive = locationActive;
     }
 
-    public JobOrder2Model getJobOrder2Model() {
-        return jobOrder2Model;
+    public SimpleJob getSimpleJob() {
+        return simpleJob;
     }
 
-    public void setJobOrder2Model(JobOrder2Model jobOrder2Model) {
-        this.jobOrder2Model = jobOrder2Model;
+    public void setSimpleJob(SimpleJob simpleJob) {
+        this.simpleJob = simpleJob;
     }
 
-    public ArrayList<JobOrder2Model> getJobOrder2ModelArrayList() {
-        return jobOrder2ModelArrayList;
+    public ArrayList<SimpleJob> getSimpleJobArrayList() {
+        return simpleJobArrayList;
     }
 
-    public void setJobOrder2ModelArrayList(ArrayList<JobOrder2Model> jobOrder2ModelArrayList) {
-        this.jobOrder2ModelArrayList = jobOrder2ModelArrayList;
+    public void setSimpleJobArrayList(ArrayList<SimpleJob> simpleJobArrayList) {
+        this.simpleJobArrayList = simpleJobArrayList;
     }
 
     public TolakModel getTolakModel() {
@@ -163,7 +158,7 @@ public class OperationalController {
         final Map<String, String> params = new HashMap<>();
         params.put("f", "acceptjob");
         params.put("email", AuthController.getmInstance().getDriverActive().getEmail());
-        params.put("idjob", jobOrder2Model.getJobId().toString());
+        params.put("idjob", simpleJob.getJobId().toString());
         Log.i("acceptjob", params.toString());
 
         RequestQueue queue = Volley.newRequestQueue(orderBaruActivity);
@@ -235,7 +230,7 @@ public class OperationalController {
         final Map<String, String> params = new HashMap<>();
         params.put("f", "pickupjob");
         params.put("email", AuthController.getmInstance().getDriverActive().getEmail());
-        params.put("idjob", jobOrder2Model.getJobId().toString());
+        params.put("idjob", simpleJob.getJobId().toString());
         Log.i("rejectjob", params.toString());
 
         RequestQueue queue = Volley.newRequestQueue(mapsOrderActivity);
@@ -270,7 +265,7 @@ public class OperationalController {
         final Map<String, String> params = new HashMap<>();
         params.put("f", "readyjob");
         params.put("email", AuthController.getmInstance().getDriverActive().getEmail());
-        params.put("idjob", jobOrder2Model.getJobId().toString());
+        params.put("idjob", simpleJob.getJobId().toString());
         Log.i("rejectjob", params.toString());
 
         RequestQueue queue = Volley.newRequestQueue(siapAntarActivity);
@@ -305,7 +300,7 @@ public class OperationalController {
         final Map<String, String> params = new HashMap<>();
         params.put("f", "deliverjob");
         params.put("email", AuthController.getmInstance().getDriverActive().getEmail());
-        params.put("idjob", jobOrder2Model.getJobId().toString());
+        params.put("idjob", simpleJob.getJobId().toString());
         params.put("latitude", locationActive.getLatitude().toString());
         params.put("longitude", locationActive.getLongitude().toString());
         Log.i("mengantarjob", params.toString());
@@ -342,7 +337,7 @@ public class OperationalController {
         final Map<String, String> params = new HashMap<>();
         params.put("f", "finishjob");
         params.put("email", AuthController.getmInstance().getDriverActive().getEmail());
-        params.put("idjob", jobOrder2Model.getJobId().toString());
+        params.put("idjob", simpleJob.getJobId().toString());
         params.put("latitude", locationActive.getLatitude().toString());
         params.put("longitude", locationActive.getLongitude().toString());
         Log.i("finishjob", params.toString());
@@ -532,26 +527,26 @@ public class OperationalController {
                         try {
                             JSONObject obj = new JSONObject(response);
                             JSONArray job = obj.getJSONArray("job");
-                            jobOrder2ModelArrayList = new ArrayList<>();
+                            simpleJobArrayList = new ArrayList<>();
                             for (int i = 0; i < job.length(); i++) {
                                 JSONObject hasil = job.getJSONObject(i);
                                 Log.i("haha", hasil.toString());
-                                JobOrder2Model jobOrder2Model = new JobOrder2Model();
-                                jobOrder2Model.setOrderNo(hasil.getString("order_id"));
-                                jobOrder2Model.setTanggal(hasil.getString("job_blast"));
-                                jobOrder2Model.setContainerNo(hasil.getString("container_no"));
-                                jobOrder2Model.setContainerName(hasil.getString("container_name"));
-                                jobOrder2Model.setComodity(hasil.getString("container_cargo_name"));
-                                jobOrder2Model.setJobName(hasil.getString("job_pickup_name"));
-                                jobOrder2Model.setOrigin(hasil.getString("job_pickup_address"));
-                                jobOrder2Model.setDestination(hasil.getString("job_deliver_address"));
-                                jobOrder2Model.setJobId(hasil.getInt("id"));
-                                Log.i("onResponse:", jobOrder2Model.getJobId().toString());
-                                jobOrder2ModelArrayList.add(jobOrder2Model);
-                                Log.i("array", jobOrder2ModelArrayList.toString());
+                                SimpleJob simpleJob = new SimpleJob();
+                                simpleJob.setOrderNo(hasil.getString("order_id"));
+                                simpleJob.setTanggal(hasil.getString("job_blast"));
+                                simpleJob.setContainerNo(hasil.getString("container_no"));
+                                simpleJob.setContainerName(hasil.getString("container_name"));
+                                simpleJob.setComodity(hasil.getString("container_cargo_name"));
+                                simpleJob.setJobName(hasil.getString("job_pickup_name"));
+                                simpleJob.setOrigin(hasil.getString("job_pickup_address"));
+                                simpleJob.setDestination(hasil.getString("job_deliver_address"));
+                                simpleJob.setJobId(hasil.getInt("id"));
+                                Log.i("onResponse:", simpleJob.getJobId().toString());
+                                simpleJobArrayList.add(simpleJob);
+                                Log.i("array", simpleJobArrayList.toString());
                                 jobId = hasil.getString("id");
                             }
-//                            jobId = jobOrder2Model.getJobId().toString();
+//                            jobId = simpleJob.getJobId().toString();
 //                            Log.i("jobid", jobId);
 
                         } catch (Throwable t) {

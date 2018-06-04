@@ -30,8 +30,7 @@ import com.andresual.dev.tms.Activity.Maps.DirectionFinder;
 import com.andresual.dev.tms.Activity.Maps.DirectionFinderListener;
 import com.andresual.dev.tms.Activity.MapsController;
 import com.andresual.dev.tms.Activity.MapsOrderActivity;
-import com.andresual.dev.tms.Activity.MengantarActivity;
-import com.andresual.dev.tms.Activity.Model.JobOrder2Model;
+import com.andresual.dev.tms.Activity.Model.SimpleJob;
 import com.andresual.dev.tms.Activity.Model.PassingLocationModel;
 import com.andresual.dev.tms.Activity.Model.RouteModel;
 import com.andresual.dev.tms.Activity.TolakOrderActivity;
@@ -56,8 +55,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -81,7 +78,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public class SiapAntarDooringActivity extends FragmentActivity implements
         OnMapReadyCallback,
@@ -124,7 +120,7 @@ public class SiapAntarDooringActivity extends FragmentActivity implements
     private GeofencingClient mGeofencingClient;
 
     private static final String NOTIFICATION_MSG = "NOTIFICATION MSG";
-    JobOrder2Model modelData;
+    SimpleJob modelData;
 
     // Create a Intent send by the notification
     public static Intent makeNotificationIntent(Context context, String msg) {
