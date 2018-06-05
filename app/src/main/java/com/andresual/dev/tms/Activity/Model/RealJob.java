@@ -144,6 +144,16 @@ public class RealJob implements Parcelable {
     private List<DetailKontainer> detailkontainer = null;
     @SerializedName("jumlahtujuan")
     int jumlahtujuan;
+    @SerializedName("jumlahterikrim")
+    int jumlahterkirim;
+
+    public int getJumlahterkirim() {
+        return jumlahterkirim;
+    }
+
+    public void setJumlahterkirim(int jumlahterkirim) {
+        this.jumlahterkirim = jumlahterkirim;
+    }
 
     public int getJumlahtujuan() {
         return jumlahtujuan;
@@ -342,16 +352,16 @@ public class RealJob implements Parcelable {
         a.put(2, "Assigned");
         a.put(3, "Accepted");
         a.put(4, "Go To Pickup");
-        a.put(5, "Waiting loading");
-        a.put(6, "Finish loading");
-        a.put(7, "start loading");
+        a.put(5, "Ready To Stuff");
+        a.put(6, "Start Stuff/Strip");
+        a.put(7, "Finish Stuff/Strip");
         a.put(8, "Deliver");
         a.put(9, "Arrive at Destination");
-        a.put(10, "Start Discarge");
-        a.put(11, "Finish Discarge");
+        a.put(10, "Start Stuff/Strip");
+        a.put(11, "Finish Stuff/Strip");
         a.put(12, "Go empty to depo");
         a.put(13, "Upload empty to depo");
-        a.put(14, "Start empty depo discarge");
+        a.put(14, "Finish Job");
         a.put(15, "Finish empty depo discarge");
         a.put(16, "Finish job");
         a.put(17, "Cancel pickup");
@@ -527,6 +537,9 @@ public class RealJob implements Parcelable {
         this.detailkontainer = detailkontainer;
     }
 
+    public RealJob() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -579,9 +592,7 @@ public class RealJob implements Parcelable {
         dest.writeString(this.jumlahbox);
         dest.writeTypedList(this.detailkontainer);
         dest.writeInt(this.jumlahtujuan);
-    }
-
-    public RealJob() {
+        dest.writeInt(this.jumlahterkirim);
     }
 
     protected RealJob(Parcel in) {
@@ -630,9 +641,10 @@ public class RealJob implements Parcelable {
         this.jumlahbox = in.readString();
         this.detailkontainer = in.createTypedArrayList(DetailKontainer.CREATOR);
         this.jumlahtujuan = in.readInt();
+        this.jumlahterkirim = in.readInt();
     }
 
-    public static final Parcelable.Creator<RealJob> CREATOR = new Parcelable.Creator<RealJob>() {
+    public static final Creator<RealJob> CREATOR = new Creator<RealJob>() {
         @Override
         public RealJob createFromParcel(Parcel source) {
             return new RealJob(source);

@@ -41,7 +41,7 @@ public class Netter {
         JOB_FINISHJOBARRIVAL("finishjobarrival"),
         JOB_FINISHJOB("finishjob"),
         JOB_GOEMPTYDEPO("goemptytoDepo"),
-
+        JOB_UPLOADEMPTYDEPO("uploademptytodepo"),
 
         DETAILPICKUP("getDetailPengangkutan"),
 

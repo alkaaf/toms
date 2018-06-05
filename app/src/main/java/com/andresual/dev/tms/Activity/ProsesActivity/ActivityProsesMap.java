@@ -1,15 +1,18 @@
 package com.andresual.dev.tms.Activity.ProsesActivity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -143,7 +146,16 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         bTerima.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nextStep();
+                if(realJob.getJobDeliverStatus() == 14){
+                 new AlertDialog.Builder(ActivityProsesMap.this).setMessage("Hey ini akan diisi sama upload gambar :). Sek yo,..").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                     @Override
+                     public void onClick(DialogInterface dialog, int which) {
+                         finish();
+                     }
+                 }).show();
+                } else {
+                    nextStep();
+                }
             }
         });
     }
@@ -156,8 +168,12 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 .putMore("email", driver.getEmail())
                 .putMore("lat", location.getLatitude())
                 .putMore("lng", location.getLongitude());
-        if (realJob.getJobDeliverStatus() > 7) {
-
+        if (realJob.getJobDeliverStatus() >= 7) {
+            if(realJob.getJumlahterkirim() >= 1) {
+                map.putMore("idjob_detail", realJob.getDetailkontainer().get(1).getIddetail());
+            } else {
+                map.putMore("idjob_detail", realJob.getDetailkontainer().get(0).getIddetail());
+            }
         }
 
         pd.show();
@@ -170,6 +186,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                         JSONObject obj = new JSONObject(response);
                         toast(obj.getString("message"));
                         if (obj.getInt("status") == 200) {
+                            whatFunc = null;
                             fetchJob();
                         }
                     } catch (JSONException e) {
@@ -211,12 +228,19 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
 
     @SuppressLint("MissingPermission")
     public void setUpAll() {
+        Log.i("JOBA", "JobType "+realJob.getJobType());
+        Log.i("JOBB", "JobStatus "+realJob.getJobDeliverStatus());
         tvDistance.setText(realJob.getJobDeliverDistancetext());
         tvStatus.setText(realJob.getStringDeliverStatus());
         tvDuration.setText(realJob.getJobDeliverEstimatetimetext());
         final boolean isJob89 = realJob.getJobType() == 8 || realJob.getJobType() == 9;
         final boolean isJobTujuanMoreThanOne = realJob.getJumlahtujuan() > 1;
         final boolean isSingleBox = Integer.parseInt(realJob.getJumlahbox()) == 1;
+        final boolean isSudahAdaYangTerkirim = realJob.getJumlahterkirim() >= 1;
+        Log.i("JOBC", "is89 "+isJob89);
+        Log.i("JOBD", "isTujuanMoreThanone "+isJobTujuanMoreThanOne);
+        Log.i("JOBE", "isSingleBox "+isSingleBox);
+        Log.i("JOBF", "isSudahAdaYAngterkirim "+isSudahAdaYangTerkirim);
         // draw route from start to end
         if (gmap != null) {
             LocationServices.getFusedLocationProviderClient(this).getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
@@ -269,42 +293,66 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 break;
             }
             case 7: {
-//                if(!isJob89 && isJobTujuanMoreThanOne && isSingleBox){
-//                    whatFunc = Netter.Webservice.JOB_DELIVERJOB;
-//                }
+                whatFunc = Netter.Webservice.JOB_DELIVERJOB;
+                bTerima.setText("Deliver");
                 break;
             }
             case 8: {
-//                if(!isJob89 && isJobTujuanMoreThanOne && isSingleBox){
-//                    whatFunc = Netter.Webservice.JOB_ARRIVEDESTINATION;
-//                }
+                whatFunc = Netter.Webservice.JOB_ARRIVEDESTINATION;
+                bTerima.setText("Arrive Destination");
+
                 break;
             }
             case 9: {
-//                if(!isJob89 && isJobTujuanMoreThanOne && isSingleBox){
-//                    whatFunc = Netter.Webservice.JOB_STARTJOBARRIVAL;
-//                }
+                whatFunc = Netter.Webservice.JOB_STARTJOBARRIVAL;
+                bTerima.setText("Start Stuff/Strip");
+
                 break;
             }
             case 10: {
-//                if(!isJob89 && isJobTujuanMoreThanOne && isSingleBox){
-//                    whatFunc = Netter.Webservice.JOB_FINISHJOBARRIVAL;
-//                }
+                if (isJob89) {
+                    whatFunc = Netter.Webservice.JOB_FINISHJOBARRIVAL;
+                    bTerima.setText("Finish Stuff/Strip");
+                } else {
+                    if(isJobTujuanMoreThanOne){
+                        if (isSudahAdaYangTerkirim) {
+                            whatFunc = Netter.Webservice.JOB_FINISHJOB;
+                            bTerima.setText("Finish Job");
+                        } else {
+                            whatFunc = Netter.Webservice.JOB_DELIVERJOB;
+                            bTerima.setText("Deliver second box");
+                        }
+                    } else {
+                        whatFunc = Netter.Webservice.JOB_FINISHJOB;
+                        bTerima.setText("Finish Job");
+                    }
+                }
                 break;
             }
             case 11: {
-//                if(!isJob89 && isJobTujuanMoreThanOne && isSingleBox){
-//                    whatFunc = Netter.Webservice.JOB_FINISHJOB;
-//                }
+                if (isJob89) {
+                    whatFunc = Netter.Webservice.JOB_GOEMPTYDEPO;
+                    bTerima.setText("Go Empty To Depo");
+                }
                 break;
             }
             case 12: {
+                if (isJob89) {
+                    whatFunc = Netter.Webservice.JOB_UPLOADEMPTYDEPO;
+                    bTerima.setText("Upload Empty to Depo");
+                }
                 break;
             }
             case 13: {
+                if (isJob89) {
+                    whatFunc = Netter.Webservice.JOB_FINISHJOB;
+                    bTerima.setText("Finish Job");
+                }
                 break;
             }
             case 14: {
+                // upload gambar e
+                bTerima.setText("Photo upload :)");
                 break;
             }
         }

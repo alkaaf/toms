@@ -106,45 +106,7 @@ public class BerandaListAdapter extends RecyclerView.Adapter<BerandaListAdapter.
         holder.tvFrom.setText(simpleJobList.get(position).getOrigin());
         holder.tvTo.setText(simpleJobList.get(position).getDestination());
         SimpleJob simpleJob = simpleJobList.get(position);
-        if (simpleJob.getJobDeliverStatus() == 1) {
-            holder.tvStatus.setText("Waiting");
-        } else if (simpleJob.getJobDeliverStatus() == 2) {
-            holder.tvStatus.setText("Assigned");
-        } else if (simpleJob.getJobDeliverStatus() == 3) {
-            holder.tvStatus.setText("Accept");
-        } else if (simpleJob.getJobDeliverStatus() == 4) {
-            holder.tvStatus.setText("Go to Pickup");
-        } else if (simpleJob.getJobDeliverStatus() == 5) {
-            holder.tvStatus.setText("Waiting loading");
-        } else if (simpleJob.getJobDeliverStatus() == 7) {
-            holder.tvStatus.setText("Finish Loading");
-        } else if (simpleJob.getJobDeliverStatus() == 6) {
-            holder.tvStatus.setText("Start Loading");
-        } else if (simpleJob.getJobDeliverStatus() == 8) {
-            holder.tvStatus.setText("Deliver");
-        } else if (simpleJob.getJobDeliverStatus() == 9) {
-            holder.tvStatus.setText("Arrive Destination");
-        } else if (simpleJob.getJobDeliverStatus() == 10) {
-            holder.tvStatus.setText("Start Discharge");
-        } else if (simpleJob.getJobDeliverStatus() == 11) {
-            holder.tvStatus.setText("Finish Discharge");
-        } else if (simpleJob.getJobDeliverStatus() == 12) {
-            holder.tvStatus.setText("Go empty to depo");
-        } else if (simpleJob.getJobDeliverStatus() == 13) {
-            holder.tvStatus.setText("Upload empty to depo");
-        } else if (simpleJob.getJobDeliverStatus() == 14) {
-            holder.tvStatus.setText("Start empty depo discharge");
-        } else if (simpleJob.getJobDeliverStatus() == 15) {
-            holder.tvStatus.setText("Finish empty depo discharge");
-        } else if (simpleJob.getJobDeliverStatus() == 16) {
-            holder.tvStatus.setText("Finish job");
-        } else if (simpleJob.getJobDeliverStatus() == 17) {
-            holder.tvStatus.setText("Cancel pickup");
-        } else if (simpleJob.getJobDeliverStatus() == 18) {
-            holder.tvStatus.setText("Cancel job");
-        } else if (simpleJob.getJobDeliverStatus() == 19) {
-            holder.tvStatus.setText("Reject job");
-        }
+        holder.tvStatus.setText(simpleJob.getStringDeliverStatus());
         if (simpleJob.getJobType() == 1) {
             holder.tvTo.setVisibility(View.INVISIBLE);
             holder.tvto2.setVisibility(View.INVISIBLE);

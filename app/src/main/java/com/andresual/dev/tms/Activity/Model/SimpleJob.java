@@ -53,22 +53,22 @@ public class SimpleJob implements Parcelable {
         a.put(2, "Assigned");
         a.put(3, "Accepted");
         a.put(4, "Go To Pickup");
-        a.put(5, "Waiting loading");
-        a.put(6, "Finish loading");
-        a.put(7, "start loading");
+        a.put(5, "Ready To Stuff");
+        a.put(6, "Start Stuff/Strip");
+        a.put(7, "Finish Stuff/Strip");
         a.put(8, "Deliver");
         a.put(9, "Arrive at Destination");
-        a.put(10, "Start Discarge");
-        a.put(11, "Finish Discarge");
+        a.put(10, "Start Stuff/Strip");
+        a.put(11, "Finish Stuff/Strip");
         a.put(12, "Go empty to depo");
         a.put(13, "Upload empty to depo");
-        a.put(14, "Start empty depo discarge");
+        a.put(14, "Finish Job");
         a.put(15, "Finish empty depo discarge");
         a.put(16, "Finish job");
         a.put(17, "Cancel pickup");
         a.put(18, "Cancel job");
         a.put(19, "Reject job");
-        return a.get(jobDeliverStatus);
+        return a.get(jobDeliverStatus,"");
     }
 
     public Integer getJobPickupStatus() {
