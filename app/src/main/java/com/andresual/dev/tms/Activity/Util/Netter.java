@@ -32,15 +32,35 @@ public class Netter {
     public enum Webservice {
         JOB_ACCEPT("acceptjob"),
         JOB_PICKUP("pickupjob"),
+        JOB_READYJOB("readyjob"),
+        JOB_STARTJOBDEPARTURE("startjobdeparture"),
+        JOB_FINISHJOBDEPARTURE("finishjobdeparture"),
+        JOB_DELIVERJOB("deliverjob"),
+        JOB_ARRIVEDESTINATION("arrivedestination"),
+        JOB_STARTJOBARRIVAL("startjobarrival"),
+        JOB_FINISHJOBARRIVAL("finishjobarrival"),
+        JOB_FINISHJOB("finishjob"),
+        JOB_GOEMPTYDEPO("goemptytoDepo"),
+
+
         DETAILPICKUP("getDetailPengangkutan"),
+
         REPORT("report_tocenter"),
+
         GETDEPO("GetListDepo"),
+
         GETDERMAGA("GetListDermaga"),
+
         UPDATELOKASIDRIVER("UpdateLokasiDriver"),
+
         GETLISTKENDARAANDRIVER("getListKendaraanDriver"),
+
         POSTPILIHKENDARAAN("PostPilihKendaraan"),
+
         GETDASHBOARDDRIVER("GetDashboardDriver"),
+
         GETJOBHARIINI("getDetailJobOrderHariIni"),
+
         GETJOBPAST("getDetailJobOrderPast");
 
         String func;
@@ -49,7 +69,7 @@ public class Netter {
             this.func = s;
         }
 
-    }
+        }
 
     public Netter(Context context) {
         this.context = context;

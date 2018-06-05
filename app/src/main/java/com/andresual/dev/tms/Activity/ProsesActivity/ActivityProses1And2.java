@@ -131,8 +131,8 @@ public class ActivityProses1And2 extends BaseActivity {
                                 try {
                                     JSONObject obj = new JSONObject(response);
                                     toast(obj.getString("message"));
-                                    if(obj.getInt("status") == 200){
-                                        ActivityProsesMap.start(context,job);
+                                    if (obj.getInt("status") == 200) {
+                                        ActivityProsesMap.start(context, job);
                                         finish();
                                     }
                                 } catch (JSONException e) {
@@ -145,10 +145,10 @@ public class ActivityProses1And2 extends BaseActivity {
                                 pdAccept.dismiss();
                             }
                         }), Netter.Webservice.JOB_ACCEPT, new StringHashMap()
-                                .putMore("idjob", Integer.toString(job.getJobId())
-                                ).putMore("email", driverModel.getEmail())
-                                .putMore("latitude", Double.toString(location.getLatitude()))
-                                .putMore("longitude", Double.toString(location.getLongitude()))
+                                .putMore("idjob", Integer.toString(job.getJobId()))
+                                .putMore("email", driverModel.getEmail())
+                                .putMore("lat", Double.toString(location.getLatitude()))
+                                .putMore("lng", Double.toString(location.getLongitude()))
                 );
             }
         });

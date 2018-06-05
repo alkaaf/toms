@@ -82,6 +82,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
            <CheckBox
+               android:checked="true"
                android:id="@+id/checkTrack"
                android:text="Lacak saya"
                android:layout_width="wrap_content"

@@ -7,7 +7,6 @@ import android.util.SparseArray;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RealJob implements Parcelable {
@@ -143,7 +142,16 @@ public class RealJob implements Parcelable {
     @SerializedName("detailkontainer")
     @Expose
     private List<DetailKontainer> detailkontainer = null;
+    @SerializedName("jumlahtujuan")
+    int jumlahtujuan;
 
+    public int getJumlahtujuan() {
+        return jumlahtujuan;
+    }
+
+    public void setJumlahtujuan(int jumlahtujuan) {
+        this.jumlahtujuan = jumlahtujuan;
+    }
 
     public String getMessage() {
         return message;
@@ -569,7 +577,8 @@ public class RealJob implements Parcelable {
         dest.writeString(this.timeZone);
         dest.writeValue(this.portorderid);
         dest.writeString(this.jumlahbox);
-        dest.writeList(this.detailkontainer);
+        dest.writeTypedList(this.detailkontainer);
+        dest.writeInt(this.jumlahtujuan);
     }
 
     public RealJob() {
@@ -619,8 +628,8 @@ public class RealJob implements Parcelable {
         this.timeZone = in.readString();
         this.portorderid = (Integer) in.readValue(Integer.class.getClassLoader());
         this.jumlahbox = in.readString();
-        this.detailkontainer = new ArrayList<DetailKontainer>();
-        in.readList(this.detailkontainer, DetailKontainer.class.getClassLoader());
+        this.detailkontainer = in.createTypedArrayList(DetailKontainer.CREATOR);
+        this.jumlahtujuan = in.readInt();
     }
 
     public static final Parcelable.Creator<RealJob> CREATOR = new Parcelable.Creator<RealJob>() {

@@ -7,4 +7,8 @@ public class StringHashMap extends HashMap<String, String> {
         put(key, value);
         return this;
     }
+    public StringHashMap putMore(String key, double value) {
+        put(key, Double.toString(value));
+        return this;
+    }
 }

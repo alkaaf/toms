@@ -1,9 +1,12 @@
 package com.andresual.dev.tms.Activity.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class DetailKontainer {
+public class DetailKontainer implements Parcelable {
     @SerializedName("iddetail")
     @Expose
     private String iddetail;
@@ -39,10 +42,10 @@ public class DetailKontainer {
     private String destinationName;
     @SerializedName("destination_lat")
     @Expose
-    private String destinationLat;
+    private double destinationLat;
     @SerializedName("destination_lng")
     @Expose
-    private String destinationLng;
+    private double destinationLng;
 
     public String getIddetail() {
         return iddetail;
@@ -132,19 +135,72 @@ public class DetailKontainer {
         this.destinationName = destinationName;
     }
 
-    public String getDestinationLat() {
+    public double getDestinationLat() {
         return destinationLat;
     }
 
-    public void setDestinationLat(String destinationLat) {
+    public void setDestinationLat(double destinationLat) {
         this.destinationLat = destinationLat;
     }
 
-    public String getDestinationLng() {
+    public double getDestinationLng() {
         return destinationLng;
     }
 
-    public void setDestinationLng(String destinationLng) {
+    public void setDestinationLng(double destinationLng) {
         this.destinationLng = destinationLng;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.iddetail);
+        dest.writeString(this.containerNo);
+        dest.writeString(this.customerName);
+        dest.writeString(this.containerOwner);
+        dest.writeString(this.containerStatus);
+        dest.writeString(this.containerID);
+        dest.writeString(this.containerName);
+        dest.writeString(this.pickupLocationName);
+        dest.writeString(this.pickupLat);
+        dest.writeString(this.pickupLng);
+        dest.writeString(this.destinationName);
+        dest.writeDouble(this.destinationLat);
+        dest.writeDouble(this.destinationLng);
+    }
+
+    public DetailKontainer() {
+    }
+
+    protected DetailKontainer(Parcel in) {
+        this.iddetail = in.readString();
+        this.containerNo = in.readString();
+        this.customerName = in.readString();
+        this.containerOwner = in.readString();
+        this.containerStatus = in.readString();
+        this.containerID = in.readString();
+        this.containerName = in.readString();
+        this.pickupLocationName = in.readString();
+        this.pickupLat = in.readString();
+        this.pickupLng = in.readString();
+        this.destinationName = in.readString();
+        this.destinationLat = in.readDouble();
+        this.destinationLng = in.readDouble();
+    }
+
+    public static final Parcelable.Creator<DetailKontainer> CREATOR = new Parcelable.Creator<DetailKontainer>() {
+        @Override
+        public DetailKontainer createFromParcel(Parcel source) {
+            return new DetailKontainer(source);
+        }
+
+        @Override
+        public DetailKontainer[] newArray(int size) {
+            return new DetailKontainer[size];
+        }
+    };
 }
