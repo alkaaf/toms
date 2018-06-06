@@ -8,12 +8,15 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andresual.dev.tms.Activity.ActivityUpload;
 import com.andresual.dev.tms.Activity.Adapter.ContainerAdapter;
 import com.andresual.dev.tms.Activity.BaseActivity;
 import com.andresual.dev.tms.Activity.Model.DriverModel;
@@ -69,6 +72,8 @@ public class ActivityProsesFrom4To7 extends BaseActivity {
     Context context;
     ProgressDialog pdAccept;
     ContainerAdapter adapter;
+    private boolean isPreview;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,13 +87,17 @@ public class ActivityProsesFrom4To7 extends BaseActivity {
         pdAccept = new ProgressDialog(this);
         pdAccept.setMessage("Menerima job");
         pd.setMessage("Memuat data");
-        context = this; if(job.getJobDeliverStatus() >= 3){
-            ActivityProsesMap.start(this,job);
+
+         isPreview = getIntent().getBooleanExtra(PREVIEW_ONLY, false);
+
+        context = this;
+        if (job.getJobDeliverStatus() >= 3 && !isPreview) {
+            ActivityProsesMap.start(this, job);
             finish();
         }
 
         setContent();
-        findViewById(R.id.llBottom).setVisibility(getIntent().getBooleanExtra(PREVIEW_ONLY, false) ? View.GONE : View.VISIBLE);
+        findViewById(R.id.llBottom).setVisibility(isPreview? View.GONE : View.VISIBLE);
         bTerima.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,12 +110,13 @@ public class ActivityProsesFrom4To7 extends BaseActivity {
                                 accept();
                             }
                         })
-                        .setNegativeButton("TIDAK", null    )
+                        .setNegativeButton("TIDAK", null)
                         .show();
             }
         });
     }
-    public void accept(){
+
+    public void accept() {
         LocationServices.getFusedLocationProviderClient(this).getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
@@ -118,8 +128,8 @@ public class ActivityProsesFrom4To7 extends BaseActivity {
                                 try {
                                     JSONObject obj = new JSONObject(response);
                                     toast(obj.getString("message"));
-                                    if(obj.getInt("status") == 200){
-                                        ActivityProsesMap.start(context,job);
+                                    if (obj.getInt("status") == 200) {
+                                        ActivityProsesMap.start(context, job);
                                         finish();
                                     }
                                 } catch (JSONException e) {
@@ -140,6 +150,7 @@ public class ActivityProsesFrom4To7 extends BaseActivity {
             }
         });
     }
+
     public void setContent() {
         pd.show();
         new Netter(this).webService(Request.Method.POST, new Response.Listener<String>() {
@@ -159,7 +170,7 @@ public class ActivityProsesFrom4To7 extends BaseActivity {
 
                     tvPickup.setText(realJob.getJobPickupName());
                     tvDeliver.setText(realJob.getJobDeliverAddress());
-                    adapter = new ContainerAdapter(ActivityProsesFrom4To7.this,R.layout.list_container,realJob.getDetailkontainer());
+                    adapter = new ContainerAdapter(ActivityProsesFrom4To7.this, R.layout.list_container, realJob.getDetailkontainer());
                     listContainer.setAdapter(adapter);
 
                 } catch (JSONException e) {
@@ -177,16 +188,32 @@ public class ActivityProsesFrom4To7 extends BaseActivity {
             }
         }), Netter.Webservice.DETAILPICKUP, new StringHashMap().putMore("id", Integer.toString(job.getJobId())));
     }
-    public static void startProses(Context context, SimpleJob simpleJob){
+
+    public static void startProses(Context context, SimpleJob simpleJob) {
         Intent intent = new Intent(context, ActivityProsesFrom4To7.class);
         intent.putExtra(INTENT_DATA, simpleJob);
         intent.putExtra(PREVIEW_ONLY, false);
         context.startActivity(intent);
     }
-    public static void startPreview(Context context, SimpleJob simpleJob){
+
+    public static void startPreview(Context context, SimpleJob simpleJob) {
         Intent intent = new Intent(context, ActivityProsesFrom4To7.class);
         intent.putExtra(INTENT_DATA, simpleJob);
         intent.putExtra(PREVIEW_ONLY, true);
         context.startActivity(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_view_photo, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_view_photo && isPreview ) {
+            ActivityUpload.start(this, job);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -346,7 +346,8 @@ public class RealJob implements Parcelable {
     public void setJobDeliverFinishtime(String jobDeliverFinishtime) {
         this.jobDeliverFinishtime = jobDeliverFinishtime;
     }
-    public String getStringDeliverStatus(){
+
+    public String getStringDeliverStatus() {
         SparseArray<String> a = new SparseArray<>();
         a.put(1, "Waiting");
         a.put(2, "Assigned");
@@ -369,6 +370,7 @@ public class RealJob implements Parcelable {
         a.put(19, "Reject job");
         return a.get(jobDeliverStatus);
     }
+
     public Integer getJobDeliverStatus() {
         return jobDeliverStatus;
     }
@@ -543,6 +545,21 @@ public class RealJob implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    public int statusKontainer() {
+        final boolean isJob89 = getJobType() == 8 || getJobType() == 9;
+        final boolean isJobTujuanMoreThanOne = getJumlahtujuan() > 1;
+        final boolean isSingleBox = Integer.parseInt(getJumlahbox()) == 1;
+        if (!isJob89 && isJobTujuanMoreThanOne && !isSingleBox) {
+            if (getDetailkontainer().get(0).getJobStatus() < 14 && getDetailkontainer().get(1).getJobStatus() < 14)
+                return 0;
+            else if (getDetailkontainer().get(0).getJobStatus() == 14 && getDetailkontainer().get(1).getJobStatus() < 14)
+                return 1;
+            else if (getDetailkontainer().get(0).getJobStatus() == 14 && getDetailkontainer().get(1).getJobStatus() == 14)
+                return 2;
+        }
+        return -1;
     }
 
     @Override

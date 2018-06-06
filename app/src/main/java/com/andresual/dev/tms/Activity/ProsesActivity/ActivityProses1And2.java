@@ -9,11 +9,14 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andresual.dev.tms.Activity.ActivityUpload;
 import com.andresual.dev.tms.Activity.BaseActivity;
 import com.andresual.dev.tms.Activity.Model.DriverModel;
 import com.andresual.dev.tms.Activity.Model.RealJob;
@@ -67,7 +70,7 @@ public class ActivityProses1And2 extends BaseActivity {
     ProgressDialog pd;
     Context context;
     ProgressDialog pdAccept;
-
+    boolean isPreview;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,12 +97,13 @@ public class ActivityProses1And2 extends BaseActivity {
             }
         });
 
-        if (job.getJobDeliverStatus() >= 3) {
+        isPreview = getIntent().getBooleanExtra(PREVIEW_ONLY, false);
+        if (job.getJobDeliverStatus() >= 3 && !isPreview) {
             ActivityProsesMap.start(this, job);
             finish();
         }
         setContent();
-        findViewById(R.id.llBottom).setVisibility(getIntent().getBooleanExtra(PREVIEW_ONLY, false) ? View.GONE : View.VISIBLE);
+        findViewById(R.id.llBottom).setVisibility(isPreview ? View.GONE : View.VISIBLE);
         bTerima.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -197,5 +201,18 @@ public class ActivityProses1And2 extends BaseActivity {
         intent.putExtra(INTENT_DATA, simpleJob);
         intent.putExtra(PREVIEW_ONLY, true);
         context.startActivity(intent);
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_view_photo, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_view_photo && isPreview ) {
+            ActivityUpload.start(this, job);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

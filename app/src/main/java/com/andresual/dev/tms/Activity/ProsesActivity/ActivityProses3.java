@@ -9,12 +9,15 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andresual.dev.tms.Activity.ActivityUpload;
 import com.andresual.dev.tms.Activity.Adapter.ContainerAdapter;
 import com.andresual.dev.tms.Activity.BaseActivity;
 import com.andresual.dev.tms.Activity.Model.DriverModel;
@@ -70,6 +73,8 @@ public class ActivityProses3 extends BaseActivity {
     ContainerAdapter adapter;
     Context context;
     ProgressDialog pdAccept;
+    private boolean isPreview;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,12 +88,15 @@ public class ActivityProses3 extends BaseActivity {
         pdAccept = new ProgressDialog(this);
         pdAccept.setMessage("Menerima job");
         pd.setMessage("Memuat data");
-        context = this; if (job.getJobDeliverStatus() >= 3) {
+        context = this;
+        isPreview = getIntent().getBooleanExtra(PREVIEW_ONLY, false);
+
+        if (job.getJobDeliverStatus() >= 3 && !isPreview) {
             ActivityProsesMap.start(this, job);
             finish();
         }
         setContent();
-        findViewById(R.id.llBottom).setVisibility(getIntent().getBooleanExtra(PREVIEW_ONLY, false) ? View.GONE : View.VISIBLE);
+        findViewById(R.id.llBottom).setVisibility(isPreview ? View.GONE : View.VISIBLE);
         bTerima.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,45 +109,47 @@ public class ActivityProses3 extends BaseActivity {
                                 accept();
                             }
                         })
-                        .setNegativeButton("TIDAK", null    )
+                        .setNegativeButton("TIDAK", null)
                         .show();
             }
         });
     }
-public void accept(){
-    LocationServices.getFusedLocationProviderClient(this).getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
-        @Override
-        public void onSuccess(Location location) {
-            pdAccept.show();
-            new Netter(context).webService(Request.Method.POST, new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            pdAccept.dismiss();
-                            try {
-                                JSONObject obj = new JSONObject(response);
-                                toast(obj.getString("message"));
-                                if(obj.getInt("status") == 200){
-                                    ActivityProsesMap.start(context,job);
-                                    finish();
+
+    public void accept() {
+        LocationServices.getFusedLocationProviderClient(this).getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                pdAccept.show();
+                new Netter(context).webService(Request.Method.POST, new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                pdAccept.dismiss();
+                                try {
+                                    JSONObject obj = new JSONObject(response);
+                                    toast(obj.getString("message"));
+                                    if (obj.getInt("status") == 200) {
+                                        ActivityProsesMap.start(context, job);
+                                        finish();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
                             }
-                        }
-                    }, Netter.getDefaultErrorListener(context, new Runnable() {
-                        @Override
-                        public void run() {
-                            pdAccept.dismiss();
-                        }
-                    }), Netter.Webservice.JOB_ACCEPT, new StringHashMap()
-                            .putMore("idjob", Integer.toString(job.getJobId())
-                            ).putMore("email", driverModel.getEmail())
-                            .putMore("latitude", Double.toString(location.getLatitude()))
-                            .putMore("longitude", Double.toString(location.getLongitude()))
-            );
-        }
-    });
-}
+                        }, Netter.getDefaultErrorListener(context, new Runnable() {
+                            @Override
+                            public void run() {
+                                pdAccept.dismiss();
+                            }
+                        }), Netter.Webservice.JOB_ACCEPT, new StringHashMap()
+                                .putMore("idjob", Integer.toString(job.getJobId())
+                                ).putMore("email", driverModel.getEmail())
+                                .putMore("latitude", Double.toString(location.getLatitude()))
+                                .putMore("longitude", Double.toString(location.getLongitude()))
+                );
+            }
+        });
+    }
+
     public void setContent() {
         pd.show();
         new Netter(this).webService(Request.Method.POST, new Response.Listener<String>() {
@@ -157,7 +167,7 @@ public void accept(){
                     tvOrderId.setText(realJob.getOrderId());
                     tvTanggal.setText(realJob.getJobPickupDatetime());
 
-                    adapter = new ContainerAdapter(ActivityProses3.this,R.layout.list_container,realJob.getDetailkontainer());
+                    adapter = new ContainerAdapter(ActivityProses3.this, R.layout.list_container, realJob.getDetailkontainer());
                     adapter.enableViewDepo = true;
                     listContainer.setAdapter(adapter);
 
@@ -189,5 +199,19 @@ public void accept(){
         intent.putExtra(INTENT_DATA, simpleJob);
         intent.putExtra(PREVIEW_ONLY, true);
         context.startActivity(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_view_photo, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_view_photo && isPreview) {
+            ActivityUpload.start(this, job);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

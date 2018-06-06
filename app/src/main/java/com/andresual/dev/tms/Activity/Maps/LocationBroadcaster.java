@@ -1,6 +1,9 @@
 package com.andresual.dev.tms.Activity.Maps;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -11,17 +14,24 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
+import com.andresual.dev.tms.Activity.ActivitySplash;
+import com.andresual.dev.tms.Activity.MainActivity;
 import com.andresual.dev.tms.Activity.Model.DriverModel;
 import com.andresual.dev.tms.Activity.Model.KendaraanModel;
 import com.andresual.dev.tms.Activity.Util.Netter;
 import com.andresual.dev.tms.Activity.Util.Pref;
 import com.andresual.dev.tms.Activity.Util.StringHashMap;
+import com.andresual.dev.tms.R;
 import com.android.volley.Request;
 import com.android.volley.Response;
 
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by andresual on 2/24/2018.
@@ -31,22 +41,21 @@ public class LocationBroadcaster extends Service {
 
     private static final String TAG = "BROADCASTGPS";
     private LocationManager locationManager = null;
-    private static final int LOCATION_INTERVAL = 30000;
+    private static final int LOCATION_INTERVAL = 0;
     private static final float LOCATION_DISTANCE = 0;
     public static final String LOCATION_DATA = "location_Data";
     public static final String LOCATION_BROADCAST_ACTION = "location.broadcast.action";
     private static Location location;
-
+    public static final int SERVICE_ID = 13;
     public static Location getLocation() {
         return location;
     }
-
     public void updateDriverLocation() {
         Pref pref = new Pref(this);
         DriverModel driverModel = pref.getDriverModel();
         KendaraanModel kendaraanModel = pref.getKendaraan();
         if (driverModel != null) {
-            new Netter(this).webService(Request.Method.POST, new Response.Listener<String>() {
+           /* new Netter(this).webService(Request.Method.POST, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             Log.e("UPDATE_LOC", response);
@@ -56,7 +65,7 @@ public class LocationBroadcaster extends Service {
                             .putMore("email", driverModel.getEmail())
                             .putMore("lat", Double.toString(getLocation().getLatitude()))
                             .putMore("lng", Double.toString(getLocation().getLongitude()))
-            );
+            );*/
         }
     }
 
@@ -78,6 +87,7 @@ public class LocationBroadcaster extends Service {
             sendBroadcast(intent);
             mLastLocation.set(location);
             LocationBroadcaster.location = location;
+            startFg();
             updateDriverLocation();
         }
 
@@ -153,7 +163,24 @@ public class LocationBroadcaster extends Service {
         } catch (IllegalArgumentException ex) {
             Log.d(TAG, "gps provider does not exist " + ex.getMessage());
         }
+
+        startFg();
+
     }
+
+    private void startFg(){
+        Intent intent = new Intent(this, ActivitySplash.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,123,intent,PendingIntent.FLAG_IMMUTABLE,null);
+        NotificationManager nm = ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE));
+        Notification ntf = new Notification.Builder(this)
+                .setContentTitle("ToMS")
+                .setContentText("Last location update " + new SimpleDateFormat("HH:mm:ss").format(new Date()))
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentIntent(pendingIntent)
+                .build();
+        startForeground(SERVICE_ID, ntf);
+    }
+
 
     @Override
     public void onDestroy() {

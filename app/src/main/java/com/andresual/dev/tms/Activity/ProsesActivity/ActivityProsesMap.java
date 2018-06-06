@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -131,7 +133,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         ButterKnife.bind(this);
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        if (getSupportActionBar() != null) getSupportActionBar().hide();
+        if (getSupportActionBar() != null) getSupportActionBar().setTitle("Proses Job");
         filter = new IntentFilter(LocationBroadcaster.LOCATION_BROADCAST_ACTION);
 
         simpleJob = getIntent().getParcelableExtra(INTENT_DATA);
@@ -143,17 +145,17 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 }
             }
         });
+        tvDistance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetJob();
+            }
+        });
 
         bTerima.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (realJob.getJobDeliverStatus() == 14) {
-//                    new AlertDialog.Builder(ActivityProsesMap.this).setMessage("Hey ini akan diisi sama upload gambar :). Sek yo,..").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            finish();
-//                        }
-//                    }).show();
+                if (realJob.statusKontainer() == 2) {
                     ActivityUpload.start(ActivityProsesMap.this, simpleJob);
                     finish();
                 } else {
@@ -171,14 +173,15 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 .putMore("email", driver.getEmail())
                 .putMore("lat", location.getLatitude())
                 .putMore("lng", location.getLongitude());
+
         if (realJob.getJobDeliverStatus() >= 7) {
-            if (realJob.getJumlahterkirim() >= 1) {
-                map.putMore("idjob_detail", realJob.getDetailkontainer().get(1).getIddetail());
-            } else {
+            if (realJob.statusKontainer() < 1) {
                 map.putMore("idjob_detail", realJob.getDetailkontainer().get(0).getIddetail());
+            } else {
+                map.putMore("idjob_detail", realJob.getDetailkontainer().get(1).getIddetail());
             }
         }
-
+        Log.i("RequestJob", map.toString());
         pd.show();
         if (whatFunc != null) {
             new Netter(this).webService(Request.Method.POST, new Response.Listener<String>() {
@@ -231,6 +234,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
 
     @SuppressLint("MissingPermission")
     public void setUpAll() {
+        clearMapElement();
         Log.i("JOBA", "JobType " + realJob.getJobType());
         Log.i("JOBB", "JobStatus " + realJob.getJobDeliverStatus());
         tvDistance.setText(realJob.getJobDeliverDistancetext());
@@ -309,7 +313,6 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             case 9: {
                 whatFunc = Netter.Webservice.JOB_STARTJOBARRIVAL;
                 bTerima.setText("Start Stuff/Strip");
-
                 break;
             }
             case 10: {
@@ -317,6 +320,9 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                     whatFunc = Netter.Webservice.JOB_FINISHJOBARRIVAL;
                     bTerima.setText("Finish Stuff/Strip");
                 } else {
+                    whatFunc = Netter.Webservice.JOB_FINISHJOB;
+                    bTerima.setText("Finish Job");
+                    /*else {
                     if (isJobTujuanMoreThanOne) {
                         if (isSudahAdaYangTerkirim) {
                             whatFunc = Netter.Webservice.JOB_DELIVERJOB;
@@ -328,7 +334,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                     } else {
                         whatFunc = Netter.Webservice.JOB_FINISHJOB;
                         bTerima.setText("Finish Job");
-                    }
+                    }*/
                 }
                 break;
             }
@@ -354,12 +360,15 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 break;
             }
             case 14: {
-                // upload gambar e
-                bTerima.setText("Photo upload :)");
+                if (realJob.statusKontainer() == 1) {
+                    whatFunc = Netter.Webservice.JOB_DELIVERJOB;
+                    bTerima.setText("Deliver second job");
+                } else {
+                    bTerima.setText("Photo upload :)");
+                }
                 break;
             }
         }
-
     }
 
     private double dd(String s) {
@@ -443,5 +452,62 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(latLng, 15);
             gmap.animateCamera(cu);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_view_photo, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_view_photo) {
+            ActivityUpload.start(this, simpleJob);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void resetJob() {
+        LocationServices.getFusedLocationProviderClient(this).getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                new Netter(ActivityProsesMap.this).webService(Request.Method.POST, new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    JSONObject obj = new JSONObject(response);
+                                    toast(obj.getString("message"));
+                                    if (obj.getInt("status") == 200) {
+                                        fetchJob();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, Netter.getDefaultErrorListener(ActivityProsesMap.this, new Runnable() {
+                            @Override
+                            public void run() {
+                            }
+                        }), Netter.Webservice.JOB_ACCEPT, new StringHashMap()
+                                .putMore("idjob", Integer.toString(simpleJob.getJobId()))
+                                .putMore("email", driver.getEmail())
+                                .putMore("lat", Double.toString(location.getLatitude()))
+                                .putMore("lng", Double.toString(location.getLongitude()))
+                );
+            }
+        });
+    }
+
+    public void clearMapElement() {
+        for (int i = 0; i < markerList.size(); i++) {
+            markerList.get(i).remove();
+        }
+        markerList.clear();
+        for (int i = 0; i < polylineList.size(); i++) {
+            polylineList.get(i).remove();
+        }
+        polylineList.clear();
+
     }
 }

@@ -104,7 +104,7 @@ public class ActivityUpload extends BaseActivity {
         setContentView(R.layout.activity_upload);
         ButterKnife.bind(this);
 
-        getSupportActionBar().setTitle("Upload gambar");
+        getSupportActionBar().setTitle("Job Gallery");
 
         simpleJob = getIntent().getParcelableExtra(INTENT_DATA);
         jobId = "photo/job_" + simpleJob.getJobId() + "/";
@@ -117,7 +117,7 @@ public class ActivityUpload extends BaseActivity {
                 new ImageViewer.Builder<>(ActivityUpload.this, photoUrl).setCustomDraweeHierarchyBuilder(
                         GenericDraweeHierarchyBuilder.newInstance(getResources())
                         .setFailureImage(R.drawable.ic_broken_image_black_24dp)
-                        .setProgressBarImage(R.drawable.ic_image_black_24dp)
+                        .setProgressBarImage(R.drawable.ic_image_placeholder)
                         .setPlaceholderImage(R.drawable.ic_image_black_24dp)
                 ).setStartPosition(pos).show();
             }

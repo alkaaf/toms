@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.andresual.dev.tms.R;
 
-public class ActivitySplash extends AppCompatActivity {
+public class ActivitySplash extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

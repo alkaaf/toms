@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.andresual.dev.tms.R;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class GalleryAdapter extends BaseRecyclerAdapter<String, GalleryAdapter.V
 
     @Override
     public void onBindViewHolder(GalleryAdapter.ViewHolder holder, int position) {
-        Glide.with(context).load(getData().get(position)).into(holder.img);
+        Glide.with(context).setDefaultRequestOptions(new RequestOptions().placeholder(R.drawable.ic_image_placeholder)).load(getData().get(position)).into(holder.img);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

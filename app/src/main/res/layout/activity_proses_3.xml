@@ -4,10 +4,10 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+
         android:id="@+id/ll1"
         android:layout_width="match_parent"
-        android:layout_height="279dp"
-        android:layout_above="@+id/llBottom"
+        android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:orientation="vertical"
         android:padding="16dp">
