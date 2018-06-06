@@ -8,7 +8,8 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
@@ -156,6 +157,7 @@
         <activity android:name=".Activity.ProsesActivity.ActivityProses1And2"/>
         <activity android:name=".Activity.ProsesActivity.ActivityProsesMoreThan8"/>
         <activity android:name=".Activity.ProsesActivity.ActivityProsesFrom4To7"/>
+        <activity android:name=".Activity.ActivityUpload"/>
     </application>
 
 </manifest>

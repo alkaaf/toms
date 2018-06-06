@@ -21,6 +21,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andresual.dev.tms.Activity.ActivityUpload;
 import com.andresual.dev.tms.Activity.BaseActivity;
 import com.andresual.dev.tms.Activity.DCP.ReadyToStuffPickupDCPActivity;
 import com.andresual.dev.tms.Activity.Maps.DirectionFinder;
@@ -146,13 +147,15 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         bTerima.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(realJob.getJobDeliverStatus() == 14){
-                 new AlertDialog.Builder(ActivityProsesMap.this).setMessage("Hey ini akan diisi sama upload gambar :). Sek yo,..").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                     @Override
-                     public void onClick(DialogInterface dialog, int which) {
-                         finish();
-                     }
-                 }).show();
+                if (realJob.getJobDeliverStatus() == 14) {
+//                    new AlertDialog.Builder(ActivityProsesMap.this).setMessage("Hey ini akan diisi sama upload gambar :). Sek yo,..").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            finish();
+//                        }
+//                    }).show();
+                    ActivityUpload.start(ActivityProsesMap.this, simpleJob);
+                    finish();
                 } else {
                     nextStep();
                 }
@@ -169,7 +172,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 .putMore("lat", location.getLatitude())
                 .putMore("lng", location.getLongitude());
         if (realJob.getJobDeliverStatus() >= 7) {
-            if(realJob.getJumlahterkirim() >= 1) {
+            if (realJob.getJumlahterkirim() >= 1) {
                 map.putMore("idjob_detail", realJob.getDetailkontainer().get(1).getIddetail());
             } else {
                 map.putMore("idjob_detail", realJob.getDetailkontainer().get(0).getIddetail());
@@ -228,19 +231,19 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
 
     @SuppressLint("MissingPermission")
     public void setUpAll() {
-        Log.i("JOBA", "JobType "+realJob.getJobType());
-        Log.i("JOBB", "JobStatus "+realJob.getJobDeliverStatus());
+        Log.i("JOBA", "JobType " + realJob.getJobType());
+        Log.i("JOBB", "JobStatus " + realJob.getJobDeliverStatus());
         tvDistance.setText(realJob.getJobDeliverDistancetext());
         tvStatus.setText(realJob.getStringDeliverStatus());
         tvDuration.setText(realJob.getJobDeliverEstimatetimetext());
         final boolean isJob89 = realJob.getJobType() == 8 || realJob.getJobType() == 9;
         final boolean isJobTujuanMoreThanOne = realJob.getJumlahtujuan() > 1;
         final boolean isSingleBox = Integer.parseInt(realJob.getJumlahbox()) == 1;
-        final boolean isSudahAdaYangTerkirim = realJob.getJumlahterkirim() >= 1;
-        Log.i("JOBC", "is89 "+isJob89);
-        Log.i("JOBD", "isTujuanMoreThanone "+isJobTujuanMoreThanOne);
-        Log.i("JOBE", "isSingleBox "+isSingleBox);
-        Log.i("JOBF", "isSudahAdaYAngterkirim "+isSudahAdaYangTerkirim);
+        final boolean isSudahAdaYangTerkirim = (isJobTujuanMoreThanOne && !isSingleBox) && realJob.getDetailkontainer().get(0).getJobStatus() == 10;
+        Log.i("JOBC", "is89 " + isJob89);
+        Log.i("JOBD", "isTujuanMoreThanone " + isJobTujuanMoreThanOne);
+        Log.i("JOBE", "isSingleBox " + isSingleBox);
+        Log.i("JOBF", "isSudahAdaYAngterkirim " + isSudahAdaYangTerkirim);
         // draw route from start to end
         if (gmap != null) {
             LocationServices.getFusedLocationProviderClient(this).getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
@@ -314,13 +317,13 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                     whatFunc = Netter.Webservice.JOB_FINISHJOBARRIVAL;
                     bTerima.setText("Finish Stuff/Strip");
                 } else {
-                    if(isJobTujuanMoreThanOne){
+                    if (isJobTujuanMoreThanOne) {
                         if (isSudahAdaYangTerkirim) {
-                            whatFunc = Netter.Webservice.JOB_FINISHJOB;
-                            bTerima.setText("Finish Job");
-                        } else {
                             whatFunc = Netter.Webservice.JOB_DELIVERJOB;
                             bTerima.setText("Deliver second box");
+                        } else {
+                            whatFunc = Netter.Webservice.JOB_FINISHJOB;
+                            bTerima.setText("Finish Job");
                         }
                     } else {
                         whatFunc = Netter.Webservice.JOB_FINISHJOB;

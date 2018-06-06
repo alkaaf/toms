@@ -46,6 +46,16 @@ public class DetailKontainer implements Parcelable {
     @SerializedName("destination_lng")
     @Expose
     private double destinationLng;
+    @SerializedName("job_status")
+    int jobStatus;
+
+    public int getJobStatus() {
+        return jobStatus;
+    }
+
+    public void setJobStatus(int jobStatus) {
+        this.jobStatus = jobStatus;
+    }
 
     public String getIddetail() {
         return iddetail;
@@ -151,6 +161,9 @@ public class DetailKontainer implements Parcelable {
         this.destinationLng = destinationLng;
     }
 
+    public DetailKontainer() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -171,9 +184,7 @@ public class DetailKontainer implements Parcelable {
         dest.writeString(this.destinationName);
         dest.writeDouble(this.destinationLat);
         dest.writeDouble(this.destinationLng);
-    }
-
-    public DetailKontainer() {
+        dest.writeInt(this.jobStatus);
     }
 
     protected DetailKontainer(Parcel in) {
@@ -190,9 +201,10 @@ public class DetailKontainer implements Parcelable {
         this.destinationName = in.readString();
         this.destinationLat = in.readDouble();
         this.destinationLng = in.readDouble();
+        this.jobStatus = in.readInt();
     }
 
-    public static final Parcelable.Creator<DetailKontainer> CREATOR = new Parcelable.Creator<DetailKontainer>() {
+    public static final Creator<DetailKontainer> CREATOR = new Creator<DetailKontainer>() {
         @Override
         public DetailKontainer createFromParcel(Parcel source) {
             return new DetailKontainer(source);
