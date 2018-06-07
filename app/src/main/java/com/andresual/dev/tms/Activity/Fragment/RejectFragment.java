@@ -59,6 +59,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -198,6 +199,14 @@ public class RejectFragment extends Fragment {
             }
         });
         map.putMore("email", new Pref(getContext()).getDriverModel().getEmail());
+
+        LocationServices.getFusedLocationProviderClient(getContext()).getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                loc = location;
+            }
+        });
+
         return view;
     }
 

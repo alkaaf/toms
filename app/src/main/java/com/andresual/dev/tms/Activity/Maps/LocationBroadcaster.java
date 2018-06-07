@@ -169,7 +169,7 @@ public class LocationBroadcaster extends Service {
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(pendingIntent)
                 .build();
-        startForeground(SERVICE_ID, ntf);
+//        startForeground(SERVICE_ID, ntf);
     }
 
 

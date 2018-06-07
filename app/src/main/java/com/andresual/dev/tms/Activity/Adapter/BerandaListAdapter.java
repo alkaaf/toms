@@ -80,14 +80,26 @@ public class BerandaListAdapter extends RecyclerView.Adapter<BerandaListAdapter.
         public void onClick(View v) {
             int position = getAdapterPosition();
             SimpleJob simpleJob = simpleJobList.get(position);
-            if (simpleJob.getJobType() <= 2) {
-                ActivityProses1And2.startProses(mContext, simpleJob);
-            } else if (simpleJob.getJobType() <= 3) {
-                ActivityProses3.startProses(mContext, simpleJob);
-            } else if (simpleJob.getJobType() <= 7) {
-                ActivityProsesFrom4To7.startProses(mContext, simpleJob);
+            if (simpleJob.getJobDeliverStatus() < 14) {
+                if (simpleJob.getJobType() <= 2) {
+                    ActivityProses1And2.startProses(mContext, simpleJob);
+                } else if (simpleJob.getJobType() <= 3) {
+                    ActivityProses3.startProses(mContext, simpleJob);
+                } else if (simpleJob.getJobType() <= 7) {
+                    ActivityProsesFrom4To7.startProses(mContext, simpleJob);
+                } else {
+                    ActivityProsesMoreThan8.startProses(mContext, simpleJob);
+                }
             } else {
-                ActivityProsesMoreThan8.startProses(mContext, simpleJob);
+                if (simpleJob.getJobType() <= 2) {
+                    ActivityProses1And2.startPreview(mContext, simpleJob);
+                } else if (simpleJob.getJobType() <= 3) {
+                    ActivityProses3.startPreview(mContext, simpleJob);
+                } else if (simpleJob.getJobType() <= 7) {
+                    ActivityProsesFrom4To7.startPreview(mContext, simpleJob);
+                } else {
+                    ActivityProsesMoreThan8.startPreview(mContext, simpleJob);
+                }
             }
         }
     }

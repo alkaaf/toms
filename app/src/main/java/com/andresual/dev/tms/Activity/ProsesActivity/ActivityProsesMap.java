@@ -406,8 +406,8 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 whatFunc = Netter.Webservice.JOB_PICKUP;
                 bTerima.setText("Pickup");
 
-                enableGeofence = true;
-                setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
+//                enableGeofence = true;
+//                setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
 
                 break;
             }
@@ -442,6 +442,8 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 whatFunc = Netter.Webservice.JOB_DELIVERJOB;
                 bTerima.setText("Deliver");
 
+                enableGeofence = true;
+                setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
 
                 break;
             }
@@ -534,7 +536,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                     whatFunc = Netter.Webservice.JOB_DELIVERJOB;
                     bTerima.setText("Deliver second job");
                 } else {
-                    bTerima.setText("Photo upload :)");
+                    bTerima.setText("Photo upload");
                     whatFunc = null;
                 }
                 break;

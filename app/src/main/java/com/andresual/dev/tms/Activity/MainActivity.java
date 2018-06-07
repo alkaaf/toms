@@ -115,6 +115,7 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
         setContentView(R.layout.activity_main);
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
 
 //        gso = ((GoogleController) getApplication()).getGoogleSignInOptions();
