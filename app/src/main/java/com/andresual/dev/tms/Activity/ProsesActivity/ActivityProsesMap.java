@@ -10,7 +10,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -105,7 +108,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     double geofenceLat;
     double geofenceLng;
     public static final double GEOFENCE_RADIUS = 1000; // in meters, non retarded unit
-
+    LocationManager lm;
 
     enum MapColor {
 
@@ -125,7 +128,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         }
 
         public int getRgbTransparent(float intensity) {
-            int newColor = ((int)(255 * intensity) << 24) | (rgb ^ 0xFF000000);
+            int newColor = ((int) (255 * intensity) << 24) | (rgb ^ 0xFF000000);
             return newColor;
         }
     }
@@ -135,7 +138,6 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(LocationBroadcaster.LOCATION_BROADCAST_ACTION)) {
                 setUpLocation((Location) intent.getParcelableExtra(LocationBroadcaster.LOCATION_DATA));
-                buttonSwitch();
             }
         }
     };
@@ -143,6 +145,8 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     List<Polyline> polylineList = new ArrayList<>();
     List<Marker> markerList = new ArrayList<>();
     List<Circle> circleList = new ArrayList<>();
+
+    Marker mockMarker;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -158,6 +162,8 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
         if (getSupportActionBar() != null) getSupportActionBar().setTitle("Proses Job");
         filter = new IntentFilter(LocationBroadcaster.LOCATION_BROADCAST_ACTION);
+        lm = ((LocationManager) getSystemService(Context.LOCATION_SERVICE));
+
 
         simpleJob = getIntent().getParcelableExtra(INTENT_DATA);
         checkTrack.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -180,7 +186,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             @Override
             public boolean onLongClick(View v) {
                 debugGeofence = !debugGeofence;
-                Toast.makeText(ActivityProsesMap.this, "Debug: Debug geofence="+debugGeofence, Toast.LENGTH_SHORT).show();
+                debugEnableMockLocation(debugGeofence, true);
                 return false;
             }
         });
@@ -321,6 +327,24 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             });
         }
 
+    }
+
+    private void mockLocationTest(LatLng latLng) {
+        if (mockMarker != null) mockMarker.remove();
+        if (debugGeofence && latLng != null) {
+            mockMarker = gmap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
+            Location mockLocation = new Location(LocationManager.GPS_PROVIDER);
+            mockLocation.setLatitude(latLng.latitude);
+            mockLocation.setLongitude(latLng.longitude);
+            mockLocation.setAltitude(location.getAltitude());
+            mockLocation.setTime(System.currentTimeMillis());
+            mockLocation.setAccuracy(1);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                mockLocation.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
+            }
+            setUpLocation(location);
+            lm.setTestProviderLocation(LocationManager.GPS_PROVIDER, mockLocation);
+        }
     }
 
     private double dd(String s) {
@@ -478,6 +502,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     @Override
     protected void onStop() {
         super.onStop();
+        debugEnableMockLocation(false, false);
         unregisterReceiver(br);
     }
 
@@ -486,6 +511,15 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         gmap = googleMap;
         gmap.setMyLocationEnabled(true);
+
+        gmap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                mockLocationTest(latLng);
+                setUpAll();
+            }
+        });
+
         UiSettings ui = gmap.getUiSettings();
         ui.setCompassEnabled(true);
         ui.setZoomControlsEnabled(true);
@@ -544,6 +578,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     public void setUpLocation(Location location) {
         this.location = location;
         this.latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        buttonSwitch();
         findMe();
     }
 
@@ -618,7 +653,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     public void buttonSwitch() {
         double distance = Haversine.calculate(geofenceLat, geofenceLng, location.getLatitude(), location.getLongitude());
         Log.i("KANA_NISHINO", distance + "m");
-        if (!debugGeofence && enableGeofence && distance > GEOFENCE_RADIUS) {
+        if (enableGeofence && distance > GEOFENCE_RADIUS) {
             bTerima.setEnabled(false);
             bTerima.setBackgroundColor(colorInactive);
         } else {
@@ -637,5 +672,25 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         this.geofenceLat = dd(lat);
         this.geofenceLng = dd(lng);
         buttonSwitch();
+    }
+
+    public void debugEnableMockLocation(boolean enable, boolean showToast){
+        try {
+            if (enable) {
+                Toast.makeText(ActivityProsesMap.this, "Press and hold location and map to set location", Toast.LENGTH_LONG).show();
+                lm.addTestProvider(LocationManager.GPS_PROVIDER, false, false,
+                        false, false, true, true, true, 0, 5);
+                lm.setTestProviderEnabled(LocationManager.GPS_PROVIDER, true);
+            } else {
+               if(showToast){ Toast.makeText(ActivityProsesMap.this, "Mocklocation disabled. Wait untuk your gps is locked", Toast.LENGTH_SHORT).show();}
+                lm.setTestProviderEnabled(LocationManager.GPS_PROVIDER, false);
+                lm.clearTestProviderLocation(LocationManager.GPS_PROVIDER);
+                lm.clearTestProviderEnabled(LocationManager.GPS_PROVIDER);
+                lm.removeTestProvider(LocationManager.GPS_PROVIDER);
+            }
+        } catch (IllegalArgumentException e){
+            e.printStackTrace();
+        }
+        mockLocationTest(null);
     }
 }
