@@ -14,7 +14,8 @@ import com.android.volley.toolbox.Volley;
 import java.util.Map;
 
 public class Netter {
-    public static final String WS_ADDR = "http://manajemenkendaraan.com/tms2/";
+//    public static final String WS_ADDR = "http://manajemenkendaraan.com/tms2/";
+    public static final String WS_ADDR = "http://toms.app-spil.com/";
     public static final String BYAMIK = "byamik.asp";
     public static final String WS = "webservice.asp";
     Context context;
@@ -42,6 +43,8 @@ public class Netter {
         JOB_FINISHJOB("finishjob"),
         JOB_GOEMPTYDEPO("goemptytoDepo"),
         JOB_UPLOADEMPTYDEPO("uploademptytodepo"),
+
+        REJECT("rejectjob"),
 
         DETAILPICKUP("getDetailPengangkutan"),
 

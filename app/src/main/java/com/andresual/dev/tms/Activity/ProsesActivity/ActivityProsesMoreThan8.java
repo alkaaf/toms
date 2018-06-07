@@ -1,5 +1,7 @@
 package com.andresual.dev.tms.Activity.ProsesActivity;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -65,6 +67,8 @@ public class ActivityProsesMoreThan8 extends BaseActivity {
     ListView listContainer;
     @BindView(R.id.btn_terima)
     Button bTerima;
+    @BindView(R.id.btn_tolak)
+    Button bTolak;
 
     public static final String INTENT_DATA = "datajob3";
     public static final String PREVIEW_ONLY = "justpreview";
@@ -94,7 +98,7 @@ public class ActivityProsesMoreThan8 extends BaseActivity {
         pdAccept.setMessage("Menerima job");
         pd.setMessage("Memuat data");
         context = this;
-         isPreview = getIntent().getBooleanExtra(PREVIEW_ONLY, false);
+        isPreview = getIntent().getBooleanExtra(PREVIEW_ONLY, false);
 
         if (job.getJobDeliverStatus() >= 3 && !isPreview) {
             ActivityProsesMap.start(this, job);
@@ -118,8 +122,22 @@ public class ActivityProsesMoreThan8 extends BaseActivity {
                         .show();
             }
         });
+        bTolak.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActivityReject.start(ActivityProsesMoreThan8.this, job);
+            }
+        });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ActivityReject.REQ_CODE && resultCode == Activity.RESULT_OK) {
+            finish();
+        }
+    }
+    @SuppressLint("MissingPermission")
     public void accept() {
         LocationServices.getFusedLocationProviderClient(this).getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
             @Override
@@ -207,6 +225,7 @@ public class ActivityProsesMoreThan8 extends BaseActivity {
         intent.putExtra(PREVIEW_ONLY, true);
         context.startActivity(intent);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_view_photo, menu);
@@ -215,7 +234,7 @@ public class ActivityProsesMoreThan8 extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_view_photo && isPreview ) {
+        if (item.getItemId() == R.id.action_view_photo && isPreview) {
             ActivityUpload.start(this, job);
         }
         return super.onOptionsItemSelected(item);

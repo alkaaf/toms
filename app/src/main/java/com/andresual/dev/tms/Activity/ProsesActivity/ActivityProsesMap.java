@@ -18,8 +18,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -45,6 +47,7 @@ import com.andresual.dev.tms.Activity.Util.StringHashMap;
 import com.andresual.dev.tms.R;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.github.aakira.expandablelayout.ExpandableLinearLayout;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -102,6 +105,19 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     KendaraanModel kendaraan;
     DriverModel driver;
     Pref pref;
+
+    @BindView(R.id.expLl)
+    ExpandableLinearLayout expLl;
+    @BindView(R.id.tvFirst)
+    TextView tvFirst;
+    @BindView(R.id.tvSecond)
+    TextView tvSecond;
+    @BindView(R.id.tvThird)
+    TextView tvThird;
+    @BindView(R.id.bExpandInfo)
+    View bExpandInfo;
+    @BindView(R.id.btn_tolak)
+    Button bTolak;
 
     boolean debugGeofence = false;
     boolean enableGeofence = false;
@@ -164,8 +180,14 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         filter = new IntentFilter(LocationBroadcaster.LOCATION_BROADCAST_ACTION);
         lm = ((LocationManager) getSystemService(Context.LOCATION_SERVICE));
 
-
         simpleJob = getIntent().getParcelableExtra(INTENT_DATA);
+        bExpandInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                expLl.toggle();
+            }
+        });
+
         checkTrack.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -186,7 +208,9 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             @Override
             public boolean onLongClick(View v) {
                 debugGeofence = !debugGeofence;
-                debugEnableMockLocation(debugGeofence, true);
+                Toast.makeText(ActivityProsesMap.this, "Debug tombol "+debugGeofence, Toast.LENGTH_SHORT).show();
+                buttonSwitch();
+//                debugEnableMockLocation(debugGeofence, true);
                 return false;
             }
         });
@@ -194,7 +218,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         bTerima.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (realJob.statusKontainer() == 2 || realJob.getJobDeliverStatus() == 14) {
+                if (whatFunc == null) {
                     ActivityUpload.start(ActivityProsesMap.this, simpleJob);
                     finish();
                 } else {
@@ -202,6 +226,20 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 }
             }
         });
+        bTolak.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActivityReject.start(ActivityProsesMap.this, simpleJob);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ActivityReject.REQ_CODE && resultCode == Activity.RESULT_OK) {
+            finish();
+        }
     }
 
     public void nextStep() {
@@ -286,17 +324,28 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         tvStatus.setText(realJob.getStringDeliverStatus());
         tvDuration.setText(realJob.getJobDeliverEstimatetimetext());
 
+
         isJob89 = realJob.getJobType() == 8 || realJob.getJobType() == 9;
-
         isJobTujuanMoreThanOne = realJob.getJumlahtujuan() > 1;
-
         isSingleBox = Integer.parseInt(realJob.getJumlahbox()) == 1;
-
         isSudahAdaYangTerkirim = (isJobTujuanMoreThanOne && !isSingleBox) && realJob.getDetailkontainer().get(0).getJobStatus() == 10;
-        Log.i("JOBC", "is89 " + isJob89);
-        Log.i("JOBD", "isTujuanMoreThanone " + isJobTujuanMoreThanOne);
-        Log.i("JOBE", "isSingleBox " + isSingleBox);
-        Log.i("JOBF", "isSudahAdaYAngterkirim " + isSudahAdaYangTerkirim);
+
+        if(getSupportActionBar()!=null)getSupportActionBar().setSubtitle(realJob.getJobTypeName() + "("+realJob.getJobType()+")");
+
+        if (!isSingleBox && isJobTujuanMoreThanOne && !isJob89) {
+            tvFirst.setText(realJob.getJobPickupName());
+            tvSecond.setText(realJob.getDetailkontainer().get(0).getCustomerName());
+            tvThird.setText(realJob.getDetailkontainer().get(1).getCustomerName());
+        } else if (isJob89) {
+            tvFirst.setText(realJob.getJobPickupName());
+            tvSecond.setText(realJob.getJobDeliverAddress());
+            tvThird.setText(realJob.getJobBalikAddress());
+        } else {
+            tvFirst.setText(realJob.getJobPickupName());
+            tvSecond.setText(realJob.getJobDeliverAddress());
+            tvThird.setVisibility(View.GONE);
+        }
+
         // draw route from start to end
         if (gmap != null) {
             LocationServices.getFusedLocationProviderClient(this).getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
@@ -486,6 +535,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                     bTerima.setText("Deliver second job");
                 } else {
                     bTerima.setText("Photo upload :)");
+                    whatFunc = null;
                 }
                 break;
             }
@@ -653,7 +703,8 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     public void buttonSwitch() {
         double distance = Haversine.calculate(geofenceLat, geofenceLng, location.getLatitude(), location.getLongitude());
         Log.i("KANA_NISHINO", distance + "m");
-        if (enableGeofence && distance > GEOFENCE_RADIUS) {
+
+        if (!debugGeofence && enableGeofence && distance > GEOFENCE_RADIUS) {
             bTerima.setEnabled(false);
             bTerima.setBackgroundColor(colorInactive);
         } else {
@@ -674,23 +725,25 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         buttonSwitch();
     }
 
-    public void debugEnableMockLocation(boolean enable, boolean showToast){
-        try {
-            if (enable) {
-                Toast.makeText(ActivityProsesMap.this, "Press and hold location and map to set location", Toast.LENGTH_LONG).show();
-                lm.addTestProvider(LocationManager.GPS_PROVIDER, false, false,
-                        false, false, true, true, true, 0, 5);
-                lm.setTestProviderEnabled(LocationManager.GPS_PROVIDER, true);
-            } else {
-               if(showToast){ Toast.makeText(ActivityProsesMap.this, "Mocklocation disabled. Wait untuk your gps is locked", Toast.LENGTH_SHORT).show();}
-                lm.setTestProviderEnabled(LocationManager.GPS_PROVIDER, false);
-                lm.clearTestProviderLocation(LocationManager.GPS_PROVIDER);
-                lm.clearTestProviderEnabled(LocationManager.GPS_PROVIDER);
-                lm.removeTestProvider(LocationManager.GPS_PROVIDER);
-            }
-        } catch (IllegalArgumentException e){
-            e.printStackTrace();
-        }
-        mockLocationTest(null);
+    public void debugEnableMockLocation(boolean enable, boolean showToast) {
+//        try {
+//            if (enable) {
+//                Toast.makeText(ActivityProsesMap.this, "Press and hold location and map to set location", Toast.LENGTH_LONG).show();
+//                lm.addTestProvider(LocationManager.GPS_PROVIDER, false, false,
+//                        false, false, true, true, true, 0, 5);
+//                lm.setTestProviderEnabled(LocationManager.GPS_PROVIDER, true);
+//            } else {
+//                if (showToast) {
+//                    Toast.makeText(ActivityProsesMap.this, "Mocklocation disabled. Wait untuk your gps is locked", Toast.LENGTH_SHORT).show();
+//                }
+//                lm.setTestProviderEnabled(LocationManager.GPS_PROVIDER, false);
+//                lm.clearTestProviderLocation(LocationManager.GPS_PROVIDER);
+//                lm.clearTestProviderEnabled(LocationManager.GPS_PROVIDER);
+//                lm.removeTestProvider(LocationManager.GPS_PROVIDER);
+//            }
+//        } catch (IllegalArgumentException e) {
+//            e.printStackTrace();
+//        }
+//        mockLocationTest(null);
     }
 }

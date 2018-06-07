@@ -3,6 +3,8 @@ package com.andresual.dev.tms.Activity.Fragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -33,8 +35,12 @@ import com.android.volley.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class AkunFragment extends Fragment {
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
+public class AkunFragment extends Fragment {
+    @BindView(R.id.tvVersion)
+    TextView tvVersion;
     TextView tvNamaProfil, tvEmailScroll, tvTelpScroll, tvKotaScroll, tvAlamatScroll, tvNopol;
     ImageView imgProfile;
     Pref pref;
@@ -57,6 +63,7 @@ public class AkunFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_akun, container, false);
         ((DashboardActivity) getActivity())
                 .setActionBarTitle("Akun");
+        ButterKnife.bind(this, view);
         pref = new Pref(getContext());
         driver = pref.getDriverModel();
         kendaraan = pref.getKendaraan();
@@ -78,6 +85,13 @@ public class AkunFragment extends Fragment {
         tvAlamatScroll.setText(driver.getAlamat());
         tvNopol.setText(kendaraan.getIdNopol());
         tvKotaScroll.setText(driver.getKota());
+
+        try {
+            PackageInfo pi = getContext().getPackageManager().getPackageInfo(getActivity().getPackageName(),0);
+            tvVersion.setText(getString(R.string.app_name)+" "+pi.versionName+" ("+pi.versionCode+")");
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
         return view;
     }

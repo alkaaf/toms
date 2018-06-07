@@ -22,8 +22,8 @@ android {
         applicationId "com.andresual.dev.tms"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 9
-        versionName "1.1.7"
+        versionCode 10
+        versionName "1.8.133"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -65,6 +65,8 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'com.github.stfalcon:frescoimageviewer:0.5.0'
     implementation 'com.facebook.fresco:fresco:1.9.0'
+    implementation 'com.github.aakira:expandable-layout:1.6.0@aar'
+    implementation 'com.faendir:acra:4.10.0'
 
 }
 

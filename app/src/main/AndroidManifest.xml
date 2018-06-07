@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -159,6 +160,7 @@
         <activity android:name=".Activity.ProsesActivity.ActivityProsesMoreThan8"/>
         <activity android:name=".Activity.ProsesActivity.ActivityProsesFrom4To7"/>
         <activity android:name=".Activity.ActivityUpload"/>
+        <activity android:name=".Activity.ProsesActivity.ActivityReject"/>
     </application>
 
 </manifest>
