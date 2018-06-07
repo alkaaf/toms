@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Menu;
@@ -34,6 +35,7 @@ import com.andresual.dev.tms.Activity.Model.KendaraanModel;
 import com.andresual.dev.tms.Activity.Model.RealJob;
 import com.andresual.dev.tms.Activity.Model.RouteModel;
 import com.andresual.dev.tms.Activity.Model.SimpleJob;
+import com.andresual.dev.tms.Activity.Util.Haversine;
 import com.andresual.dev.tms.Activity.Util.Netter;
 import com.andresual.dev.tms.Activity.Util.Pref;
 import com.andresual.dev.tms.Activity.Util.StringHashMap;
@@ -48,6 +50,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -79,6 +83,9 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     CheckBox checkTrack;
     @BindView(R.id.btn_terima)
     Button bTerima;
+
+    int colorActive;
+    int colorInactive;
     SupportMapFragment mapFragment;
     GoogleMap gmap;
     Location location;
@@ -93,11 +100,20 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     DriverModel driver;
     Pref pref;
 
+    boolean debugGeofence = false;
+    boolean enableGeofence = false;
+    double geofenceLat;
+    double geofenceLng;
+    public static final double GEOFENCE_RADIUS = 1000; // in meters, non retarded unit
+
+
     enum MapColor {
 
         BLUE(BitmapDescriptorFactory.HUE_BLUE, Color.BLUE),
         GREEN(BitmapDescriptorFactory.HUE_GREEN, Color.GREEN),
         RED(BitmapDescriptorFactory.HUE_RED, Color.RED),
+        MAGENTA(BitmapDescriptorFactory.HUE_MAGENTA, Color.MAGENTA),
+        CYAN(BitmapDescriptorFactory.HUE_CYAN, Color.CYAN),
         YELLOW(BitmapDescriptorFactory.HUE_YELLOW, Color.YELLOW);
 
         public float hsv;
@@ -107,6 +123,11 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             this.hsv = hsv;
             this.rgb = rgb;
         }
+
+        public int getRgbTransparent(float intensity) {
+            int newColor = ((int)(255 * intensity) << 24) | (rgb ^ 0xFF000000);
+            return newColor;
+        }
     }
 
     BroadcastReceiver br = new BroadcastReceiver() {
@@ -114,13 +135,14 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(LocationBroadcaster.LOCATION_BROADCAST_ACTION)) {
                 setUpLocation((Location) intent.getParcelableExtra(LocationBroadcaster.LOCATION_DATA));
-
+                buttonSwitch();
             }
         }
     };
     IntentFilter filter;
     List<Polyline> polylineList = new ArrayList<>();
     List<Marker> markerList = new ArrayList<>();
+    List<Circle> circleList = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -129,7 +151,8 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         pref = new Pref(this);
         driver = pref.getDriverModel();
         kendaraan = pref.getKendaraan();
-
+        colorActive = ContextCompat.getColor(this, R.color.colorPrimary);
+        colorInactive = ContextCompat.getColor(this, R.color.md_blue_grey_100);
         ButterKnife.bind(this);
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -145,17 +168,27 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 }
             }
         });
-        tvDistance.setOnClickListener(new View.OnClickListener() {
+        tvDistance.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onLongClick(View v) {
+                Toast.makeText(ActivityProsesMap.this, "Debug: Reset job to pickup", Toast.LENGTH_SHORT).show();
                 resetJob();
+                return false;
+            }
+        });
+        tvDuration.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                debugGeofence = !debugGeofence;
+                Toast.makeText(ActivityProsesMap.this, "Debug: Debug geofence="+debugGeofence, Toast.LENGTH_SHORT).show();
+                return false;
             }
         });
 
         bTerima.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (realJob.statusKontainer() == 2) {
+                if (realJob.statusKontainer() == 2 || realJob.getJobDeliverStatus() == 14) {
                     ActivityUpload.start(ActivityProsesMap.this, simpleJob);
                     finish();
                 } else {
@@ -212,6 +245,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     }
 
     public void fetchJob() {
+        enableGeofence = false;
         new Netter(this).webService(Request.Method.POST, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -232,6 +266,11 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         }), Netter.Webservice.DETAILPICKUP, new StringHashMap().putMore("id", Integer.toString(simpleJob.getJobId())));
     }
 
+    boolean isJob89;
+    boolean isJobTujuanMoreThanOne;
+    boolean isSingleBox;
+    boolean isSudahAdaYangTerkirim;
+
     @SuppressLint("MissingPermission")
     public void setUpAll() {
         clearMapElement();
@@ -240,10 +279,14 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         tvDistance.setText(realJob.getJobDeliverDistancetext());
         tvStatus.setText(realJob.getStringDeliverStatus());
         tvDuration.setText(realJob.getJobDeliverEstimatetimetext());
-        final boolean isJob89 = realJob.getJobType() == 8 || realJob.getJobType() == 9;
-        final boolean isJobTujuanMoreThanOne = realJob.getJumlahtujuan() > 1;
-        final boolean isSingleBox = Integer.parseInt(realJob.getJumlahbox()) == 1;
-        final boolean isSudahAdaYangTerkirim = (isJobTujuanMoreThanOne && !isSingleBox) && realJob.getDetailkontainer().get(0).getJobStatus() == 10;
+
+        isJob89 = realJob.getJobType() == 8 || realJob.getJobType() == 9;
+
+        isJobTujuanMoreThanOne = realJob.getJumlahtujuan() > 1;
+
+        isSingleBox = Integer.parseInt(realJob.getJumlahbox()) == 1;
+
+        isSudahAdaYangTerkirim = (isJobTujuanMoreThanOne && !isSingleBox) && realJob.getDetailkontainer().get(0).getJobStatus() == 10;
         Log.i("JOBC", "is89 " + isJob89);
         Log.i("JOBD", "isTujuanMoreThanone " + isJobTujuanMoreThanOne);
         Log.i("JOBE", "isSingleBox " + isSingleBox);
@@ -254,11 +297,12 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 @Override
                 public void onSuccess(Location location) {
                     setUpLocation(location);
+                    prepareButton();
                     drawRoute(location.getLatitude(), location.getLongitude(), dd(realJob.getJobPickupLatitude()), dd(realJob.getJobPickupLongitude()), MapColor.BLUE, realJob.getJobPickupName());
                     if (isJob89) {
                         drawRoute(location.getLatitude(), location.getLongitude(), dd(realJob.getJobPickupLatitude()), dd(realJob.getJobPickupLongitude()), MapColor.BLUE, realJob.getJobPickupName());
                         drawRoute(dd(realJob.getJobPickupLatitude()), dd(realJob.getJobPickupLongitude()), dd(realJob.getJobDeliverLatitude()), dd(realJob.getJobDeliverLongitude()), MapColor.GREEN, realJob.getJobDeliverAddress());
-                        drawRoute(dd(realJob.getJobDeliverLatitude()), dd(realJob.getJobDeliverLongitude()), dd(realJob.getJobBalikLatitude()), dd(realJob.getJobBalikLongitude()), MapColor.YELLOW, realJob.getJobBalikAddress());
+                        drawRoute(dd(realJob.getJobDeliverLatitude()), dd(realJob.getJobDeliverLongitude()), dd(realJob.getJobBalikLatitude()), dd(realJob.getJobBalikLongitude()), MapColor.MAGENTA, realJob.getJobBalikAddress());
                     } else {
 
                         if (isSingleBox) {
@@ -266,7 +310,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                         } else {
                             if (isJobTujuanMoreThanOne) {
                                 drawRoute(dd(realJob.getJobPickupLatitude()), dd(realJob.getJobPickupLongitude()), realJob.getDetailkontainer().get(0).getDestinationLat(), realJob.getDetailkontainer().get(0).getDestinationLng(), MapColor.GREEN, realJob.getDetailkontainer().get(0).getDestinationName());
-                                drawRoute(realJob.getDetailkontainer().get(0).getDestinationLat(), realJob.getDetailkontainer().get(0).getDestinationLng(), realJob.getDetailkontainer().get(1).getDestinationLat(), realJob.getDetailkontainer().get(1).getDestinationLng(), MapColor.YELLOW, realJob.getDetailkontainer().get(1).getDestinationName());
+                                drawRoute(realJob.getDetailkontainer().get(0).getDestinationLat(), realJob.getDetailkontainer().get(0).getDestinationLng(), realJob.getDetailkontainer().get(1).getDestinationLat(), realJob.getDetailkontainer().get(1).getDestinationLng(), MapColor.MAGENTA, realJob.getDetailkontainer().get(1).getDestinationName());
 
                             } else {
                                 drawRoute(dd(realJob.getJobPickupLatitude()), dd(realJob.getJobPickupLongitude()), dd(realJob.getJobDeliverLatitude()), dd(realJob.getJobDeliverLongitude()), MapColor.GREEN, realJob.getJobDeliverAddress());
@@ -277,42 +321,89 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             });
         }
 
-        // setting parameter and ui for transport
+    }
+
+    private double dd(String s) {
+        return Double.parseDouble(s);
+    }
+
+    private void prepareButton() {
         switch (realJob.getJobDeliverStatus()) {
             case 3: {
                 whatFunc = Netter.Webservice.JOB_PICKUP;
                 bTerima.setText("Pickup");
+
+                enableGeofence = true;
+                setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
+
                 break;
             }
             case 4: {
                 whatFunc = Netter.Webservice.JOB_READYJOB;
                 bTerima.setText("Ready To Stuff");
+
+                enableGeofence = true;
+                setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
+
                 break;
             }
             case 5: {
                 whatFunc = Netter.Webservice.JOB_STARTJOBDEPARTURE;
                 bTerima.setText("Start Stuff/Strip");
+
+                enableGeofence = true;
+                setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
+
                 break;
             }
             case 6: {
                 whatFunc = Netter.Webservice.JOB_FINISHJOBDEPARTURE;
                 bTerima.setText("Finish Stuff/Strip");
+
+                enableGeofence = true;
+                setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
+
                 break;
             }
             case 7: {
                 whatFunc = Netter.Webservice.JOB_DELIVERJOB;
                 bTerima.setText("Deliver");
+
+
                 break;
             }
             case 8: {
                 whatFunc = Netter.Webservice.JOB_ARRIVEDESTINATION;
                 bTerima.setText("Arrive Destination");
 
+                enableGeofence = true;
+                if (!isSingleBox && isJobTujuanMoreThanOne && !isJob89) {
+                    if (realJob.statusKontainer() == 0) {
+                        setGeofenceTarget(realJob.getDetailkontainer().get(0).getDestinationLat(), realJob.getDetailkontainer().get(0).getDestinationLng());
+                    } else {
+                        setGeofenceTarget(realJob.getDetailkontainer().get(1).getDestinationLat(), realJob.getDetailkontainer().get(1).getDestinationLng());
+                    }
+                } else {
+                    setGeofenceTarget(realJob.getJobDeliverLatitude(), realJob.getJobDeliverLongitude());
+                }
+
                 break;
             }
             case 9: {
                 whatFunc = Netter.Webservice.JOB_STARTJOBARRIVAL;
                 bTerima.setText("Start Stuff/Strip");
+
+                enableGeofence = true;
+                if (!isSingleBox && isJobTujuanMoreThanOne && !isJob89) {
+                    if (realJob.statusKontainer() == 0) {
+                        setGeofenceTarget(realJob.getDetailkontainer().get(0).getDestinationLat(), realJob.getDetailkontainer().get(0).getDestinationLng());
+                    } else {
+                        setGeofenceTarget(realJob.getDetailkontainer().get(1).getDestinationLat(), realJob.getDetailkontainer().get(1).getDestinationLng());
+                    }
+                } else {
+                    setGeofenceTarget(realJob.getJobDeliverLatitude(), realJob.getJobDeliverLongitude());
+                }
+
                 break;
             }
             case 10: {
@@ -322,26 +413,26 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 } else {
                     whatFunc = Netter.Webservice.JOB_FINISHJOB;
                     bTerima.setText("Finish Job");
-                    /*else {
-                    if (isJobTujuanMoreThanOne) {
-                        if (isSudahAdaYangTerkirim) {
-                            whatFunc = Netter.Webservice.JOB_DELIVERJOB;
-                            bTerima.setText("Deliver second box");
-                        } else {
-                            whatFunc = Netter.Webservice.JOB_FINISHJOB;
-                            bTerima.setText("Finish Job");
-                        }
-                    } else {
-                        whatFunc = Netter.Webservice.JOB_FINISHJOB;
-                        bTerima.setText("Finish Job");
-                    }*/
                 }
+
+                enableGeofence = true;
+                if (!isSingleBox && isJobTujuanMoreThanOne && !isJob89) {
+                    if (realJob.statusKontainer() == 0) {
+                        setGeofenceTarget(realJob.getDetailkontainer().get(0).getDestinationLat(), realJob.getDetailkontainer().get(0).getDestinationLng());
+                    } else {
+                        setGeofenceTarget(realJob.getDetailkontainer().get(1).getDestinationLat(), realJob.getDetailkontainer().get(1).getDestinationLng());
+                    }
+                } else {
+                    setGeofenceTarget(realJob.getJobDeliverLatitude(), realJob.getJobDeliverLongitude());
+                }
+
                 break;
             }
             case 11: {
                 if (isJob89) {
                     whatFunc = Netter.Webservice.JOB_GOEMPTYDEPO;
                     bTerima.setText("Go Empty To Depo");
+
                 }
                 break;
             }
@@ -349,6 +440,9 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 if (isJob89) {
                     whatFunc = Netter.Webservice.JOB_UPLOADEMPTYDEPO;
                     bTerima.setText("Upload Empty to Depo");
+
+                    enableGeofence = true;
+                    setGeofenceTarget(realJob.getJobBalikLatitude(), realJob.getJobBalikLongitude());
                 }
                 break;
             }
@@ -356,6 +450,9 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 if (isJob89) {
                     whatFunc = Netter.Webservice.JOB_FINISHJOB;
                     bTerima.setText("Finish Job");
+
+                    enableGeofence = true;
+                    setGeofenceTarget(realJob.getJobBalikLatitude(), realJob.getJobBalikLongitude());
                 }
                 break;
             }
@@ -369,10 +466,6 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 break;
             }
         }
-    }
-
-    private double dd(String s) {
-        return Double.parseDouble(s);
     }
 
     @Override
@@ -439,6 +532,13 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         MarkerOptions markerOptions = new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.defaultMarker(color.hsv)).title(title);
         Marker marker = gmap.addMarker(markerOptions);
         markerList.add(marker);
+        drawCircle(latLng, color);
+    }
+
+    public void drawCircle(LatLng latLng, MapColor color) {
+        CircleOptions circleOptions = new CircleOptions().center(latLng).fillColor(color.getRgbTransparent(0.1f)).strokeColor(Color.TRANSPARENT).radius(GEOFENCE_RADIUS);
+        Circle circle = gmap.addCircle(circleOptions);
+        circleList.add(circle);
     }
 
     public void setUpLocation(Location location) {
@@ -468,6 +568,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressLint("MissingPermission")
     private void resetJob() {
         LocationServices.getFusedLocationProviderClient(this).getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
             @Override
@@ -508,6 +609,33 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             polylineList.get(i).remove();
         }
         polylineList.clear();
+        for (int i = 0; i < circleList.size(); i++) {
+            circleList.get(i).remove();
+        }
+        circleList.clear();
+    }
 
+    public void buttonSwitch() {
+        double distance = Haversine.calculate(geofenceLat, geofenceLng, location.getLatitude(), location.getLongitude());
+        Log.i("KANA_NISHINO", distance + "m");
+        if (!debugGeofence && enableGeofence && distance > GEOFENCE_RADIUS) {
+            bTerima.setEnabled(false);
+            bTerima.setBackgroundColor(colorInactive);
+        } else {
+            bTerima.setEnabled(true);
+            bTerima.setBackgroundColor(colorActive);
+        }
+    }
+
+    public void setGeofenceTarget(double lat, double lng) {
+        this.geofenceLat = lat;
+        this.geofenceLng = lng;
+        buttonSwitch();
+    }
+
+    public void setGeofenceTarget(String lat, String lng) {
+        this.geofenceLat = dd(lat);
+        this.geofenceLng = dd(lng);
+        buttonSwitch();
     }
 }

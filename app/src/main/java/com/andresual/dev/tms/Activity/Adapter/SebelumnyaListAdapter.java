@@ -1,8 +1,12 @@
 package com.andresual.dev.tms.Activity.Adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +30,9 @@ import com.andresual.dev.tms.Activity.ReadyToStuffPickupActivity;
 import com.andresual.dev.tms.Activity.SiapAntarActivity;
 import com.andresual.dev.tms.Activity.StartDischargeActivity;
 import com.andresual.dev.tms.Activity.StartStuffPickupActivity;
+import com.andresual.dev.tms.Activity.Util.Netter;
+import com.andresual.dev.tms.Activity.Util.Pref;
+import com.andresual.dev.tms.Activity.Util.StringHashMap;
 import com.andresual.dev.tms.Dooring.MapsOrderDooringActivity;
 import com.andresual.dev.tms.Dooring.MengantarDooringActivity;
 import com.andresual.dev.tms.Dooring.MenurunkanDooringActivity;
@@ -33,6 +40,13 @@ import com.andresual.dev.tms.Dooring.OrderBaruDooringActivity;
 import com.andresual.dev.tms.Dooring.SiapAntarDooringActivity;
 import com.andresual.dev.tms.JobFinishedActivity;
 import com.andresual.dev.tms.R;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,13 +69,14 @@ public class SebelumnyaListAdapter extends RecyclerView.Adapter<SebelumnyaListAd
         this.listener = listener;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         public TextView tvJobName, tvFrom, tvTo, tvStatus;
         Context ctx;
 
         public ViewHolder(View view, Context ctx) {
             super(view);
             view.setOnClickListener(this);
+            view.setOnLongClickListener(this);
             tvJobName = (TextView) view.findViewById(R.id.tv_nama);
             tvFrom = (TextView) view.findViewById(R.id.tv_from1);
             tvTo = (TextView) view.findViewById(R.id.tv_to1);
@@ -82,6 +97,48 @@ public class SebelumnyaListAdapter extends RecyclerView.Adapter<SebelumnyaListAd
             } else {
                 ActivityProsesMoreThan8.startPreview(mContext, simpleJob);
             }
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            new AlertDialog.Builder(mContext).setMessage("Reset job to Accept?")
+                    .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        @SuppressLint("MissingPermission")
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            LocationServices.getFusedLocationProviderClient(mContext).getLastLocation().addOnSuccessListener((Activity) mContext, new OnSuccessListener<Location>() {
+                                @Override
+                                public void onSuccess(Location location) {
+                                    new Netter(mContext).webService(Request.Method.POST, new Response.Listener<String>() {
+                                                @Override
+                                                public void onResponse(String response) {
+                                                    try {
+                                                        JSONObject obj = new JSONObject(response);
+//                                                        toast(obj.getString("message"));
+                                                        if (obj.getInt("status") == 200) {
+                                                            notifyDataSetChanged();
+                                                        }
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                            }, Netter.getDefaultErrorListener(mContext, new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                }
+                                            }), Netter.Webservice.JOB_ACCEPT, new StringHashMap()
+                                                    .putMore("idjob", Integer.toString(simpleJobList.get(getAdapterPosition()).getJobId()))
+                                                    .putMore("email", new Pref(mContext).getDriverModel().getEmail())
+                                                    .putMore("lat", Double.toString(location.getLatitude()))
+                                                    .putMore("lng", Double.toString(location.getLongitude()))
+                                    );
+                                }
+                            });
+                        }
+                    })
+                    .setNegativeButton("NO", null)
+                    .show();
+            return false;
         }
     }
 
