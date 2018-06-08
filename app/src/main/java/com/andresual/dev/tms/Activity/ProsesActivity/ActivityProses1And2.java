@@ -74,6 +74,7 @@ public class ActivityProses1And2 extends BaseActivity {
     Context context;
     ProgressDialog pdAccept;
     boolean isPreview;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,6 +139,7 @@ public class ActivityProses1And2 extends BaseActivity {
             finish();
         }
     }
+
     @SuppressLint("MissingPermission")
     public void accept() {
         LocationServices.getFusedLocationProviderClient(this).getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
@@ -218,15 +220,18 @@ public class ActivityProses1And2 extends BaseActivity {
         intent.putExtra(PREVIEW_ONLY, true);
         context.startActivity(intent);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_view_photo, menu);
+        if (isPreview) {
+            getMenuInflater().inflate(R.menu.menu_view_photo, menu);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_view_photo && isPreview ) {
+        if (item.getItemId() == R.id.action_view_photo && isPreview) {
             ActivityUpload.start(this, job);
         }
         return super.onOptionsItemSelected(item);

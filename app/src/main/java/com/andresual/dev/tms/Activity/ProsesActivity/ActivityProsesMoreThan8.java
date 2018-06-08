@@ -228,7 +228,9 @@ public class ActivityProsesMoreThan8 extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_view_photo, menu);
+        if(isPreview) {
+            getMenuInflater().inflate(R.menu.menu_view_photo, menu);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 

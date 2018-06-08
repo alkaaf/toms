@@ -92,7 +92,7 @@ public class ActivityProsesFrom4To7 extends BaseActivity {
         pdAccept.setMessage("Menerima job");
         pd.setMessage("Memuat data");
 
-         isPreview = getIntent().getBooleanExtra(PREVIEW_ONLY, false);
+        isPreview = getIntent().getBooleanExtra(PREVIEW_ONLY, false);
 
         context = this;
         if (job.getJobDeliverStatus() >= 3 && !isPreview) {
@@ -101,7 +101,7 @@ public class ActivityProsesFrom4To7 extends BaseActivity {
         }
 
         setContent();
-        findViewById(R.id.llBottom).setVisibility(isPreview? View.GONE : View.VISIBLE);
+        findViewById(R.id.llBottom).setVisibility(isPreview ? View.GONE : View.VISIBLE);
         bTerima.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,6 +125,7 @@ public class ActivityProsesFrom4To7 extends BaseActivity {
             }
         });
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -132,6 +133,7 @@ public class ActivityProsesFrom4To7 extends BaseActivity {
             finish();
         }
     }
+
     @SuppressLint("MissingPermission")
     public void accept() {
         LocationServices.getFusedLocationProviderClient(this).getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
@@ -222,13 +224,15 @@ public class ActivityProsesFrom4To7 extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_view_photo, menu);
+        if (isPreview) {
+            getMenuInflater().inflate(R.menu.menu_view_photo, menu);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_view_photo && isPreview ) {
+        if (item.getItemId() == R.id.action_view_photo && isPreview) {
             ActivityUpload.start(this, job);
         }
         return super.onOptionsItemSelected(item);

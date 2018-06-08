@@ -122,6 +122,7 @@ public class ActivityProses3 extends BaseActivity {
             }
         });
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -129,6 +130,7 @@ public class ActivityProses3 extends BaseActivity {
             finish();
         }
     }
+
     @SuppressLint("MissingPermission")
     public void accept() {
         LocationServices.getFusedLocationProviderClient(this).getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
@@ -218,7 +220,9 @@ public class ActivityProses3 extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_view_photo, menu);
+        if (isPreview) {
+            getMenuInflater().inflate(R.menu.menu_view_photo, menu);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 

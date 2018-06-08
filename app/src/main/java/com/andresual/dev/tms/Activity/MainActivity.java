@@ -163,7 +163,7 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
             }
         }
 
-
+//        Log.i("FB_TOKEN", FirebaseInstanceId.getInstance().getToken());
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

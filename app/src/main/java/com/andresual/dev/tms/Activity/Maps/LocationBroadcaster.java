@@ -22,12 +22,16 @@ import com.andresual.dev.tms.Activity.ActivitySplash;
 import com.andresual.dev.tms.Activity.MainActivity;
 import com.andresual.dev.tms.Activity.Model.DriverModel;
 import com.andresual.dev.tms.Activity.Model.KendaraanModel;
+import com.andresual.dev.tms.Activity.Util.Haversine;
 import com.andresual.dev.tms.Activity.Util.Netter;
 import com.andresual.dev.tms.Activity.Util.Pref;
 import com.andresual.dev.tms.Activity.Util.StringHashMap;
 import com.andresual.dev.tms.R;
 import com.android.volley.Request;
 import com.android.volley.Response;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -43,29 +47,58 @@ public class LocationBroadcaster extends Service {
     private LocationManager locationManager = null;
     private static final int LOCATION_INTERVAL = 0;
     private static final float LOCATION_DISTANCE = 0;
+
+    private static final double SEND_MIN_DISTANCE = 50;
+    private static final double SEND_MIN_MILLIS = 60000;
+
     public static final String LOCATION_DATA = "location_Data";
     public static final String LOCATION_BROADCAST_ACTION = "location.broadcast.action";
     private static Location location;
     public static final int SERVICE_ID = 13;
+
     public static Location getLocation() {
         return location;
     }
+
+    Location lastKnown;
+    long lastUpdate;
+
     public void updateDriverLocation() {
         Pref pref = new Pref(this);
         DriverModel driverModel = pref.getDriverModel();
         KendaraanModel kendaraanModel = pref.getKendaraan();
         if (driverModel != null) {
-           /* new Netter(this).webService(Request.Method.POST, new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Log.e("UPDATE_LOC", response);
-                        }
-                    }, Netter.getDefaultErrorListener(this, null), Netter.Webservice.UPDATELOKASIDRIVER,
-                    new StringHashMap().putMore("idkendaraan", kendaraanModel.getIdKendaraan())
-                            .putMore("email", driverModel.getEmail())
-                            .putMore("lat", Double.toString(getLocation().getLatitude()))
-                            .putMore("lng", Double.toString(getLocation().getLongitude()))
-            );*/
+            if(lastKnown != null && lastUpdate != 0) {
+                // check the distance
+                double distance = Haversine.calculate(lastKnown, location);
+                long delta = System.currentTimeMillis() - lastUpdate;
+                Log.i("MIN_DISTANCE", "distance "+ distance);
+                if(distance >= SEND_MIN_DISTANCE || delta    >= SEND_MIN_MILLIS) {
+                    new Netter(this).webService(Request.Method.POST, new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    try {
+                                        JSONObject obj = new JSONObject(response);
+                                        if (obj.getInt("status") == 200) {
+                                            lastKnown = location;
+                                            lastUpdate  = System.currentTimeMillis();
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    Log.e("UPDATE_LOC", response);
+                                }
+                            }, Netter.getDefaultErrorListener(this, null), Netter.Webservice.UPDATELOKASIDRIVER,
+                            new StringHashMap().putMore("idkendaraan", kendaraanModel.getIdKendaraan())
+                                    .putMore("email", driverModel.getEmail())
+                                    .putMore("lat", Double.toString(getLocation().getLatitude()))
+                                    .putMore("lng", Double.toString(getLocation().getLongitude()))
+                    );
+                }
+            } else {
+                lastKnown = location;
+                lastUpdate = System.currentTimeMillis();
+            }
         }
     }
 
@@ -81,13 +114,11 @@ public class LocationBroadcaster extends Service {
         @Override
         public void onLocationChanged(Location location) {
             Log.i(TAG, "onLocationChanged: " + location);
-            Log.i(TAG, "onLocationChanged: broadcasting");
             Intent intent = new Intent(LOCATION_BROADCAST_ACTION);
             intent.putExtra(LOCATION_DATA, location);
             sendBroadcast(intent);
             mLastLocation.set(location);
             LocationBroadcaster.location = location;
-            startFg();
             updateDriverLocation();
         }
 
@@ -141,35 +172,13 @@ public class LocationBroadcaster extends Service {
         } catch (IllegalArgumentException ex) {
             Log.d(TAG, "gps provider does not exist " + ex.getMessage());
         }
-
-        startFg();
-        Intent intentBc = new Intent(LOCATION_BROADCAST_ACTION);
-        intentBc.putExtra(LOCATION_DATA, location);
-        sendBroadcast(intent);
         return START_STICKY;
     }
 
     @Override
     public void onCreate() {
-
         Log.i(TAG, "onCreate");
 
-
-
-
-    }
-
-    private void startFg(){
-        Intent intent = new Intent(this, ActivitySplash.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,123,intent,PendingIntent.FLAG_IMMUTABLE,null);
-        NotificationManager nm = ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE));
-        Notification ntf = new Notification.Builder(this)
-                .setContentTitle("ToMS")
-                .setContentText("Last location update " + new SimpleDateFormat("HH:mm:ss").format(new Date()))
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentIntent(pendingIntent)
-                .build();
-//        startForeground(SERVICE_ID, ntf);
     }
 
 

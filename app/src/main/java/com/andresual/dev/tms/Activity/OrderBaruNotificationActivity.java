@@ -26,14 +26,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import static com.andresual.dev.tms.Activity.Util.FcmMessagingService.id;
 
 public class OrderBaruNotificationActivity extends AppCompatActivity {
 
     ArrayList<SimpleJob> simpleJobArrayList;
     SimpleJob simpleJob;
     TextView tvOrderNo, tvPelanggan, tvTanggal, tvEstimasiJarak, tvEstimasiWaktu, tvOrigin, tvContSize, tvContType, tvComodity;
-
+    String id;
     //////////////////////////////getter setter////////////////////////////////////////////////////
 
 

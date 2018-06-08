@@ -45,7 +45,7 @@ public class BerandaFragment extends Fragment {
     TextView tvBulanIni, tvHariIni, tvSelesai, tvProses;
     SwipeRefreshLayout swipe;
 
-    BerandaListAdapter mAdapter;
+    public BerandaListAdapter mAdapter;
     ArrayList<SimpleJob> jobList = new ArrayList<>();
     DashboardModel dashboardModel;
     Pref pref;

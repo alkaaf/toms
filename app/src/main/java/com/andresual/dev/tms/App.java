@@ -24,21 +24,18 @@ import org.acra.sender.HttpSender;
         httpMethod = HttpSender.Method.PUT,
         reportType = HttpSender.Type.JSON,
         formUri = "http://35.187.154.93:5984/acra-toms/_design/acra-storage/_update/report",
-//        formUri = "http://35.187.154.93:5984/acra-smsjin/_design/acra-storage/_update/report",
         formUriBasicAuthLogin = "dalbo",
         formUriBasicAuthPassword = "dalbo",
         mode = ReportingInteractionMode.TOAST,
         resToastText = R.string.crash_dialog_title
-        /*customReportContent = {ReportField.USER_COMMENT, ReportField.APP_VERSION_CODE, ReportField.APP_VERSION_NAME, ReportField.ANDROID_VERSION, ReportField.PHONE_MODEL, ReportField.CUSTOM_DATA, ReportField.STACK_TRACE},
-        mode = ReportingInteractionMode.TOAST,
-        resToastText = R.string.crash_dialog_title*/)
+)
 public class App extends Application {
     public static Context context;
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.i("TIME_TICK", "Time is tick tock");
-            startService(new Intent(App.this, LocationBroadcaster.class));
+//            startService(new Intent(App.this, LocationBroadcaster.class));
         }
     };
 
@@ -52,8 +49,8 @@ public class App extends Application {
                 .setDownsampleEnabled(true)
                 .build();
         Fresco.initialize(this, config);
-        IntentFilter filter = new IntentFilter(Intent.ACTION_TIME_TICK);
-        registerReceiver(receiver, filter);
+//        IntentFilter filter = new IntentFilter(Intent.ACTION_TIME_TICK);
+//        registerReceiver(receiver, filter);
     }
 
 

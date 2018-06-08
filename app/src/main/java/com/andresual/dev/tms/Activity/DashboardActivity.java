@@ -1,6 +1,7 @@
 package com.andresual.dev.tms.Activity;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -40,7 +41,15 @@ import com.andresual.dev.tms.Activity.Maps.LocationBroadcaster;
 import com.andresual.dev.tms.Activity.Model.DriverModel;
 import com.andresual.dev.tms.Activity.Model.KendaraanModel;
 import com.andresual.dev.tms.Activity.Model.PassingLocationModel;
+import com.andresual.dev.tms.Activity.Model.SimpleJob;
+import com.andresual.dev.tms.Activity.ProsesActivity.ActivityProses1And2;
+import com.andresual.dev.tms.Activity.ProsesActivity.ActivityProses3;
+import com.andresual.dev.tms.Activity.ProsesActivity.ActivityProsesFrom4To7;
+import com.andresual.dev.tms.Activity.ProsesActivity.ActivityProsesMoreThan8;
+import com.andresual.dev.tms.Activity.Util.FcmMessagingService;
+import com.andresual.dev.tms.Activity.Util.Netter;
 import com.andresual.dev.tms.Activity.Util.Pref;
+import com.andresual.dev.tms.Activity.Util.StringHashMap;
 import com.andresual.dev.tms.R;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -58,7 +67,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -78,10 +89,13 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
     KendaraanModel kendaraanModel;
     Pref pref;
     IntentFilter filter;
+    Context mContext;
+    Fragment selectedFragment;
+
     BroadcastReceiver br = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals(LocationBroadcaster.LOCATION_BROADCAST_ACTION)){
+            if (intent.getAction().equals(LocationBroadcaster.LOCATION_BROADCAST_ACTION)) {
                 Location loc = intent.getParcelableExtra(LocationBroadcaster.LOCATION_DATA);
             }
         }
@@ -92,6 +106,9 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+        mContext = this;
+
+
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         pref = new Pref(this);
@@ -99,8 +116,8 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
         kendaraanModel = pref.getKendaraan();
         filter = new IntentFilter(LocationBroadcaster.LOCATION_BROADCAST_ACTION);
 
-        if(getSupportActionBar()!=null){
-            getSupportActionBar().setSubtitle(driverModel.getUsername()+ " | "+kendaraanModel.getIdNopol());
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setSubtitle(driverModel.getUsername() + " | " + kendaraanModel.getIdNopol());
             getSupportActionBar().setElevation(0);
         }
 
@@ -122,7 +139,7 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Fragment selectedFragment = null;
+                selectedFragment = null;
                 switch (item.getItemId()) {
                     case R.id.navigation_beranda:
                         selectedFragment = BerandaFragment.newInstance();
@@ -159,15 +176,54 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
         if (isMockSettingsON(getApplicationContext())) {
             Toast.makeText(this, "Mock location anda sedang aktif", Toast.LENGTH_LONG).show();
         }
+
+        // Handle notification
+        final String id = getIntent().getStringExtra(FcmMessagingService.INTENT_ID_DATA);
+        if (id != null) {
+            if(selectedFragment != null && selectedFragment instanceof BerandaFragment){
+                ((BerandaFragment) selectedFragment).fetchDashboard();
+                ((BerandaFragment) selectedFragment).fetchListJob();
+            }
+            final ProgressDialog pdNotif = new ProgressDialog(this);
+            pdNotif.setMessage("Memproses notifikasi");
+            new Netter(this).webService(Request.Method.POST, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    JSONObject obj = null;
+                    pdNotif.dismiss();
+                    try {
+                        obj = new JSONObject(response);
+                        SimpleJob simpleJob = new Gson().fromJson(obj.getString("job-" + id), SimpleJob.class);
+                        if (simpleJob != null) {
+                            if (simpleJob.getJobType() <= 2) {
+                                ActivityProses1And2.startProses(mContext, simpleJob);
+                            } else if (simpleJob.getJobType() <= 3) {
+                                ActivityProses3.startProses(mContext, simpleJob);
+                            } else if (simpleJob.getJobType() <= 7) {
+                                ActivityProsesFrom4To7.startProses(mContext, simpleJob);
+                            } else {
+                                ActivityProsesMoreThan8.startProses(mContext, simpleJob);
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, Netter.getDefaultErrorListener(this, new Runnable() {
+                @Override
+                public void run() {
+                    pdNotif.dismiss();
+                }
+            }), Netter.Webservice.DETAILPICKUP, new StringHashMap().putMore("id", id));
+        }
     }
 
     @Override
     public void onStart() {
         super.onStart();
-//        googleApiClient.connect();
         isMockSettingsON(DashboardActivity.this);
         areThereMockPermissionApps(DashboardActivity.this);
-        registerReceiver(br,filter);
+        registerReceiver(br, filter);
     }
 
     @Override
@@ -188,7 +244,6 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
-//            System.exit(0);
         }
 
         twice = true;
@@ -251,7 +306,6 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
             return true;
         return false;
     }
-
 
 
     private void buildAlertMessageNoGps() {

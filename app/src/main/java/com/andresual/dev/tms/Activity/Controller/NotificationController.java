@@ -55,7 +55,6 @@ public class NotificationController {
 
     public void acceptJob(final OrderBaruNotificationActivity orderBaruNotificationActivity) {
 
-        id = FcmMessagingService.getVariable();
 
         final Map<String, String> params = new HashMap<>();
         params.put("f", "acceptjob");
@@ -93,7 +92,6 @@ public class NotificationController {
 
     public void jemputJob(final JemputNotificationActivity jemputNotificationActivity) {
 
-        id = FcmMessagingService.getVariable();
 
         final Map<String, String> params = new HashMap<>();
         params.put("f", "pickupjob");
@@ -131,7 +129,6 @@ public class NotificationController {
 
     public void siapAntarJob(final SiapAntarNotificationActivity siapAntarNotificationActivity) {
 
-        id = FcmMessagingService.getVariable();
 
         final Map<String, String> params = new HashMap<>();
         params.put("f", "readyjob");
@@ -169,7 +166,6 @@ public class NotificationController {
 
     public void mengantarJob(final MengantarNotificationActivity mengantarNotificationActivity) {
 
-        id = FcmMessagingService.getVariable();
 
         final Map<String, String> params = new HashMap<>();
         params.put("f", "deliverjob");
@@ -209,7 +205,6 @@ public class NotificationController {
 
     public void menurunkanJob(final MenurunkanNotificationActivity menurunkanNotificationActivity) {
 
-        id = FcmMessagingService.getVariable();
 
         final Map<String, String> params = new HashMap<>();
         params.put("f", "finishjob");
