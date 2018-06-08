@@ -106,8 +106,10 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     DriverModel driver;
     Pref pref;
 
+    @BindView(R.id.tvOrderId)
+    TextView tvOrderId;
     @BindView(R.id.expLl)
-    ExpandableLinearLayout expLl;
+    View expLl;
     @BindView(R.id.tvFirst)
     TextView tvFirst;
     @BindView(R.id.tvSecond)
@@ -184,7 +186,11 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         bExpandInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                expLl.toggle();
+                if(expLl.getVisibility() == View.GONE){
+                    expLl.setVisibility(View.VISIBLE);
+                } else {
+                    expLl.setVisibility(View.GONE);
+                }
             }
         });
 
@@ -330,8 +336,9 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         isSingleBox = Integer.parseInt(realJob.getJumlahbox()) == 1;
         isSudahAdaYangTerkirim = (isJobTujuanMoreThanOne && !isSingleBox) && realJob.getDetailkontainer().get(0).getJobStatus() == 10;
 
-        if(getSupportActionBar()!=null)getSupportActionBar().setSubtitle(realJob.getJobTypeName() + "("+realJob.getJobType()+")");
+        if(getSupportActionBar()!=null)getSupportActionBar().setSubtitle(realJob.getJobTypeName()/* + "("+realJob.getJobType()+")"*/);
 
+        tvOrderId.setText(realJob.getOrderId());
         if (!isSingleBox && isJobTujuanMoreThanOne && !isJob89) {
             tvFirst.setText(realJob.getJobPickupName());
             tvSecond.setText(realJob.getDetailkontainer().get(0).getCustomerName());
