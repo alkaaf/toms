@@ -96,7 +96,7 @@
         <activity android:name=".Activity.SiapAntarActivity" />
         <activity android:name=".Activity.MengantarActivity" />
         <activity android:name=".Activity.MenurunkanActivity" />
-
+        <activity android:name=".Activity.ReportActivity"/>
         <service
             android:name=".Activity.Util.MyJobService"
             android:exported="false">
@@ -161,6 +161,7 @@
         <activity android:name=".Activity.ProsesActivity.ActivityProsesFrom4To7"/>
         <activity android:name=".Activity.ActivityUpload"/>
         <activity android:name=".Activity.ProsesActivity.ActivityReject"/>
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"/>
     </application>
 
 </manifest>

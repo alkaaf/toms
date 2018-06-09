@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.andresual.dev.tms.Activity.Adapter.BerandaListAdapter;
 import com.andresual.dev.tms.Activity.Adapter.HariIniListAdapter;
 import com.andresual.dev.tms.Activity.Model.DriverModel;
 import com.andresual.dev.tms.Activity.Model.SimpleJob;
@@ -30,7 +31,7 @@ import java.util.ArrayList;
 public class HariIniFragment extends Fragment {
 
     RecyclerView rvHariIni;
-    HariIniListAdapter mAdapter;
+    BerandaListAdapter mAdapter;
     RelativeLayout clEmptyView;
     SwipeRefreshLayout swipe;
 
@@ -55,7 +56,7 @@ public class HariIniFragment extends Fragment {
         swipe = view.findViewById(R.id.swipe);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
 
-        mAdapter = new HariIniListAdapter(getContext(), jobList);
+        mAdapter = new BerandaListAdapter(getContext(), jobList);
         mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {

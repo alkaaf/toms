@@ -38,6 +38,8 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.stfalcon.frescoimageviewer.ImageViewer;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -116,9 +118,9 @@ public class ActivityUpload extends BaseActivity {
             public void onItemClick(int pos, View v) {
                 new ImageViewer.Builder<>(ActivityUpload.this, photoUrl).setCustomDraweeHierarchyBuilder(
                         GenericDraweeHierarchyBuilder.newInstance(getResources())
-                        .setFailureImage(R.drawable.ic_broken_image_black_24dp)
-                        .setProgressBarImage(R.drawable.ic_image_placeholder)
-                        .setPlaceholderImage(R.drawable.ic_image_black_24dp)
+                                .setFailureImage(R.drawable.ic_broken_image_black_24dp)
+                                .setProgressBarImage(R.drawable.ic_image_placeholder)
+                                .setPlaceholderImage(R.drawable.ic_image_black_24dp)
                 ).setStartPosition(pos).show();
             }
         });
@@ -134,6 +136,7 @@ public class ActivityUpload extends BaseActivity {
 
     Uri file;
 
+    @Deprecated
     public void takeCamera() {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
@@ -145,19 +148,37 @@ public class ActivityUpload extends BaseActivity {
         }
     }
 
+    public void takeCameraWithCrop() {
+        CropImage.activity()
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setActivityTitle("Tambah foto")
+                .setRequestedSize(1980,1080)
+                .start(this);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case REQUEST_IMAGE1: {
                 if (resultCode == RESULT_OK) {
-                    doUpload(data);
+                    doUpload();
+                }
+                break;
+            }
+            case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE: {
+                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                if (resultCode == RESULT_OK) {
+                    file = result.getUri();
+                    doUpload();
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    Exception error = result.getError();
                 }
             }
         }
     }
 
-    public void doUpload(Intent data) {
+    public void doUpload() {
 //        Bitmap bm = (Bitmap) data.getExtras().get("data");
 //        ByteArrayOutputStream stream = new ByteArrayOutputStream();
 //        bm.compress(Bitmap.CompressFormat.JPEG, 100, stream);
@@ -182,7 +203,7 @@ public class ActivityUpload extends BaseActivity {
             @Override
             public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                 Log.i("FBUpload", "Uploading " + taskSnapshot.getBytesTransferred() + "/" + taskSnapshot.getTotalByteCount() + " B");
-                pd.setMessage("Mengunggah... (" + Math.round(100*((float)taskSnapshot.getBytesTransferred()/(float)taskSnapshot.getTotalByteCount())) + "%)");
+                pd.setMessage("Mengunggah... (" + Math.round(100 * ((float) taskSnapshot.getBytesTransferred() / (float) taskSnapshot.getTotalByteCount())) + "%)");
             }
         });
     }
@@ -202,7 +223,7 @@ public class ActivityUpload extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_add_gambar) {
-            takeCamera();
+            takeCameraWithCrop();
         }
         return super.onOptionsItemSelected(item);
     }

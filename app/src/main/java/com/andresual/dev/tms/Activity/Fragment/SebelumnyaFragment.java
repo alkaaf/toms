@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.andresual.dev.tms.Activity.Adapter.BerandaListAdapter;
 import com.andresual.dev.tms.Activity.Adapter.SebelumnyaListAdapter;
 import com.andresual.dev.tms.Activity.Model.DriverModel;
 import com.andresual.dev.tms.Activity.Model.SimpleJob;
@@ -30,7 +31,7 @@ import java.util.ArrayList;
 public class SebelumnyaFragment extends Fragment {
 
     RecyclerView rvSebelumnya;
-    SebelumnyaListAdapter mAdapter;
+    BerandaListAdapter mAdapter;
     RelativeLayout clEmptyView;
     SwipeRefreshLayout swipe;
     ArrayList<SimpleJob> jobList = new ArrayList<>();
@@ -52,7 +53,7 @@ public class SebelumnyaFragment extends Fragment {
         swipe = view.findViewById(R.id.swipe);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        mAdapter = new SebelumnyaListAdapter(getContext(), jobList);
+        mAdapter = new BerandaListAdapter(getContext(), jobList);
         mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {

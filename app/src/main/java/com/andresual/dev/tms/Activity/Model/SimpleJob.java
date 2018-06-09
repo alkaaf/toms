@@ -6,6 +6,9 @@ import android.util.SparseArray;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by andresual on 2/15/2018.
  */
@@ -47,7 +50,7 @@ public class SimpleJob implements Parcelable {
     @SerializedName("job_type")
     private Integer jobType;
 
-    public String getStringDeliverStatus(){
+    public String getStringDeliverStatus() {
         SparseArray<String> a = new SparseArray<>();
         a.put(1, "Waiting");
         a.put(2, "Assigned");
@@ -68,8 +71,34 @@ public class SimpleJob implements Parcelable {
         a.put(17, "Cancel pickup");
         a.put(18, "Cancel job");
         a.put(19, "Reject job");
-        return a.get(jobDeliverStatus,"");
+        return a.get(jobDeliverStatus, "");
     }
+
+    public int getStatusColor() {
+        SparseArray<Integer> a = new SparseArray<>();
+        a.put(1, 0xFFe64a19);
+        a.put(2, 0xFFf57c00);
+        a.put(3, 0xFFffa000);
+        a.put(4, 0xFFc2185b);
+        a.put(5, 0xFF7b1fa2);
+        a.put(6, 0xFF512da8);
+        a.put(7, 0xFF303f9f);
+        a.put(8, 0xFF455ede);
+        a.put(9, 0xFF0288d1);
+        a.put(10, 0xFF0097a7);
+        a.put(11, 0xFF00796b);
+        a.put(12, 0xFF0a7e07);
+        a.put(13, 0xFF689f38);
+        a.put(14, 0xFFafb42b);
+        a.put(15, 0xFF000000);
+        a.put(16, 0xFF000000);
+        a.put(17, 0xFF000000);
+        a.put(18, 0xFF000000);
+        a.put(19, 0xFF000000);
+        return a.get(jobDeliverStatus);
+    }
+
+
 
     public Integer getJobPickupStatus() {
         return jobPickupStatus;

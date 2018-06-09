@@ -6,151 +6,170 @@
     android:orientation="vertical"
     tools:context="com.andresual.dev.tms.Activity.Fragment.AkunFragment">
 
-    <LinearLayout
-        android:id="@+id/cl1"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_weight="1">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/iv_profile_picture"
-            android:layout_width="128dp"
-            android:layout_height="128dp"
-            android:layout_marginTop="16dp"
-            android:src="@mipmap/ic_launcher_round"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_name_profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Bambang Susilo"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/iv_profile_picture"
-            app:layout_constraintStart_toStartOf="@+id/iv_profile_picture"
-            app:layout_constraintTop_toBottomOf="@+id/iv_profile_picture" />
-
-        <TextView
-            android:id="@+id/tv_nopol"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="AB 12345 PKJ"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/tv_name_profile"
-            app:layout_constraintStart_toStartOf="@+id/tv_name_profile"
-            app:layout_constraintTop_toBottomOf="@+id/tv_name_profile" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:padding="16dp"
-        android:id="@+id/cl2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@id/cl1"
-        android:orientation="vertical">
-
-        <include layout="@layout/line_horizontal"/>
-        <LinearLayout
-            android:id="@+id/ll2"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:drawableStart="@drawable/ic_email_black_24dp"
-                android:id="@+id/tv_email"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:layout_gravity="center_vertical"
-                android:text="amikaja@gmail.com"
-                android:textAlignment="center" />
-        </LinearLayout>
-    <include layout="@layout/line_horizontal"/>
-        <LinearLayout
-            android:id="@+id/ll3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp">
-
-            <TextView
-                android:gravity="center"
-                android:drawableStart="@drawable/ic_local_phone_black_24dp"
-                android:id="@+id/tv_telp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:foregroundGravity="center"
-                android:text="081-4343-4343"
-                android:textAlignment="center" />
-        </LinearLayout>
-        <include layout="@layout/line_horizontal"/>
-        <LinearLayout
-            android:id="@+id/ll5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ll2">
-
-            <TextView
-                android:drawableStart="@drawable/ic_home2_black_24dp"
-                android:id="@+id/tv_kota"
+            <LinearLayout
+                android:id="@+id/cl1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:foregroundGravity="center"
+                android:layout_gravity="center"
                 android:gravity="center"
-                android:text="Surabaya"
-                android:textAlignment="center" />
-        </LinearLayout>
-        <include layout="@layout/line_horizontal"/>
-        <LinearLayout
-            android:id="@+id/ll6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ll2">
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_weight="1">
 
-            <TextView
-                android:gravity="center"
-                android:drawableStart="@drawable/ic_location_city_black_24dp"
-                android:id="@+id/tv_alamat"
+                <ImageView
+                    android:id="@+id/iv_profile_picture"
+                    android:layout_width="128dp"
+                    android:layout_height="128dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@mipmap/ic_launcher_round"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_name_profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Bambang Susilo"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/iv_profile_picture"
+                    app:layout_constraintStart_toStartOf="@+id/iv_profile_picture"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_profile_picture" />
+
+                <TextView
+                    android:id="@+id/tv_nopol"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="AB 12345 PKJ"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_name_profile"
+                    app:layout_constraintStart_toStartOf="@+id/tv_name_profile"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_name_profile" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/cl2"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:foregroundGravity="center"
-                android:text="Surabaya"
-                android:textAlignment="center" />
-        </LinearLayout>
-        <include layout="@layout/line_horizontal"/>
-        <TextView
-            android:id="@+id/tvVersion"
-            android:layout_marginTop="16dp"
-            android:textAlignment="center"
-            android:text="123"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@id/cl1"
+                android:orientation="vertical"
+                android:padding="16dp">
 
+                <include layout="@layout/line_horizontal" />
 
+                <LinearLayout
+                    android:id="@+id/ll2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/tv_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:drawableStart="@drawable/ic_email_black_24dp"
+                        android:gravity="center"
+                        android:text="amikaja@gmail.com"
+                        android:textAlignment="center" />
+                </LinearLayout>
+
+                <include layout="@layout/line_horizontal" />
+
+                <LinearLayout
+                    android:id="@+id/ll3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/tv_telp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawableStart="@drawable/ic_local_phone_black_24dp"
+                        android:foregroundGravity="center"
+                        android:gravity="center"
+                        android:text="081-4343-4343"
+                        android:textAlignment="center" />
+                </LinearLayout>
+
+                <include layout="@layout/line_horizontal" />
+
+                <LinearLayout
+                    android:id="@+id/ll5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ll2">
+
+                    <TextView
+                        android:id="@+id/tv_kota"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_home2_black_24dp"
+                        android:foregroundGravity="center"
+                        android:gravity="center"
+                        android:text="Surabaya"
+                        android:textAlignment="center" />
+                </LinearLayout>
+
+                <include layout="@layout/line_horizontal" />
+
+                <LinearLayout
+                    android:id="@+id/ll6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ll2">
+
+                    <TextView
+                        android:id="@+id/tv_alamat"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawableStart="@drawable/ic_location_city_black_24dp"
+                        android:foregroundGravity="center"
+                        android:gravity="center"
+                        android:text="Surabaya"
+                        android:textAlignment="center" />
+                </LinearLayout>
+
+                <include layout="@layout/line_horizontal" />
+
+                <TextView
+                    android:id="@+id/tvVersion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="123"
+                    android:textAlignment="center" />
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>
+
+

@@ -7,6 +7,9 @@ import android.util.SparseArray;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class RealJob implements Parcelable {
@@ -537,6 +540,19 @@ public class RealJob implements Parcelable {
 
     public void setDetailkontainer(List<DetailKontainer> detailkontainer) {
         this.detailkontainer = detailkontainer;
+    }
+
+    public String parsedPickupDate() {
+//        6/1/2018 10:03:12 AM
+        SimpleDateFormat parser = new SimpleDateFormat("M/d/yyyy HH:mm:ss a");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        try {
+            Date d = parser.parse(getJobPickupDatetime());
+            return formatter.format(d);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return "Unable to parse";
+        }
     }
 
     public RealJob() {

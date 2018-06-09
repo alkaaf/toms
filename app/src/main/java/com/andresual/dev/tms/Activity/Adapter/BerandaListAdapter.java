@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -62,6 +63,7 @@ public class BerandaListAdapter extends RecyclerView.Adapter<BerandaListAdapter.
         public TextView tvJobName, tvFrom, tvTo, tvStatus, tvto2;
         public RelativeLayout rl1;
         Context ctx;
+        ImageView iv;
 
         public ViewHolder(View view, Context ctx) {
             super(view);
@@ -69,6 +71,7 @@ public class BerandaListAdapter extends RecyclerView.Adapter<BerandaListAdapter.
             tvJobName = (TextView) view.findViewById(R.id.tv_nama);
             tvFrom = (TextView) view.findViewById(R.id.tv_from1);
             tvTo = (TextView) view.findViewById(R.id.tv_to1);
+            iv = view.findViewById(R.id.iv_img);
             tvto2 = view.findViewById(R.id.tv_to);
             tvStatus = view.findViewById(R.id.tv_status);
             rl1 = view.findViewById(R.id.rl1);
@@ -126,6 +129,8 @@ public class BerandaListAdapter extends RecyclerView.Adapter<BerandaListAdapter.
             holder.tvTo.setVisibility(View.VISIBLE);
             holder.tvto2.setVisibility(View.VISIBLE);
         }
+        holder.tvStatus.setBackgroundColor(simpleJob.getStatusColor());
+        holder.iv.setColorFilter(simpleJob.getStatusColor());
     }
 
     @Override

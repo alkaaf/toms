@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#e4e4e4"
-    android:padding="8dp"
     tools:context="com.andresual.dev.tms.Activity.Fragment.HariIniFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -17,6 +16,8 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <android.support.v7.widget.RecyclerView
+            android:padding="4dp"
+            android:clipToPadding="false"
             android:id="@+id/rv1"
             android:layout_width="0dp"
             android:layout_height="0dp" />

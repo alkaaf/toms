@@ -79,6 +79,9 @@ public class ActivityProses1And2 extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_proses_1_2);
+
+        getSupportActionBar().setTitle("Detail job");
+
         ButterKnife.bind(this);
         pref = new Pref(this);
         driverModel = pref.getDriverModel();
@@ -190,7 +193,7 @@ public class ActivityProses1And2 extends BaseActivity {
                     tvEstimasiJarak.setText(realJob.getJobDeliverDistancetext());
                     tvEstimasiWaktu.setText(realJob.getJobDeliverEstimatetimetext());
                     tvOrderId.setText(realJob.getOrderId());
-                    tvTanggal.setText(realJob.getJobPickupDatetime());
+                    tvTanggal.setText(realJob.parsedPickupDate());
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(ActivityProses1And2.this, "Gagal memuat data", Toast.LENGTH_SHORT).show();

@@ -45,25 +45,15 @@ public class Netter {
         JOB_UPLOADEMPTYDEPO("uploademptytodepo"),
 
         REJECT("rejectjob"),
-
         DETAILPICKUP("getDetailPengangkutan"),
-
         REPORT("report_tocenter"),
-
         GETDEPO("GetListDepo"),
-
         GETDERMAGA("GetListDermaga"),
-
         UPDATELOKASIDRIVER("UpdateLokasiDriver"),
-
         GETLISTKENDARAANDRIVER("getListKendaraanDriver"),
-
         POSTPILIHKENDARAAN("PostPilihKendaraan"),
-
         GETDASHBOARDDRIVER("GetDashboardDriver"),
-
         GETJOBHARIINI("getDetailJobOrderHariIni"),
-
         GETJOBPAST("getDetailJobOrderPast");
 
         String func;

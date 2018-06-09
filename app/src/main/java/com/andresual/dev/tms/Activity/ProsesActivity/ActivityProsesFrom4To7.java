@@ -82,6 +82,8 @@ public class ActivityProsesFrom4To7 extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_proses_4_7);
+        getSupportActionBar().setTitle("Detail job");
+
         ButterKnife.bind(this);
         pref = new Pref(this);
         driverModel = pref.getDriverModel();
@@ -185,7 +187,7 @@ public class ActivityProsesFrom4To7 extends BaseActivity {
                     tvEstimasiJarak.setText(realJob.getJobDeliverDistancetext());
                     tvEstimasiWaktu.setText(realJob.getJobDeliverEstimatetimetext());
                     tvOrderId.setText(realJob.getOrderId());
-                    tvTanggal.setText(realJob.getJobPickupDatetime());
+                    tvTanggal.setText(realJob.parsedPickupDate());
 
                     tvPickup.setText(realJob.getJobPickupName());
                     tvDeliver.setText(realJob.getJobDeliverAddress());

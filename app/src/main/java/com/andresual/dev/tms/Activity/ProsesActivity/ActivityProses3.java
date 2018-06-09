@@ -81,6 +81,8 @@ public class ActivityProses3 extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_proses_3);
+        getSupportActionBar().setTitle("Detail job");
+
         ButterKnife.bind(this);
         pref = new Pref(this);
         driverModel = pref.getDriverModel();
@@ -182,7 +184,7 @@ public class ActivityProses3 extends BaseActivity {
                     tvEstimasiJarak.setText(realJob.getJobDeliverDistancetext());
                     tvEstimasiWaktu.setText(realJob.getJobDeliverEstimatetimetext());
                     tvOrderId.setText(realJob.getOrderId());
-                    tvTanggal.setText(realJob.getJobPickupDatetime());
+                    tvTanggal.setText(realJob.parsedPickupDate());
 
                     adapter = new ContainerAdapter(ActivityProses3.this, R.layout.list_container, realJob.getDetailkontainer());
                     adapter.enableViewDepo = true;

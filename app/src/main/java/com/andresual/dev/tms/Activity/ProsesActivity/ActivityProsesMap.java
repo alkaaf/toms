@@ -120,6 +120,12 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     View bExpandInfo;
     @BindView(R.id.btn_tolak)
     Button bTolak;
+    @BindView(R.id.tvJobPickupName)
+    TextView tvJobPickupName;
+    @BindView(R.id.tvJobDesc)
+    TextView tvJobDesc;
+    @BindView(R.id.tvTanggal)
+    TextView tvTanggal;
 
     boolean debugGeofence = false;
     boolean enableGeofence = false;
@@ -186,7 +192,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         bExpandInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(expLl.getVisibility() == View.GONE){
+                if (expLl.getVisibility() == View.GONE) {
                     expLl.setVisibility(View.VISIBLE);
                 } else {
                     expLl.setVisibility(View.GONE);
@@ -214,7 +220,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             @Override
             public boolean onLongClick(View v) {
                 debugGeofence = !debugGeofence;
-                Toast.makeText(ActivityProsesMap.this, "Debug tombol "+debugGeofence, Toast.LENGTH_SHORT).show();
+                Toast.makeText(ActivityProsesMap.this, "Debug tombol " + debugGeofence, Toast.LENGTH_SHORT).show();
                 buttonSwitch();
 //                debugEnableMockLocation(debugGeofence, true);
                 return false;
@@ -329,14 +335,18 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         tvDistance.setText(realJob.getJobDeliverDistancetext());
         tvStatus.setText(realJob.getStringDeliverStatus());
         tvDuration.setText(realJob.getJobDeliverEstimatetimetext());
-
+        tvOrderId.setText(realJob.getOrderId());
+        tvJobDesc.setText(realJob.getJobDescription());
+        tvJobPickupName.setText(realJob.getJobPickupName());
+        tvTanggal.setText(realJob.parsedPickupDate());
 
         isJob89 = realJob.getJobType() == 8 || realJob.getJobType() == 9;
         isJobTujuanMoreThanOne = realJob.getJumlahtujuan() > 1;
         isSingleBox = Integer.parseInt(realJob.getJumlahbox()) == 1;
         isSudahAdaYangTerkirim = (isJobTujuanMoreThanOne && !isSingleBox) && realJob.getDetailkontainer().get(0).getJobStatus() == 10;
 
-        if(getSupportActionBar()!=null)getSupportActionBar().setSubtitle(realJob.getJobTypeName()/* + "("+realJob.getJobType()+")"*/);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setSubtitle(realJob.getJobTypeName()/* + "("+realJob.getJobType()+")"*/);
 
         tvOrderId.setText(realJob.getOrderId());
         if (!isSingleBox && isJobTujuanMoreThanOne && !isJob89) {

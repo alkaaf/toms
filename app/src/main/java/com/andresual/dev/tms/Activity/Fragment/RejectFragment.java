@@ -20,6 +20,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -38,6 +41,7 @@ import com.andresual.dev.tms.Activity.MapsOrderActivity;
 import com.andresual.dev.tms.Activity.Model.DepoModel;
 import com.andresual.dev.tms.Activity.Model.DermagaModel;
 import com.andresual.dev.tms.Activity.Model.PassingLocationModel;
+import com.andresual.dev.tms.Activity.ReportActivity;
 import com.andresual.dev.tms.Activity.TolakOrderActivity;
 import com.andresual.dev.tms.Activity.Util.Netter;
 import com.andresual.dev.tms.Activity.Util.Pref;
@@ -206,8 +210,17 @@ public class RejectFragment extends Fragment {
                 loc = location;
             }
         });
-
+        resetUI();
         return view;
+    }
+
+    public void resetUI(){
+        rg1.clearCheck();
+        rg2.clearCheck();
+        map.remove("tipelokasi");
+        map.remove("idlokasi");
+        tvTarget.setText("");
+        tvTarget.setVisibility(View.GONE);
     }
 
     @Override
@@ -255,6 +268,7 @@ public class RejectFragment extends Fragment {
                 try {
                     JSONObject obj = new JSONObject(response);
                     Toast.makeText(getContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                    resetUI();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -266,5 +280,25 @@ public class RejectFragment extends Fragment {
                 pd.dismiss();
             }
         }), Netter.Webservice.REPORT, map);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_report, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.action_list_report){
+            startActivity(new Intent(getContext(), ReportActivity.class));
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 }
