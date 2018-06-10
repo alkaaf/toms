@@ -51,6 +51,7 @@ public class Netter {
         GETDEPO("GetListDepo"),
         GETDERMAGA("GetListDermaga"),
         UPDATELOKASIDRIVER("UpdateLokasiDriver"),
+        UPDATELOKASIDRIVERWITHDISTANCE("UpdateLokasiDriverWithDistance"),
         GETLISTKENDARAANDRIVER("getListKendaraanDriver"),
         POSTPILIHKENDARAAN("PostPilihKendaraan"),
         GETDASHBOARDDRIVER("GetDashboardDriver"),

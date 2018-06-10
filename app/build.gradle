@@ -22,8 +22,8 @@ android {
         applicationId "com.andresual.dev.tms"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 12
-        versionName "1.8.136"
+        versionCode 13
+        versionName "1.8.137"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }

@@ -48,7 +48,7 @@ public class LocationBroadcaster extends Service {
     private static final int LOCATION_INTERVAL = 0;
     private static final float LOCATION_DISTANCE = 0;
 
-    private static final double SEND_MIN_DISTANCE = 50;
+    private static final double SEND_MIN_DISTANCE = 40;
     private static final double SEND_MIN_MILLIS = 60000;
 
     public static final String LOCATION_DATA = "location_Data";
@@ -73,27 +73,51 @@ public class LocationBroadcaster extends Service {
                 double distance = Haversine.calculate(lastKnown, location);
                 long delta = System.currentTimeMillis() - lastUpdate;
                 Log.i("MIN_DISTANCE", "distance " + distance);
-                if (distance >= SEND_MIN_DISTANCE || delta >= SEND_MIN_MILLIS) {
-                    new Netter(this).webService(Request.Method.POST, new Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
-                                    try {
-                                        JSONObject obj = new JSONObject(response);
-                                        if (obj.getInt("status") == 200) {
-                                            lastKnown = location;
-                                            lastUpdate = System.currentTimeMillis();
+                if (distance >= SEND_MIN_DISTANCE /*|| delta >= SEND_MIN_MILLIS*/) {
+                    if (location.getProvider().equalsIgnoreCase("gps")) {
+                        new Netter(this).webService(Request.Method.POST, new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        try {
+                                            JSONObject obj = new JSONObject(response);
+                                            if (obj.getInt("status") == 200) {
+                                                lastKnown = location;
+                                                lastUpdate = System.currentTimeMillis();
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
                                         }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
+                                        Log.e("UPDATE_LOC", response);
                                     }
-                                    Log.e("UPDATE_LOC", response);
-                                }
-                            }, Netter.getSilentErrorListener(this, null), Netter.Webservice.UPDATELOKASIDRIVER,
-                            new StringHashMap().putMore("idkendaraan", kendaraanModel.getIdKendaraan())
-                                    .putMore("email", driverModel.getEmail())
-                                    .putMore("lat", Double.toString(getLocation().getLatitude()))
-                                    .putMore("lng", Double.toString(getLocation().getLongitude()))
-                    );
+                                }, Netter.getSilentErrorListener(this, null), Netter.Webservice.UPDATELOKASIDRIVER,
+                                new StringHashMap().putMore("idkendaraan", kendaraanModel.getIdKendaraan())
+                                        .putMore("email", driverModel.getEmail())
+                                        .putMore("lat", Double.toString(getLocation().getLatitude()))
+                                        .putMore("lng", Double.toString(getLocation().getLongitude()))
+                                        .putMore("jaraktempuh", distance)
+                        );
+                        new Netter(this).webService(Request.Method.POST, new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        try {
+                                            JSONObject obj = new JSONObject(response);
+                                            if (obj.getInt("status") == 200) {
+                                                lastKnown = location;
+                                                lastUpdate = System.currentTimeMillis();
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        Log.e("UPDATE_LOC_DISTANCE", response);
+                                    }
+                                }, Netter.getSilentErrorListener(this, null), Netter.Webservice.UPDATELOKASIDRIVERWITHDISTANCE,
+                                new StringHashMap().putMore("idkendaraan", kendaraanModel.getIdKendaraan())
+                                        .putMore("email", driverModel.getEmail())
+                                        .putMore("lat", Double.toString(getLocation().getLatitude()))
+                                        .putMore("lng", Double.toString(getLocation().getLongitude()))
+                                        .putMore("jaraktempuh", distance)
+                        );
+                    }
                 }
             } else {
                 lastKnown = location;
