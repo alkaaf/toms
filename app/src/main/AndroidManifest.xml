@@ -96,7 +96,7 @@
         <activity android:name=".Activity.SiapAntarActivity" />
         <activity android:name=".Activity.MengantarActivity" />
         <activity android:name=".Activity.MenurunkanActivity" />
-        <activity android:name=".Activity.ReportActivity"/>
+        <activity android:name=".Activity.ReportListActivity"/>
         <service
             android:name=".Activity.Util.MyJobService"
             android:exported="false">

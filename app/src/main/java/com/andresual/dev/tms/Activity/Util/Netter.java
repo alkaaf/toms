@@ -14,7 +14,7 @@ import com.android.volley.toolbox.Volley;
 import java.util.Map;
 
 public class Netter {
-//    public static final String WS_ADDR = "http://manajemenkendaraan.com/tms2/";
+    //    public static final String WS_ADDR = "http://manajemenkendaraan.com/tms2/";
     public static final String WS_ADDR = "http://toms.app-spil.com/";
     public static final String BYAMIK = "byamik.asp";
     public static final String WS = "webservice.asp";
@@ -44,6 +44,7 @@ public class Netter {
         JOB_GOEMPTYDEPO("goemptytoDepo"),
         JOB_UPLOADEMPTYDEPO("uploademptytodepo"),
 
+        REPORTLIST("ShowListInfoDriver"),
         REJECT("rejectjob"),
         DETAILPICKUP("getDetailPengangkutan"),
         REPORT("report_tocenter"),
@@ -56,13 +57,14 @@ public class Netter {
         GETJOBHARIINI("getDetailJobOrderHariIni"),
         GETJOBPAST("getDetailJobOrderPast");
 
+
         String func;
 
         Webservice(String s) {
             this.func = s;
         }
 
-        }
+    }
 
     public Netter(Context context) {
         this.context = context;
@@ -96,6 +98,15 @@ public class Netter {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                if (after != null) after.run();
+            }
+        };
+    }
+
+    public static Response.ErrorListener getSilentErrorListener(final Context context, final Runnable after) {
+        return new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
                 if (after != null) after.run();
             }
         };

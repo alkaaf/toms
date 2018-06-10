@@ -544,7 +544,7 @@ public class RealJob implements Parcelable {
 
     public String parsedPickupDate() {
 //        6/1/2018 10:03:12 AM
-        SimpleDateFormat parser = new SimpleDateFormat("M/d/yyyy HH:mm:ss a");
+        SimpleDateFormat parser = new SimpleDateFormat("M/d/yyyy hh:mm:ss a");
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         try {
             Date d = parser.parse(getJobPickupDatetime());
@@ -555,6 +555,15 @@ public class RealJob implements Parcelable {
         }
     }
 
+    public static void main(String[] args) {
+        SimpleDateFormat parser = new SimpleDateFormat("M/d/yyyy hh:mm:ss a");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        try {
+            System.out.println(formatter.format(parser.parse("6/1/2018 10:03:12 PM")));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
     public RealJob() {
     }
 

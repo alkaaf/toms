@@ -1,14 +1,20 @@
 package com.andresual.dev.tms.Activity;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.andresual.dev.tms.Activity.Adapter.BerandaListAdapter;
 import com.andresual.dev.tms.Activity.Adapter.PilihKendaraanAdapter;
@@ -79,6 +85,8 @@ public class PilihKendaraanActivity extends BaseActivity {
                 fetchKendaraan();
             }
         });
+
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
     public void fetchKendaraan() {
@@ -108,4 +116,62 @@ public class PilihKendaraanActivity extends BaseActivity {
             }
         }), Netter.Webservice.GETLISTKENDARAANDRIVER, new StringHashMap().putMore("id_driver", driverModel.getIdDriver()));
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_logout, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.action_logout){
+            new AlertDialog.Builder(this)
+                    .setTitle("Keluar aplikasi")
+                    .setMessage("Apakah anda yakin ingin keluar aplikasi?")
+                    .setPositiveButton("YA", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            logOut();
+                        }
+                    })
+                    .setNegativeButton("TIDAK", null).show();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void logOut() {
+//        ProgressDialog pd = new ProgressDialog(this);
+//        pd.show();
+//        StringHashMap shm = new StringHashMap()
+//                .putMore("id_kendaraan", kendaraan.getIdKendaraan())
+//                .putMore("id_driver", driver.getIdDriver())
+//                .putMore("email", driver.getEmail())                ;
+//        new Netter(this).byAmik(Request.Method.POST, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                pd.dismiss();
+//                try {
+//                    JSONObject obj = new JSONObject(response);
+//                    int status = obj.getInt("status");
+//                    String message = obj.getString("message");
+//                    Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+//                    if(status == 200){
+//                        pref.clearDriver();
+//                        pref.clearKendaraan();
+//                        startActivity(new Intent(getContext(),MainActivity.class));
+//                        getActivity().finish();
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }, Netter.getDefaultErrorListener(getContext(), new Runnable() {
+//            @Override
+//            public void run() {
+//                pd.dismiss();
+//            }
+//        }), Netter.Byamik.GETLOGOUT, shm);
+    }
+
 }

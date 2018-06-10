@@ -237,6 +237,11 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
                         new Pref(MainActivity.this).putModelDriver(driver);
                         startActivity(new Intent(MainActivity.this, PilihKendaraanActivity.class));
                         finish();
+                    } else if (status == 101) {
+                        new AlertDialog.Builder(MainActivity.this).setTitle("Kesalahan login")
+                                .setMessage("Anda belum terdaftar dalam sistem. Harap hubungi administrator anda")
+                                .setPositiveButton("Ok", null)
+                                .show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

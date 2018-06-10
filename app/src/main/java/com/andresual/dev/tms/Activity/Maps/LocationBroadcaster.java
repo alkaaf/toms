@@ -68,12 +68,12 @@ public class LocationBroadcaster extends Service {
         DriverModel driverModel = pref.getDriverModel();
         KendaraanModel kendaraanModel = pref.getKendaraan();
         if (driverModel != null) {
-            if(lastKnown != null && lastUpdate != 0) {
+            if (lastKnown != null && lastUpdate != 0) {
                 // check the distance
                 double distance = Haversine.calculate(lastKnown, location);
                 long delta = System.currentTimeMillis() - lastUpdate;
-                Log.i("MIN_DISTANCE", "distance "+ distance);
-                if(distance >= SEND_MIN_DISTANCE || delta    >= SEND_MIN_MILLIS) {
+                Log.i("MIN_DISTANCE", "distance " + distance);
+                if (distance >= SEND_MIN_DISTANCE || delta >= SEND_MIN_MILLIS) {
                     new Netter(this).webService(Request.Method.POST, new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
@@ -81,14 +81,14 @@ public class LocationBroadcaster extends Service {
                                         JSONObject obj = new JSONObject(response);
                                         if (obj.getInt("status") == 200) {
                                             lastKnown = location;
-                                            lastUpdate  = System.currentTimeMillis();
+                                            lastUpdate = System.currentTimeMillis();
                                         }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
                                     Log.e("UPDATE_LOC", response);
                                 }
-                            }, Netter.getDefaultErrorListener(this, null), Netter.Webservice.UPDATELOKASIDRIVER,
+                            }, Netter.getSilentErrorListener(this, null), Netter.Webservice.UPDATELOKASIDRIVER,
                             new StringHashMap().putMore("idkendaraan", kendaraanModel.getIdKendaraan())
                                     .putMore("email", driverModel.getEmail())
                                     .putMore("lat", Double.toString(getLocation().getLatitude()))

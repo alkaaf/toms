@@ -1,6 +1,5 @@
 package com.andresual.dev.tms.Activity.Fragment;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -8,17 +7,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.NestedScrollView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,43 +29,21 @@ import android.widget.Toast;
 import com.andresual.dev.tms.Activity.DashboardActivity;
 import com.andresual.dev.tms.Activity.ListDepoActivity;
 import com.andresual.dev.tms.Activity.ListDermagaActivity;
-import com.andresual.dev.tms.Activity.Manager.SessionManager;
 import com.andresual.dev.tms.Activity.Maps.LocationBroadcaster;
-import com.andresual.dev.tms.Activity.MapsOrderActivity;
 import com.andresual.dev.tms.Activity.Model.DepoModel;
 import com.andresual.dev.tms.Activity.Model.DermagaModel;
-import com.andresual.dev.tms.Activity.Model.PassingLocationModel;
-import com.andresual.dev.tms.Activity.ReportActivity;
-import com.andresual.dev.tms.Activity.TolakOrderActivity;
+import com.andresual.dev.tms.Activity.ReportListActivity;
 import com.andresual.dev.tms.Activity.Util.Netter;
 import com.andresual.dev.tms.Activity.Util.Pref;
 import com.andresual.dev.tms.Activity.Util.StringHashMap;
 import com.andresual.dev.tms.R;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import static android.support.v4.content.PermissionChecker.PERMISSION_GRANTED;
 
 public class RejectFragment extends Fragment {
     RadioGroup rg1;
@@ -291,7 +263,7 @@ public class RejectFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_list_report){
-            startActivity(new Intent(getContext(), ReportActivity.class));
+            startActivity(new Intent(getContext(), ReportListActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }

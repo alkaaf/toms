@@ -53,11 +53,15 @@ public class ActivityReject extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tolak_order);
+
+        if(getSupportActionBar()!=null)getSupportActionBar().setTitle("Tolak job");
+
         ButterKnife.bind(this);
         pref = new Pref(this);
         driver = pref.getDriverModel();
         kendaraan = pref.getKendaraan();
         simpleJob = getIntent().getParcelableExtra(INTENT_DATA);
+        rg.clearCheck();
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
