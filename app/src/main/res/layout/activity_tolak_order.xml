@@ -42,7 +42,7 @@
             android:id="@+id/rb3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Order saat ini brlum selesai" />
+            android:text="Order saat ini belum selesai" />
 
         <RadioButton
             android:id="@+id/rb4"
