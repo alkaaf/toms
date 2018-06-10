@@ -107,6 +107,28 @@
                     android:textStyle="bold" />
             </RelativeLayout>
         </LinearLayout>
+        <include layout="@layout/line_horizontal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Daftar kontainer"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold" />☺
+
+            <ListView
+                android:id="@+id/listContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </ListView>
+        </LinearLayout>
     </LinearLayout>
 
     <fragment

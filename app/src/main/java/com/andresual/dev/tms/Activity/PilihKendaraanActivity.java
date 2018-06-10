@@ -62,7 +62,6 @@ public class PilihKendaraanActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pilih_kendaraan);
 
-
         mAdapter = new PilihKendaraanAdapter(this, kendaraanList);
         rvKendaraan = findViewById(R.id.rv_pilih_kendaran);
         swipe = findViewById(R.id.swipe);
@@ -72,10 +71,6 @@ public class PilihKendaraanActivity extends BaseActivity {
 
         pref = new Pref(this);
 
-        if (pref.checkKendaraan()) {
-            startActivity(new Intent(this, DashboardActivity.class));
-            finish();
-        }
 
         driverModel = pref.getDriverModel();
         fetchKendaraan();
@@ -118,6 +113,16 @@ public class PilihKendaraanActivity extends BaseActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        if (pref.checkKendaraan()) {
+            startActivity(new Intent(this, DashboardActivity.class));
+            finish();
+        }
+
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_logout, menu);
         return super.onCreateOptionsMenu(menu);
@@ -141,37 +146,37 @@ public class PilihKendaraanActivity extends BaseActivity {
     }
 
     public void logOut() {
-//        ProgressDialog pd = new ProgressDialog(this);
-//        pd.show();
-//        StringHashMap shm = new StringHashMap()
-//                .putMore("id_kendaraan", kendaraan.getIdKendaraan())
-//                .putMore("id_driver", driver.getIdDriver())
-//                .putMore("email", driver.getEmail())                ;
-//        new Netter(this).byAmik(Request.Method.POST, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                pd.dismiss();
-//                try {
-//                    JSONObject obj = new JSONObject(response);
-//                    int status = obj.getInt("status");
-//                    String message = obj.getString("message");
-//                    Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-//                    if(status == 200){
-//                        pref.clearDriver();
-//                        pref.clearKendaraan();
-//                        startActivity(new Intent(getContext(),MainActivity.class));
-//                        getActivity().finish();
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }, Netter.getDefaultErrorListener(getContext(), new Runnable() {
-//            @Override
-//            public void run() {
-//                pd.dismiss();
-//            }
-//        }), Netter.Byamik.GETLOGOUT, shm);
+        final ProgressDialog pd = new ProgressDialog(this);
+        pd.show();
+        StringHashMap shm = new StringHashMap()
+                .putMore("id_kendaraan", "0")
+                .putMore("id_driver", driverModel.getIdDriver())
+                .putMore("email", driverModel.getEmail())                ;
+        new Netter(this).byAmik(Request.Method.POST, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                pd.dismiss();
+                try {
+                    JSONObject obj = new JSONObject(response);
+                    int status = obj.getInt("status");
+                    String message = obj.getString("message");
+                    Toast.makeText(PilihKendaraanActivity.this, message, Toast.LENGTH_SHORT).show();
+                    if(status == 200){
+                        pref.clearDriver();
+                        pref.clearKendaraan();
+                        startActivity(new Intent(PilihKendaraanActivity.this,MainActivity.class));
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, Netter.getDefaultErrorListener(PilihKendaraanActivity.this, new Runnable() {
+            @Override
+            public void run() {
+                pd.dismiss();
+            }
+        }), Netter.Byamik.GETLOGOUT, shm);
     }
 
 }

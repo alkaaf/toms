@@ -14,10 +14,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.andresual.dev.tms.Activity.ActivityUpload;
+import com.andresual.dev.tms.Activity.Adapter.ContainerAdapter;
 import com.andresual.dev.tms.Activity.BaseActivity;
 import com.andresual.dev.tms.Activity.Model.DriverModel;
 import com.andresual.dev.tms.Activity.Model.RealJob;
@@ -59,6 +61,9 @@ public class ActivityProses1And2 extends BaseActivity {
     Button bTerima;
     @BindView(R.id.btn_tolak)
     Button bTolak;
+    @BindView(R.id.listContainer)
+    ListView listContainer;
+    ContainerAdapter adapter;
 
     public static final String INTENT_DATA = "datajob1-2";
     public static final String PREVIEW_ONLY = "justpreview";
@@ -194,6 +199,9 @@ public class ActivityProses1And2 extends BaseActivity {
                     tvEstimasiWaktu.setText(realJob.getJobDeliverEstimatetimetext());
                     tvOrderId.setText(realJob.getOrderId());
                     tvTanggal.setText(realJob.parsedPickupDate());
+
+                    adapter = new ContainerAdapter(ActivityProses1And2.this, R.layout.list_container, realJob.getDetailkontainer());
+                    listContainer.setAdapter(adapter);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(ActivityProses1And2.this, "Gagal memuat data", Toast.LENGTH_SHORT).show();

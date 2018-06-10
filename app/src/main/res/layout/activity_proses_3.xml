@@ -65,11 +65,11 @@
             android:padding="8dp">
 
             <TextView
-                android:textStyle="bold"
                 android:id="@+id/tvTanggal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="22/04 2Am" />
+                android:text="22/04 2Am"
+                android:textStyle="bold" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -123,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:text="Daftar kontainer"
                 android:textColor="@color/colorPrimary"
-                android:textStyle="bold" />
+                android:textStyle="bold" />☺
 
             <ListView
                 android:id="@+id/listContainer"
