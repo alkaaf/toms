@@ -136,7 +136,6 @@ public class ActivityUpload extends BaseActivity {
 
     Uri file;
 
-    @Deprecated
     public void takeCamera() {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
@@ -162,7 +161,8 @@ public class ActivityUpload extends BaseActivity {
         switch (requestCode) {
             case REQUEST_IMAGE1: {
                 if (resultCode == RESULT_OK) {
-                    doUpload();
+//                    doUpload();
+                    CropImage.activity(file).start(this);
                 }
                 break;
             }
@@ -179,10 +179,7 @@ public class ActivityUpload extends BaseActivity {
     }
 
     public void doUpload() {
-//        Bitmap bm = (Bitmap) data.getExtras().get("data");
-//        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//        bm.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-//        byte[] buff = stream.toByteArray();
+
         pd = new ProgressDialog(this);
         pd.show();
         pd.setCancelable(false);
@@ -223,7 +220,7 @@ public class ActivityUpload extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_add_gambar) {
-            takeCameraWithCrop();
+            takeCamera();
         }
         return super.onOptionsItemSelected(item);
     }

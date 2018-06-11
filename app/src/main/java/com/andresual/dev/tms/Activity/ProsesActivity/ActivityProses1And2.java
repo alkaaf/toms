@@ -63,6 +63,14 @@ public class ActivityProses1And2 extends BaseActivity {
     Button bTolak;
     @BindView(R.id.listContainer)
     ListView listContainer;
+    @BindView(R.id.vDestinationList)
+    View vDestinationList;
+    @BindView(R.id.tv1)
+    TextView tv1;
+    @BindView(R.id.tv2)
+    TextView tv2;
+    @BindView(R.id.tv3)
+    TextView tv3;
     ContainerAdapter adapter;
 
     public static final String INTENT_DATA = "datajob1-2";
@@ -199,9 +207,28 @@ public class ActivityProses1And2 extends BaseActivity {
                     tvEstimasiWaktu.setText(realJob.getJobDeliverEstimatetimetext());
                     tvOrderId.setText(realJob.getOrderId());
                     tvTanggal.setText(realJob.parsedPickupDate());
+                    getSupportActionBar().setSubtitle(realJob.getJobTypeName());
 
                     adapter = new ContainerAdapter(ActivityProses1And2.this, R.layout.list_container, realJob.getDetailkontainer());
                     listContainer.setAdapter(adapter);
+
+                    // sembunyikan list jika belum selesai
+                    listContainer.setVisibility(realJob.getJobDeliverStatus() == 14 ? View.VISIBLE : View.GONE);
+                    vDestinationList.setVisibility(realJob.getJobDeliverStatus() == 14 ? View.VISIBLE : View.GONE);
+                    // sembunyikan map jika sudah selesai
+                    findViewById(R.id.map).setVisibility(realJob.getJobDeliverStatus() == 14 ? View.GONE : View.VISIBLE);
+
+                    if (Integer.parseInt(realJob.getJumlahbox()) == 2 && realJob.getJumlahtujuan() == 2) {
+                        tv1.setText(realJob.getJobPickupName());
+                        tv2.setText(realJob.getDetailkontainer().get(0).getDestinationName());
+                        tv3.setText(realJob.getDetailkontainer().get(1).getDestinationName());
+                        tv3.setVisibility(View.VISIBLE);
+                    } else {
+                        tv1.setText(realJob.getJobPickupName());
+                        tv2.setText(realJob.getJobDeliverAddress());
+                        tv3.setVisibility(View.VISIBLE);
+                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(ActivityProses1And2.this, "Gagal memuat data", Toast.LENGTH_SHORT).show();

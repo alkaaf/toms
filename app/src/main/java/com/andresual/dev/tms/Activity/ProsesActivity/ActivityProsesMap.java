@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -16,12 +15,9 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -31,7 +27,6 @@ import android.widget.Toast;
 
 import com.andresual.dev.tms.Activity.ActivityUpload;
 import com.andresual.dev.tms.Activity.BaseActivity;
-import com.andresual.dev.tms.Activity.DCP.ReadyToStuffPickupDCPActivity;
 import com.andresual.dev.tms.Activity.Maps.DirectionFinder;
 import com.andresual.dev.tms.Activity.Maps.DirectionFinderListener;
 import com.andresual.dev.tms.Activity.Maps.LocationBroadcaster;
@@ -47,7 +42,6 @@ import com.andresual.dev.tms.Activity.Util.StringHashMap;
 import com.andresual.dev.tms.R;
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.github.aakira.expandablelayout.ExpandableLinearLayout;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -126,6 +120,8 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     TextView tvJobDesc;
     @BindView(R.id.tvTanggal)
     TextView tvTanggal;
+    @BindView(R.id.vDestinationList)
+    View vDestinationList;
 
     boolean debugGeofence = false;
     boolean enableGeofence = false;
@@ -326,6 +322,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     boolean isJobTujuanMoreThanOne;
     boolean isSingleBox;
     boolean isSudahAdaYangTerkirim;
+    boolean isJob12;
 
     @SuppressLint("MissingPermission")
     public void setUpAll() {
@@ -344,7 +341,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         isJobTujuanMoreThanOne = realJob.getJumlahtujuan() > 1;
         isSingleBox = Integer.parseInt(realJob.getJumlahbox()) == 1;
         isSudahAdaYangTerkirim = (isJobTujuanMoreThanOne && !isSingleBox) && realJob.getDetailkontainer().get(0).getJobStatus() == 10;
-
+        isJob12 = realJob.getJobType() == 1 || realJob.getJobType() == 2;
         if (getSupportActionBar() != null)
             getSupportActionBar().setSubtitle(realJob.getJobTypeName()/* + "("+realJob.getJobType()+")"*/);
 
@@ -425,7 +422,9 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
 
 //                enableGeofence = true;
 //                setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
-
+                if (isJob12) {
+                    vDestinationList.setVisibility(View.GONE);
+                }
                 break;
             }
             case 4: {
@@ -434,7 +433,9 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
 
                 enableGeofence = true;
                 setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
-
+                if (isJob12) {
+                    vDestinationList.setVisibility(View.GONE);
+                }
                 break;
             }
             case 5: {
@@ -443,7 +444,9 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
 
                 enableGeofence = true;
                 setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
-
+                if (isJob12) {
+                    vDestinationList.setVisibility(View.GONE);
+                }
                 break;
             }
             case 6: {
@@ -452,7 +455,9 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
 
                 enableGeofence = true;
                 setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
-
+                if (isJob12) {
+                    vDestinationList.setVisibility(View.GONE);
+                }
                 break;
             }
             case 7: {
@@ -461,15 +466,18 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
 
                 enableGeofence = true;
                 setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
-
+                if (isJob12) {
+                    vDestinationList.setVisibility(View.GONE);
+                }
                 break;
             }
-            case 8: {
+            case 8: {//deliver
                 whatFunc = Netter.Webservice.JOB_ARRIVEDESTINATION;
                 bTerima.setText("Arrive Destination");
 
                 enableGeofence = true;
                 if (!isSingleBox && isJobTujuanMoreThanOne && !isJob89) {
+
                     if (realJob.statusKontainer() == 0) {
                         setGeofenceTarget(realJob.getDetailkontainer().get(0).getDestinationLat(), realJob.getDetailkontainer().get(0).getDestinationLng());
                     } else {
@@ -477,6 +485,9 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                     }
                 } else {
                     setGeofenceTarget(realJob.getJobDeliverLatitude(), realJob.getJobDeliverLongitude());
+                }
+                if (isJob12) {
+                    vDestinationList.setVisibility(View.VISIBLE);
                 }
 
                 break;
@@ -593,6 +604,8 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         ui.setCompassEnabled(true);
         ui.setZoomControlsEnabled(true);
         ui.setZoomGesturesEnabled(true);
+
+        quickFindMe();
         fetchJob();
     }
 
@@ -654,7 +667,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     private void findMe() {
         if (checkTrack.isChecked()) {
             CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(latLng, 15);
-            gmap.animateCamera(cu);
+//            gmap.animateCamera(cu);
         }
     }
 
@@ -702,6 +715,17 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 );
             }
         });
+    }
+
+    @SuppressLint("MissingPermission")
+    private void quickFindMe() {
+        LocationServices.getFusedLocationProviderClient(this).getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),15f));
+            }
+        });
+
     }
 
     public void clearMapElement() {

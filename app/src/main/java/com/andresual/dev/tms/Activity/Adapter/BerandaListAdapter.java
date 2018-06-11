@@ -122,7 +122,7 @@ public class BerandaListAdapter extends RecyclerView.Adapter<BerandaListAdapter.
         holder.tvTo.setText(simpleJobList.get(position).getDestination());
         SimpleJob simpleJob = simpleJobList.get(position);
         holder.tvStatus.setText(simpleJob.getStringDeliverStatus());
-        if (simpleJob.getJobType() == 1) {
+        if ((simpleJob.getJobType() == 1 || simpleJob.getJobType() == 2) && simpleJob.getJobDeliverStatus() < 8 ) {
             holder.tvTo.setVisibility(View.INVISIBLE);
             holder.tvto2.setVisibility(View.INVISIBLE);
         } else {

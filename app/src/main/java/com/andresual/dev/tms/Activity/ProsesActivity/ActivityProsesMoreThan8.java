@@ -197,7 +197,7 @@ public class ActivityProsesMoreThan8 extends BaseActivity {
                     tvDeliver.setText(realJob.getJobDeliverAddress());
                     adapter = new ContainerAdapter(ActivityProsesMoreThan8.this, R.layout.list_container, realJob.getDetailkontainer());
                     listContainer.setAdapter(adapter);
-
+                    getSupportActionBar().setSubtitle(realJob.getJobTypeName());
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(ActivityProsesMoreThan8.this, "Gagal memuat data", Toast.LENGTH_SHORT).show();

@@ -128,32 +128,39 @@
 
                     <include layout="@layout/line_horizontal" />
 
-                    <TextView
-                        android:id="@+id/tvFirst"
+                    <LinearLayout
+                        android:id="@+id/vDestinationList"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawableStart="@drawable/ic_location_start"
-                        android:gravity="center_vertical"
-                        android:padding="8dp"
-                        android:text="hello world" />
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tvSecond"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableStart="@drawable/ic_location_finish"
-                        android:gravity="center_vertical"
-                        android:padding="8dp"
-                        android:text="hello world" />
+                        <TextView
+                            android:id="@+id/tvFirst"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableStart="@drawable/ic_location_start"
+                            android:gravity="center_vertical"
+                            android:padding="8dp"
+                            android:text="hello world" />
 
-                    <TextView
-                        android:id="@+id/tvThird"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableStart="@drawable/ic_location_return"
-                        android:gravity="center_vertical"
-                        android:padding="8dp"
-                        android:text="hello world" />
+                        <TextView
+                            android:id="@+id/tvSecond"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableStart="@drawable/ic_location_finish"
+                            android:gravity="center_vertical"
+                            android:padding="8dp"
+                            android:text="hello world" />
+
+                        <TextView
+                            android:id="@+id/tvThird"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableStart="@drawable/ic_location_return"
+                            android:gravity="center_vertical"
+                            android:padding="8dp"
+                            android:text="hello world" />
+                    </LinearLayout>
                 </LinearLayout>
             </ScrollView>
         </LinearLayout>
