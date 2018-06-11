@@ -17,7 +17,7 @@
         map:layout_constraintEnd_toEndOf="parent"
         map:layout_constraintStart_toStartOf="parent"
         map:layout_constraintTop_toBottomOf="@+id/ll2"
-        tools:context="com.andresual.dev.tms.Activity.MapsOrderActivity" />
+        tools:context="com.spil.dev.tms.Activity.MapsOrderActivity" />
 
     <android.support.v7.widget.CardView
         android:id="@+id/cardView"

@@ -4,7 +4,7 @@
     android:padding="1dp"
     android:layout_height="wrap_content">
 
-    <com.andresual.dev.tms.Activity.SquareImageView
+    <com.spil.dev.tms.Activity.SquareImageView
         android:id="@+id/img"
         android:scaleType="centerCrop"
         android:layout_width="match_parent"

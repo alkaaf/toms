@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#e4e4e4"
-    tools:context="com.andresual.dev.tms.Activity.Fragment.HariIniFragment">
+    tools:context="com.spil.dev.tms.Activity.Fragment.HariIniFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe"

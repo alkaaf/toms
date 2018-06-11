@@ -19,7 +19,7 @@ repositories {
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.andresual.dev.tms"
+        applicationId "com.spil.dev.tms"
         minSdkVersion 19
         targetSdkVersion 27
         versionCode 14

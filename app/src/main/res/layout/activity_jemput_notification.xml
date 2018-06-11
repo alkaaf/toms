@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.andresual.dev.tms.Activity.Notification.JemputNotificationActivity">
+    tools:context="com.spil.dev.tms.Activity.Notification.JemputNotificationActivity">
 
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
@@ -17,7 +17,7 @@
         map:layout_constraintEnd_toEndOf="parent"
         map:layout_constraintStart_toStartOf="parent"
         map:layout_constraintTop_toTopOf="parent"
-        tools:context="com.andresual.dev.tms.Activity.MapsOrderActivity" />
+        tools:context="com.spil.dev.tms.Activity.MapsOrderActivity" />
 
     <LinearLayout
         android:id="@+id/ll1"
