@@ -415,10 +415,11 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     }
 
     private void prepareButton() {
+        bTerima.setText(realJob.getButtonLabel());
         switch (realJob.getJobDeliverStatus()) {
             case 3: {
                 whatFunc = Netter.Webservice.JOB_PICKUP;
-                bTerima.setText("Pickup");
+//                bTerima.setText("Pickup");
 
 //                enableGeofence = true;
 //                setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
@@ -429,7 +430,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             }
             case 4: {
                 whatFunc = Netter.Webservice.JOB_READYJOB;
-                bTerima.setText("Ready To Stuff");
+//                bTerima.setText("Ready To Stuff");
 
                 enableGeofence = true;
                 setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
@@ -440,7 +441,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             }
             case 5: {
                 whatFunc = Netter.Webservice.JOB_STARTJOBDEPARTURE;
-                bTerima.setText("Start Stuff/Strip");
+//                bTerima.setText("Start Stuff/Strip");
 
                 enableGeofence = true;
                 setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
@@ -451,7 +452,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             }
             case 6: {
                 whatFunc = Netter.Webservice.JOB_FINISHJOBDEPARTURE;
-                bTerima.setText("Finish Stuff/Strip");
+//                bTerima.setText("Finish Stuff/Strip");
 
                 enableGeofence = true;
                 setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
@@ -462,7 +463,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             }
             case 7: {
                 whatFunc = Netter.Webservice.JOB_DELIVERJOB;
-                bTerima.setText("Deliver");
+//                bTerima.setText("Deliver");
 
                 enableGeofence = true;
                 setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
@@ -473,7 +474,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             }
             case 8: {//deliver
                 whatFunc = Netter.Webservice.JOB_ARRIVEDESTINATION;
-                bTerima.setText("Arrive Destination");
+//                bTerima.setText("Arrive Destination");
 
                 enableGeofence = true;
                 if (!isSingleBox && isJobTujuanMoreThanOne && !isJob89) {
@@ -494,7 +495,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             }
             case 9: {
                 whatFunc = Netter.Webservice.JOB_STARTJOBARRIVAL;
-                bTerima.setText("Start Stuff/Strip");
+//                bTerima.setText("Start Stuff/Strip");
 
                 enableGeofence = true;
                 if (!isSingleBox && isJobTujuanMoreThanOne && !isJob89) {
@@ -512,10 +513,10 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             case 10: {
                 if (isJob89) {
                     whatFunc = Netter.Webservice.JOB_FINISHJOBARRIVAL;
-                    bTerima.setText("Finish Stuff/Strip");
+//                    bTerima.setText("Finish Stuff/Strip");
                 } else {
                     whatFunc = Netter.Webservice.JOB_FINISHJOB;
-                    bTerima.setText("Finish Job");
+//                    bTerima.setText("Finish Job");
                 }
 
                 enableGeofence = true;
@@ -534,7 +535,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             case 11: {
                 if (isJob89) {
                     whatFunc = Netter.Webservice.JOB_GOEMPTYDEPO;
-                    bTerima.setText("Go Empty To Depo");
+//                    bTerima.setText("Go Empty To Depo");
 
                 }
                 break;
@@ -542,7 +543,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             case 12: {
                 if (isJob89) {
                     whatFunc = Netter.Webservice.JOB_UPLOADEMPTYDEPO;
-                    bTerima.setText("Upload Empty to Depo");
+//                    bTerima.setText("Upload Empty to Depo");
 
                     enableGeofence = true;
                     setGeofenceTarget(realJob.getJobBalikLatitude(), realJob.getJobBalikLongitude());
@@ -552,7 +553,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             case 13: {
                 if (isJob89) {
                     whatFunc = Netter.Webservice.JOB_FINISHJOB;
-                    bTerima.setText("Finish Job");
+//                    bTerima.setText("Finish Job");
 
                     enableGeofence = true;
                     setGeofenceTarget(realJob.getJobBalikLatitude(), realJob.getJobBalikLongitude());
@@ -562,9 +563,9 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             case 14: {
                 if (realJob.statusKontainer() == 1) {
                     whatFunc = Netter.Webservice.JOB_DELIVERJOB;
-                    bTerima.setText("Deliver second job");
+//                    bTerima.setText("Deliver second job");
                 } else {
-                    bTerima.setText("Photo upload");
+//                    bTerima.setText("Photo upload");
                     whatFunc = null;
                 }
                 break;

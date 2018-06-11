@@ -238,7 +238,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/colorPrimary"
-            android:text="Go to pickup"
+            android:text="pickup"
             android:textAlignment="center"
             android:textColor="@color/textColor1"
             android:textStyle="bold" />

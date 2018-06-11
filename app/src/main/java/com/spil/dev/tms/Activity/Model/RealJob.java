@@ -150,6 +150,135 @@ public class RealJob implements Parcelable {
     @SerializedName("jumlahterikrim")
     int jumlahterkirim;
 
+    public String getButtonLabel() {
+        SparseArray<SparseArray<String>> sp = new SparseArray<>();
+
+        // 1
+        SparseArray<String> s = new SparseArray<>();
+        s.put(3, "PICK UP");
+        s.put(4, "ARRIVED AT PORT");
+        s.put(5, "START LOAD");
+        s.put(6, "FINISH LOAD");
+        s.put(7, "DELIVER TO DEPO");
+        s.put(8, "ARRIVED AT DEPO");
+        s.put(9, "START UNLOAD");
+        s.put(10, "FINISH JOB");
+        s.put(14, "UPLOAD PHOTO");
+        sp.put(1, s);
+
+        // 2
+        s = new SparseArray<>();
+        s.put(3, "PICK UP");
+        s.put(4, "ARRIVED AT DEPO");
+        s.put(5, "START LOAD");
+        s.put(6, "FINISH LOAD");
+        s.put(7, "DELIVER TO PORT");
+        s.put(8, "ARRIVED AT PORT");
+        s.put(9, "START UNLOAD");
+        s.put(10, "FINISH JOB");
+        s.put(14, "UPLOAD PHOTO");
+        sp.put(2, s);
+
+        // 3
+        s = new SparseArray<>();
+        s.put(3, "PICK UP");
+        s.put(4, "ARRIVED AT DEPO");
+        s.put(5, "START LOAD");
+        s.put(6, "FINISH LOAD");
+        s.put(7, "DELIVER TO DEPO");
+        s.put(8, "ARRIVED AT DEPO");
+        s.put(9, "START UNLOAD");
+        s.put(10, "FINISH JOB");
+        s.put(14, "UPLOAD PHOTO");
+        sp.put(3, s);
+
+        // 4
+        s = new SparseArray<>();
+        s.put(3, "PICK UP");
+        s.put(4, "ARRIVED AT DEPO");
+        s.put(5, "START LOAD");
+        s.put(6, "FINISH LOAD");
+        s.put(7, "DELIVER TO CUSTOMER");
+        s.put(8, "ARRIVED AT CUSTOMER");
+        s.put(9, "START UNLOAD");
+        s.put(10, "FINISH JOB");
+        s.put(14, "UPLOAD PHOTO");
+        sp.put(4, s);
+
+        // 5
+        s = new SparseArray<>();
+        s.put(3, "PICK UP");
+        s.put(4, "ARRIVED AT CUSTOMER");
+        s.put(5, "START STUFFING");
+        s.put(6, "FINISH STUFFING");
+        s.put(7, "DELIVER TO DEPO");
+        s.put(8, "ARRIVED AT DEPO");
+        s.put(9, "FINISH LOAD");
+        s.put(10, "FINISH JOB");
+        s.put(14, "UPLOAD PHOTO");
+        sp.put(5, s);
+
+        // 6
+        s = new SparseArray<>();
+        s.put(3, "PICK UP");
+        s.put(4, "ARRIVED AT CUSTOMER");
+        s.put(5, "START STUFFING");
+        s.put(6, "FINISH STUFFING");
+        s.put(7, "DELIVER TO PORT");
+        s.put(8, "ARRIVED AT PORT");
+        s.put(9, "FINISH UNLOAD");
+        s.put(10, "FINISH JOB");
+        s.put(14, "UPLOAD PHOTO");
+        sp.put(6, s);
+
+        // 7
+        s = new SparseArray<>();
+        s.put(3, "PICK UP");
+        s.put(4, "ARRIVED AT PORT");
+        s.put(5, "START LOAD");
+        s.put(6, "FINISH LOAD");
+        s.put(7, "DELIVER TO CUSTOMER");
+        s.put(8, "ARRIVED AT CUSTOMER");
+        s.put(9, "FINISH UNLOAD");
+        s.put(10, "FINISH JOB");
+        s.put(14, "UPLOAD PHOTO");
+        sp.put(7, s);
+
+        // 8
+        s = new SparseArray<>();
+        s.put(3, "PICK UP");
+        s.put(4, "ARRIVED AT DEPO");
+        s.put(5, "START LOAD");
+        s.put(6, "FINISH LOAD");
+        s.put(7, "DELIVER TO CUSTOMER");
+        s.put(8, "ARRIVED AT CUSTOMER");
+        s.put(9, "START STUFFING");
+        s.put(10, "FINISH STUFFING");
+        s.put(11, "DELIVER TO PORT");
+        s.put(12, "ARRIVED AT PORT");
+        s.put(13, "FINISH UNLOAD");
+        s.put(14, "UPLOAD PHOTO");
+        sp.put(8, s);
+
+        // 9
+        s = new SparseArray<>();
+        s.put(3, "PICK UP");
+        s.put(4, "ARRIVED AT PORT");
+        s.put(5, "START LOAD");
+        s.put(6, "FINISH LOAD");
+        s.put(7, "DELIVER TO CUSTOMER");
+        s.put(8, "ARRIVED AT CUSTOMER");
+        s.put(9, "START STRIPPING");
+        s.put(10, "FINISH STRIPPING");
+        s.put(11, "DELIVER TO DEPO");
+        s.put(12, "ARRIVED AT DEPO");
+        s.put(13, "FINISH UNLOAD");
+        s.put(14, "UPLOAD PHOTO");
+        sp.put(9, s);
+
+        return sp.get(getJobType()).get(getJobDeliverStatus(), "-");
+    }
+
     public int getJumlahterkirim() {
         return jumlahterkirim;
     }
@@ -564,6 +693,7 @@ public class RealJob implements Parcelable {
             e.printStackTrace();
         }
     }
+
     public RealJob() {
     }
 
