@@ -1,8 +1,11 @@
 package com.spil.dev.tms.Activity.Adapter;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +16,8 @@ import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.spil.dev.tms.Activity.Controller.AuthController;
 import com.spil.dev.tms.Activity.Controller.KendaraanController;
 import com.spil.dev.tms.Activity.Controller.SelectKendaraanController;
@@ -126,38 +131,47 @@ public class PilihKendaraanAdapter extends RecyclerView.Adapter<PilihKendaraanAd
             this.ctx = ctx;
         }
 
+        @SuppressLint("MissingPermission")
         @Override
         public void onClick(View v) {
-            int position = getAdapterPosition();
-            final KendaraanModel kendaraan = kendaraanModelList.get(position);
-            pd.show();
-            new Netter(mContext).webService(Request.Method.POST, new Response.Listener<String>() {
+            LocationServices.getFusedLocationProviderClient(mContext).getLastLocation().addOnSuccessListener((Activity) mContext, new OnSuccessListener<Location>() {
                 @Override
-                public void onResponse(String response) {
-                    pd.dismiss();
-                    try {
-                        JSONObject obj = new JSONObject(response);
-                        int status = obj.getInt("status");
-                        String msg = obj.getString("message");
-                        Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
-                        if (status == 200) {
-                            pref.putKendaraan(kendaraan);
-                            mContext.startActivity(new Intent(mContext, DashboardActivity.class));
-                        } else if (status == 300) {
+                public void onSuccess(Location location) {
+                    int position = getAdapterPosition();
+                    final KendaraanModel kendaraan = kendaraanModelList.get(position);
+                    pd.show();
+                    new Netter(mContext).webService(Request.Method.POST, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            pd.dismiss();
+                            try {
+                                JSONObject obj = new JSONObject(response);
+                                int status = obj.getInt("status");
+                                String msg = obj.getString("message");
+                                Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
+                                if (status == 200) {
+                                    pref.putKendaraan(kendaraan);
+                                    mContext.startActivity(new Intent(mContext, DashboardActivity.class));
+                                } else if (status == 300) {
 
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    }, Netter.getDefaultErrorListener(mContext, new Runnable() {
+                        @Override
+                        public void run() {
+                            pd.dismiss();
+                        }
+                    }), Netter.Webservice.POSTPILIHKENDARAAN, new StringHashMap().putMore("id_kendaraan",
+                            kendaraan.getIdKendaraan())
+                            .putMore("id_driver", driverModel.getIdDriver())
+                            .putMore("lat", location.getLatitude())
+                            .putMore("lng", location.getLongitude()));
                 }
-            }, Netter.getDefaultErrorListener(mContext, new Runnable() {
-                @Override
-                public void run() {
-                    pd.dismiss();
-                }
-            }), Netter.Webservice.POSTPILIHKENDARAAN, new StringHashMap().putMore("id_kendaraan",
-                    kendaraan.getIdKendaraan())
-                    .putMore("id_driver", driverModel.getIdDriver()));
+            });
+
         }
     }
 }

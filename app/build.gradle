@@ -20,10 +20,10 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.spil.dev.tms"
-        minSdkVersion 19
+        minSdkVersion 20
         targetSdkVersion 27
-        versionCode 14
-        versionName "1.8.138"
+        versionCode 16
+        versionName "1.8.140"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }

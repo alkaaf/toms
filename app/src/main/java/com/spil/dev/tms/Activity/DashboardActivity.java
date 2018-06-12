@@ -144,7 +144,7 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
                             // Ignore the error.
                         }
                         break;
-                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:{
+                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE: {
                         Toast.makeText(activity, "Unavail", Toast.LENGTH_SHORT).show();
                         break;
                     }
@@ -158,7 +158,7 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQ_LOCATION_HIGH && resultCode == 0){
+        if (requestCode == REQ_LOCATION_HIGH && resultCode == 0) {
             Toast.makeText(mContext, "Harap aktifkan GPS dengan mode \"High Accuracy\" untuk melanjutkan penggunaan aplikasi", Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -213,11 +213,11 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
         manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-        locationChecker(mGoogleApiClient,this);
+        locationChecker(mGoogleApiClient, this);
         if (!statusOfGPS) {
 //            processStopLocation();
 
-            }
+        }
 
         Intent intent = new Intent(this, LocationBroadcaster.class);
         startService(intent);
@@ -270,7 +270,7 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
         // Handle notification
         final String id = getIntent().getStringExtra(FcmMessagingService.INTENT_ID_DATA);
         if (id != null) {
-            if(selectedFragment != null && selectedFragment instanceof BerandaFragment){
+            if (selectedFragment != null && selectedFragment instanceof BerandaFragment) {
                 ((BerandaFragment) selectedFragment).fetchDashboard();
                 ((BerandaFragment) selectedFragment).fetchListJob();
             }

@@ -22,10 +22,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.spil.dev.tms.Activity.ActivityUpload;
+import com.spil.dev.tms.Activity.Adapter.ContainerAdapter;
 import com.spil.dev.tms.Activity.BaseActivity;
 import com.spil.dev.tms.Activity.Maps.DirectionFinder;
 import com.spil.dev.tms.Activity.Maps.DirectionFinderListener;
@@ -39,6 +41,7 @@ import com.spil.dev.tms.Activity.Util.Haversine;
 import com.spil.dev.tms.Activity.Util.Netter;
 import com.spil.dev.tms.Activity.Util.Pref;
 import com.spil.dev.tms.Activity.Util.StringHashMap;
+import com.spil.dev.tms.Activity.Util.UIUtils;
 import com.spil.dev.tms.R;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -122,6 +125,8 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     TextView tvTanggal;
     @BindView(R.id.vDestinationList)
     View vDestinationList;
+    @BindView(R.id.lvContainer)
+    ListView lvContainer;
 
     boolean debugGeofence = false;
     boolean enableGeofence = false;
@@ -327,7 +332,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     @SuppressLint("MissingPermission")
     public void setUpAll() {
         clearMapElement();
-        Log.i("JOBA", "JobType " + realJob.getJobType());
+        Log.i("JOBID", "JOBID " + realJob.getId());
         Log.i("JOBB", "JobStatus " + realJob.getJobDeliverStatus());
         tvDistance.setText(realJob.getJobDeliverDistancetext());
         tvStatus.setText(realJob.getStringDeliverStatus());
@@ -360,6 +365,9 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             tvThird.setVisibility(View.GONE);
         }
 
+        // setup container adapter
+        lvContainer.setAdapter(new ContainerAdapter(this, R.layout.list_container, realJob.getDetailkontainer()));
+        UIUtils.setListViewHeightBasedOnItems(lvContainer);
         // draw route from start to end
         if (gmap != null) {
             LocationServices.getFusedLocationProviderClient(this).getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
@@ -425,6 +433,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
 //                setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
                 if (isJob12) {
                     vDestinationList.setVisibility(View.GONE);
+                    lvContainer.setVisibility(View.GONE);
                 }
                 break;
             }
@@ -436,6 +445,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
                 if (isJob12) {
                     vDestinationList.setVisibility(View.GONE);
+                    lvContainer.setVisibility(View.GONE);
                 }
                 break;
             }
@@ -447,6 +457,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
                 if (isJob12) {
                     vDestinationList.setVisibility(View.GONE);
+                    lvContainer.setVisibility(View.GONE);
                 }
                 break;
             }
@@ -458,6 +469,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
                 if (isJob12) {
                     vDestinationList.setVisibility(View.GONE);
+                    lvContainer.setVisibility(View.GONE);
                 }
                 break;
             }
@@ -469,6 +481,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
                 if (isJob12) {
                     vDestinationList.setVisibility(View.GONE);
+                    lvContainer.setVisibility(View.GONE);
                 }
                 break;
             }
@@ -489,6 +502,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 }
                 if (isJob12) {
                     vDestinationList.setVisibility(View.VISIBLE);
+                    lvContainer.setVisibility(View.VISIBLE);
                 }
 
                 break;
@@ -723,7 +737,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         LocationServices.getFusedLocationProviderClient(this).getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),15f));
+                gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15f));
             }
         });
 

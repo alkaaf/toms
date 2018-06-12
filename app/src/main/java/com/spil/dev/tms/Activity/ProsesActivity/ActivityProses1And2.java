@@ -226,7 +226,7 @@ public class ActivityProses1And2 extends BaseActivity {
                     } else {
                         tv1.setText(realJob.getJobPickupName());
                         tv2.setText(realJob.getJobDeliverAddress());
-                        tv3.setVisibility(View.VISIBLE);
+                        tv3.setVisibility(View.GONE);
                     }
 
                 } catch (JSONException e) {

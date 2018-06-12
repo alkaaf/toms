@@ -28,9 +28,13 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_list_black_24dp" />
-                            <entry key="sourceFile" value="C:\Users\ALKAAF" />
+                            <entry key="height" value="800" />
+                            <entry key="outputName" value="ic_logo_tms" />
+                            <entry key="overrideSize" value="true" />
+                            <entry key="sourceFile" value="D:\doc\tms\logo_tms.svg" />
+                            <entry key="width" value="1280" />
                           </map>
                         </option>
                       </PersistentState>

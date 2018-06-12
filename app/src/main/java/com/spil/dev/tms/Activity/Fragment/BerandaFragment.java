@@ -20,6 +20,7 @@ import com.spil.dev.tms.Activity.Model.DashboardModel;
 import com.spil.dev.tms.Activity.Model.DriverModel;
 import com.spil.dev.tms.Activity.Model.SimpleJob;
 import com.spil.dev.tms.Activity.ProsesActivity.ActivityProsesMap;
+import com.spil.dev.tms.Activity.Resarch.Research;
 import com.spil.dev.tms.Activity.Util.Netter;
 import com.spil.dev.tms.Activity.Util.Pref;
 import com.spil.dev.tms.Activity.Util.StringHashMap;
@@ -87,7 +88,7 @@ public class BerandaFragment extends Fragment {
         tvBulanIni.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(), ActivityProsesMap.class));
+                startActivity(new Intent(getContext(), Research.class));
             }
         });
         tvHariIni = view.findViewById(R.id.tv_hari_ini);
