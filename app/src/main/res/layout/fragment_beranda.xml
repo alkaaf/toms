@@ -52,13 +52,13 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
+            <com.daasuu.cat.CountAnimationTextView
                 android:textColor="@color/white"
                 android:id="@+id/tv_bulan_ini"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="00"
+                android:text="0"
                 android:textSize="60sp" />
 
             <TextView
@@ -77,12 +77,12 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
+            <com.daasuu.cat.CountAnimationTextView
                 android:textColor="@color/white"
                 android:id="@+id/tv_hari_ini"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="00"
+                android:text="0"
                 android:textSize="60sp" />
 
             <TextView
@@ -101,12 +101,12 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
+            <com.daasuu.cat.CountAnimationTextView
                 android:textColor="@color/white"
                 android:id="@+id/tv_selesai"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="00"
+                android:text="0"
                 android:textSize="60sp" />
 
             <TextView
@@ -125,12 +125,12 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
+            <com.daasuu.cat.CountAnimationTextView
                 android:textColor="@color/white"
                 android:id="@+id/tv_proses"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="00"
+                android:text="0"
                 android:textSize="60sp" />
 
             <TextView

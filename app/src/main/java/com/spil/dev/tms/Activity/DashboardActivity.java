@@ -232,7 +232,7 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
                 selectedFragment = null;
                 switch (item.getItemId()) {
                     case R.id.navigation_beranda:
-                        selectedFragment = BerandaFragment.newInstance();
+                        selectedFragment = new BerandaFragment();
                         break;
 
                     case R.id.navigation_riwayat:
@@ -260,7 +260,7 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
 
         //tampilkan fragment pertama secara manual
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_layout, BerandaFragment.newInstance());
+        transaction.replace(R.id.frame_layout, new BerandaFragment());
         transaction.commit();
 
         if (isMockSettingsON(getApplicationContext())) {
@@ -272,7 +272,7 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
         if (id != null) {
             if (selectedFragment != null && selectedFragment instanceof BerandaFragment) {
                 ((BerandaFragment) selectedFragment).fetchDashboard();
-                ((BerandaFragment) selectedFragment).fetchListJob();
+//                ((BerandaFragment) selectedFragment).fetchListJob();
             }
             final ProgressDialog pdNotif = new ProgressDialog(this);
             pdNotif.setMessage("Memproses notifikasi");

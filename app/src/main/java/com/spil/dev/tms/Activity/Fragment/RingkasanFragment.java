@@ -1,13 +1,16 @@
 package com.spil.dev.tms.Activity.Fragment;
 
+import android.animation.TimeInterpolator;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.TextView;
 
+import com.daasuu.cat.CountAnimationTextView;
 import com.spil.dev.tms.Activity.DashboardActivity;
 import com.spil.dev.tms.Activity.Model.DashboardModel;
 import com.spil.dev.tms.Activity.Model.DriverModel;
@@ -30,9 +33,10 @@ import java.util.Locale;
 public class RingkasanFragment extends Fragment {
 
     TextView displayDateTime;
-    TextView tvBulanIni, tvHariIni, tvSelesai, tvProses;
+    CountAnimationTextView tvBulanIni, tvHariIni, tvSelesai, tvProses;
     Pref pref;
     DriverModel driverModel;
+
     public RingkasanFragment() {
         // Required empty public constructor
     }
@@ -61,7 +65,7 @@ public class RingkasanFragment extends Fragment {
         tvBulanIni = view.findViewById(R.id.tv_bulan_ini);
         tvHariIni = view.findViewById(R.id.tv_hari_ini);
         tvSelesai = view.findViewById(R.id.tv_selesai);
-        tvProses = view.findViewById(R.id.tv_point);
+        tvProses = view.findViewById(R.id.tv_proses);
         ////////////////////////
 
         return view;
@@ -80,10 +84,18 @@ public class RingkasanFragment extends Fragment {
                 try {
                     JSONObject obj = new JSONObject(response);
                     DashboardModel dashboardModel = new Gson().fromJson(obj.getString("data"), DashboardModel.class);
-                    tvBulanIni.setText(String.format("%02d", dashboardModel.bulan_ini));
-                    tvHariIni.setText(String.format("%02d", dashboardModel.hari_ini));
-                    tvProses.setText(String.format("%02d", dashboardModel.proses));
-                    tvSelesai.setText(String.format("%02d", dashboardModel.selesai));
+//                    tvBulanIni.setText(String.format("%02d", dashboardModel.bulan_ini));
+//                    tvHariIni.setText(String.format("%02d", dashboardModel.hari_ini));
+//                    tvProses.setText(String.format("%02d", dashboardModel.proses));
+//                    tvSelesai.setText(String.format("%02d", dashboardModel.selesai));
+                    tvBulanIni.setInterpolator(new AccelerateDecelerateInterpolator())
+                            .countAnimation(0, dashboardModel.bulan_ini);
+                    tvHariIni.setInterpolator(new AccelerateDecelerateInterpolator())
+                            .countAnimation(0, dashboardModel.hari_ini);
+                    tvProses.setInterpolator(new AccelerateDecelerateInterpolator())
+                            .countAnimation(0, dashboardModel.proses);
+                    tvSelesai.setInterpolator(new AccelerateDecelerateInterpolator())
+                            .countAnimation(0, dashboardModel.selesai);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

@@ -5,11 +5,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:layout_marginBottom="20dp"
-
+android:background="@color/colorPrimary"
     tools:context="com.spil.dev.tms.Activity.Fragment.RingkasanFragment">
 
     <TextView
+        android:textColor="@color/white"
         android:textStyle="bold"
         android:textSize="20sp"
         android:textAlignment="center"
@@ -17,6 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <TextView
+        android:textColor="@color/white"
         android:textAlignment="center"
         android:id="@+id/tv_tanggal"
         android:layout_width="match_parent"
@@ -30,99 +31,115 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <GridLayout
+    <LinearLayout
         android:id="@+id/gl1"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:columnCount="4"
-        android:elevation="8dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView">
 
-        <android.support.v7.widget.CardView
-            android:layout_margin="4dp"
-            app:cardElevation="4dp">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1    "
+            android:gravity="center"
+            android:orientation="vertical">
 
-            <TextView
+            <com.daasuu.cat.CountAnimationTextView
+                android:textColor="@color/white"
                 android:id="@+id/tv_bulan_ini"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:padding="8dp"
-                android:text="50"
+                android:text="00"
                 android:textSize="60sp" />
 
             <TextView
+                android:textColor="@color/white"
                 android:id="@+id/tv_bulan_ini1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center"
                 android:text="Bulan ini" />
-        </android.support.v7.widget.CardView>
+        </LinearLayout>
 
-        <android.support.v7.widget.CardView
-            android:layout_margin="4dp"
-            app:cardElevation="4dp">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1    "
+            android:gravity="center"
+            android:orientation="vertical">
 
-            <TextView
+            <com.daasuu.cat.CountAnimationTextView
                 android:id="@+id/tv_hari_ini"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="07"
+                android:text="00"
+                android:textColor="@color/white"
                 android:textSize="60sp" />
 
             <TextView
+                android:textColor="@color/white"
                 android:id="@+id/tv_hari_ini1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center"
                 android:text="Hari ini" />
-        </android.support.v7.widget.CardView>
+        </LinearLayout>
 
-        <android.support.v7.widget.CardView
-            android:layout_margin="4dp"
-            app:cardElevation="4dp">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1    "
+            android:gravity="center"
+            android:orientation="vertical">
 
-            <TextView
+            <com.daasuu.cat.CountAnimationTextView
+                android:textColor="@color/white"
                 android:id="@+id/tv_selesai"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="01"
+                android:text="00"
                 android:textSize="60sp" />
 
             <TextView
+                android:textColor="@color/white"
                 android:id="@+id/tv_selesai1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center"
                 android:text="Selesai" />
-        </android.support.v7.widget.CardView>
+        </LinearLayout>
 
-        <android.support.v7.widget.CardView
-            android:layout_margin="4dp"
-            app:cardElevation="4dp">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_point"
+            <com.daasuu.cat.CountAnimationTextView
+                android:textColor="@color/white"
+                android:id="@+id/tv_proses"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
                 android:text="00"
                 android:textSize="60sp" />
 
             <TextView
-                android:id="@+id/tv_proses"
+                android:textColor="@color/white"
+                android:id="@+id/tv_point1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center"
                 android:text="Proses" />
-        </android.support.v7.widget.CardView>
-    </GridLayout>
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

@@ -74,7 +74,7 @@ dependencies {
     implementation 'com.github.aakira:expandable-layout:1.6.0@aar'
     implementation 'com.faendir:acra:4.10.0'
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.+'
-
+    implementation 'com.daasuu:CountAnimationTextView:0.1.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

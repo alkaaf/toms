@@ -11,9 +11,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.daasuu.cat.CountAnimationTextView;
 import com.spil.dev.tms.Activity.Adapter.BerandaListAdapter;
 import com.spil.dev.tms.Activity.DashboardActivity;
 import com.spil.dev.tms.Activity.Model.DashboardModel;
@@ -38,12 +41,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class BerandaFragment extends Fragment {
+public class BerandaFragment extends FragmentBase {
 
     RelativeLayout clEmptyView;
     RecyclerView rvBeranda;
     TextView displayDateTime;
-    TextView tvBulanIni, tvHariIni, tvSelesai, tvProses;
+    CountAnimationTextView tvBulanIni, tvHariIni, tvSelesai, tvProses;
     SwipeRefreshLayout swipe;
 
     public BerandaListAdapter mAdapter;
@@ -53,25 +56,23 @@ public class BerandaFragment extends Fragment {
     StringHashMap map = new StringHashMap();
     DriverModel driver;
 
+    static BerandaFragment instance;
     public BerandaFragment() {
         // Required empty public constructor
+        instance = this;
     }
 
-    private static BerandaFragment mInstance;
-
-    public static BerandaFragment getmInstance() {
-        if (mInstance == null) {
-            mInstance = new BerandaFragment();
-        }
-        return mInstance;
+    public static BerandaFragment getInstance() {
+        return instance;
     }
-
-    public static BerandaFragment newInstance() {
-        BerandaFragment berandaFragment = new BerandaFragment();
-        return berandaFragment;
+    public void invokeMe(){
+        uiRunner(new Runnable() {
+            @Override
+            public void run() {
+                fetchListJob();
+            }
+        });
     }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -147,7 +148,7 @@ public class BerandaFragment extends Fragment {
                     jobList.addAll(temp);
                     mAdapter.notifyDataSetChanged();
 
-                } catch (JSONException e) {
+                } catch ( JSONException e) {
                     e.printStackTrace();
                 }
             }
@@ -166,10 +167,18 @@ public class BerandaFragment extends Fragment {
                 try {
                     JSONObject obj = new JSONObject(response);
                     DashboardModel dashboardModel = new Gson().fromJson(obj.getString("data"), DashboardModel.class);
-                    tvBulanIni.setText(String.format("%02d", dashboardModel.bulan_ini));
-                    tvHariIni.setText(String.format("%02d", dashboardModel.hari_ini));
-                    tvProses.setText(String.format("%02d", dashboardModel.proses));
-                    tvSelesai.setText(String.format("%02d", dashboardModel.selesai));
+//                    tvBulanIni.setText(String.format("%02d", dashboardModel.bulan_ini));
+//                    tvHariIni.setText(String.format("%02d", dashboardModel.hari_ini));
+//                    tvProses.setText(String.format("%02d", dashboardModel.proses));
+//                    tvSelesai.setText(String.format("%02d", dashboardModel.selesai));
+                    tvBulanIni.setInterpolator(new AccelerateDecelerateInterpolator())
+                            .countAnimation(0, dashboardModel.bulan_ini);
+                    tvHariIni.setInterpolator(new AccelerateDecelerateInterpolator())
+                            .countAnimation(0, dashboardModel.hari_ini);
+                    tvProses.setInterpolator(new AccelerateDecelerateInterpolator())
+                            .countAnimation(0, dashboardModel.proses);
+                    tvSelesai.setInterpolator(new AccelerateDecelerateInterpolator())
+                            .countAnimation(0, dashboardModel.selesai);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

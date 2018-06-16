@@ -7,32 +7,15 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
-import com.spil.dev.tms.Activity.Controller.NotificationController;
-import com.spil.dev.tms.Activity.Controller.OperationalController;
 import com.spil.dev.tms.Activity.DashboardActivity;
-import com.spil.dev.tms.Activity.Model.JobOrderModel;
-import com.spil.dev.tms.Activity.OrderBaruActivity;
-import com.spil.dev.tms.Activity.OrderBaruNotificationActivity;
+import com.spil.dev.tms.Activity.Fragment.BerandaFragment;
+import com.spil.dev.tms.Activity.ProsesActivity.ActivityProsesMap;
 import com.spil.dev.tms.R;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-
-import static com.android.volley.VolleyLog.TAG;
 
 /**
  * Created by andresual on 1/23/2018.
@@ -64,11 +47,27 @@ public class FcmMessagingService extends FirebaseMessagingService {
 
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         notificationBuilder.setSound(alarmSound);
-
         notificationBuilder.setContentIntent(pendingIntent);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, notificationBuilder.build());
 
+
+        reloadUiOnNotif();
+
         super.onMessageReceived(remoteMessage);
+
+
+    }
+
+    private void reloadUiOnNotif() {
+        // invoke branda fetch again
+        BerandaFragment bf = BerandaFragment.getInstance();
+        if (bf != null) {
+            bf.invokeMe();
+        }
+        // invoke proses map ui
+        if (ActivityProsesMap.getInstance() != null) {
+            ActivityProsesMap.getInstance().fetchJob();
+        }
     }
 }

@@ -11,6 +11,7 @@
 
 
     <ImageView
+        android:layout_marginBottom="20dp"
         android:layout_gravity="center"
         android:tint="@color/colorAccent"
         android:id="@+id/imageView"

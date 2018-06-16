@@ -72,26 +72,30 @@ public class Netter {
     }
 
     public void byAmik(int method, Response.Listener<String> listener, Response.ErrorListener errorListener, Byamik func, final StringHashMap param) {
-        RequestQueue queue = Volley.newRequestQueue(context);
-        param.putMore("f", func.func);
+        if(context!=null) {
+            RequestQueue queue = Volley.newRequestQueue(context);
+            param.putMore("f", func.func);
 
-        queue.add(new StringRequest(method, WS_ADDR + BYAMIK, listener, errorListener) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                return param;
-            }
-        });
+            queue.add(new StringRequest(method, WS_ADDR + BYAMIK, listener, errorListener) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    return param;
+                }
+            });
+        }
     }
 
     public void webService(int method, Response.Listener<String> listener, Response.ErrorListener errorListener, Webservice func, final StringHashMap param) {
-        RequestQueue queue = Volley.newRequestQueue(context);
-        param.putMore("f", func.func);
-        queue.add(new StringRequest(method, WS_ADDR + WS, listener, errorListener) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                return param;
-            }
-        });
+        if(context!=null) {
+            RequestQueue queue = Volley.newRequestQueue(context);
+            param.putMore("f", func.func);
+            queue.add(new StringRequest(method, WS_ADDR + WS, listener, errorListener) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    return param;
+                }
+            });
+        }
     }
 
     public static Response.ErrorListener getDefaultErrorListener(final Context context, final Runnable after) {
