@@ -1,11 +1,14 @@
 package com.spil.dev.tms.Activity.Util;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
 import com.spil.dev.tms.Activity.DashboardActivity;
@@ -38,14 +41,16 @@ public class FcmMessagingService extends FirebaseMessagingService {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(INTENT_ID_DATA, id);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "Channel");
         notificationBuilder.setContentTitle(title);
         notificationBuilder.setContentText(body);
         notificationBuilder.setSmallIcon(R.mipmap.ic_launcher);
         notificationBuilder.setAutoCancel(true);
         notificationBuilder.setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
-
-        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
+        notificationBuilder.setPriority(Notification.PRIORITY_MAX);
+        notificationBuilder.setLights(Color.DKGRAY,0,10000);
         notificationBuilder.setSound(alarmSound);
         notificationBuilder.setContentIntent(pendingIntent);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

@@ -1,9 +1,11 @@
 package com.spil.dev.tms.Activity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -11,6 +13,7 @@ import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.media.ExifInterface;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,6 +27,7 @@ import android.widget.Toast;
 import com.spil.dev.tms.Activity.Adapter.BaseRecyclerAdapter;
 import com.spil.dev.tms.Activity.Adapter.GalleryAdapter;
 import com.spil.dev.tms.Activity.Model.SimpleJob;
+import com.spil.dev.tms.Activity.Util.QuickLocation;
 import com.spil.dev.tms.R;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -43,6 +47,7 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,6 +57,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ActivityUpload extends BaseActivity {
+    public static final int REQ_CODE = 3;
+
     FirebaseDatabase fbdb;
     FirebaseStorage fbstor;
     DatabaseReference dbref;
@@ -70,6 +77,7 @@ public class ActivityUpload extends BaseActivity {
     String jobId;
     private final int REQUEST_IMAGE1 = 2;
     ProgressDialog pd;
+    int counter = 0;
 
     ChildEventListener cel = new ChildEventListener() {
         @Override
@@ -77,6 +85,7 @@ public class ActivityUpload extends BaseActivity {
             Log.i("CHILDADD", dataSnapshot.getValue().toString());
             photoUrl.add(dataSnapshot.getValue().toString());
             adapter.notifyDataSetChanged();
+            setOkResult();
         }
 
         @Override
@@ -99,6 +108,10 @@ public class ActivityUpload extends BaseActivity {
 
         }
     };
+
+    public void setOkResult() {
+        setResult(Activity.RESULT_OK);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -151,7 +164,7 @@ public class ActivityUpload extends BaseActivity {
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
                 .setActivityTitle("Tambah foto")
-                .setRequestedSize(1980,1080)
+                .setRequestedSize(1980, 1080)
                 .start(this);
     }
 
@@ -162,7 +175,9 @@ public class ActivityUpload extends BaseActivity {
             case REQUEST_IMAGE1: {
                 if (resultCode == RESULT_OK) {
 //                    doUpload();
-                    CropImage.activity(file).start(this);
+                    CropImage.activity(file).start(ActivityUpload.this);
+                    // set the geotag
+
                 }
                 break;
             }
@@ -170,6 +185,12 @@ public class ActivityUpload extends BaseActivity {
                 CropImage.ActivityResult result = CropImage.getActivityResult(data);
                 if (resultCode == RESULT_OK) {
                     file = result.getUri();
+                    QuickLocation.get(this, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            geoTag(file.getPath(), location.getLatitude(), location.getLongitude());
+                        }
+                    });
                     doUpload();
                 } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                     Exception error = result.getError();
@@ -184,13 +205,15 @@ public class ActivityUpload extends BaseActivity {
         pd.show();
         pd.setCancelable(false);
 
-        storef.child("job_" + simpleJob.getJobId() + "_" + System.currentTimeMillis()).putFile(file).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                pd.hide();
-                dbref.push().setValue(taskSnapshot.getMetadata().getDownloadUrl().toString());
-            }
-        }).addOnFailureListener(new OnFailureListener() {
+        storef.child("job_" + simpleJob.getJobId() + "_" + System.currentTimeMillis()).putFile(file)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        pd.hide();
+                        dbref.push().setValue(taskSnapshot.getMetadata().getDownloadUrl().toString());
+                        setOkResult();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 pd.dismiss();
@@ -208,7 +231,7 @@ public class ActivityUpload extends BaseActivity {
     public static void start(Context context, SimpleJob simpleJob) {
         Intent intent = new Intent(context, ActivityUpload.class);
         intent.putExtra(INTENT_DATA, simpleJob);
-        context.startActivity(intent);
+        ((Activity) context).startActivityForResult(intent, REQ_CODE);
     }
 
     @Override
@@ -238,5 +261,41 @@ public class ActivityUpload extends BaseActivity {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         return new File(mediaStorageDir.getPath() + File.separator +
                 "IMG_" + timeStamp + ".jpg");
+    }
+
+    public void geoTag(String filename, double latitude, double longitude) {
+        ExifInterface exif;
+
+        try {
+            exif = new ExifInterface(filename);
+            int num1Lat = (int) Math.floor(latitude);
+            int num2Lat = (int) Math.floor((latitude - num1Lat) * 60);
+            double num3Lat = (latitude - ((double) num1Lat + ((double) num2Lat / 60))) * 3600000;
+
+            int num1Lon = (int) Math.floor(longitude);
+            int num2Lon = (int) Math.floor((longitude - num1Lon) * 60);
+            double num3Lon = (longitude - ((double) num1Lon + ((double) num2Lon / 60))) * 3600000;
+
+            exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE, num1Lat + "/1," + num2Lat + "/1," + num3Lat + "/1000");
+            exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, num1Lon + "/1," + num2Lon + "/1," + num3Lon + "/1000");
+
+
+            if (latitude > 0) {
+                exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, "N");
+            } else {
+                exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, "S");
+            }
+
+            if (longitude > 0) {
+                exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF, "E");
+            } else {
+                exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF, "W");
+            }
+
+            exif.saveAttributes();
+        } catch (IOException e) {
+            Log.e("PictureActivity", e.getLocalizedMessage());
+        }
+
     }
 }

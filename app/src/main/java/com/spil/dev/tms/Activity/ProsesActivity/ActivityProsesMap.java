@@ -263,6 +263,9 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         if (requestCode == ActivityReject.REQ_CODE && resultCode == Activity.RESULT_OK) {
             finish();
         }
+        if (requestCode == ActivityUpload.REQ_CODE && resultCode == Activity.RESULT_OK) {
+
+        }
     }
 
     public void nextStep() {
