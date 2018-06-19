@@ -29,7 +29,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.spil.dev.tms.Activity.Fragment.AkunFragment;
@@ -48,6 +51,7 @@ import com.spil.dev.tms.Activity.ProsesActivity.ActivityProses1And2;
 import com.spil.dev.tms.Activity.ProsesActivity.ActivityProses3;
 import com.spil.dev.tms.Activity.ProsesActivity.ActivityProsesFrom4To7;
 import com.spil.dev.tms.Activity.ProsesActivity.ActivityProsesMoreThan8;
+import com.spil.dev.tms.Activity.Util.DF;
 import com.spil.dev.tms.Activity.Util.FcmMessagingService;
 import com.spil.dev.tms.Activity.Util.Netter;
 import com.spil.dev.tms.Activity.Util.Pref;
@@ -101,6 +105,7 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
     Fragment selectedFragment;
     GoogleApiClient mGoogleApiClient;
     public static final int REQ_LOCATION_HIGH = 1000;
+    public static final long FORCE_CHANGE_PASS_THRESHOLD = 1000 * 60 * 24 * 30 * 3;
 
     BroadcastReceiver br = new BroadcastReceiver() {
         @Override
@@ -169,6 +174,7 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         mContext = this;
+
 
         mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
@@ -306,6 +312,8 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
                 }
             }), Netter.Webservice.DETAILPICKUP, new StringHashMap().putMore("id", id));
         }
+        checkObsoletePassword();
+
     }
 
     @Override
@@ -314,7 +322,52 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
         isMockSettingsON(DashboardActivity.this);
         areThereMockPermissionApps(DashboardActivity.this);
         registerReceiver(br, filter);
+
+
     }
+
+    private void checkObsoletePassword() {
+        long lastChange = DF.parse(driverModel.getLastChangePassword()).getTime();
+        if (lastChange + FORCE_CHANGE_PASS_THRESHOLD <= System.currentTimeMillis()) {
+            View vPass = LayoutInflater.from(this).inflate(R.layout.alert_change_password, null, false);
+            final EditText iOldPass = vPass.findViewById(R.id.iOldPass);
+            final EditText iNewPass = vPass.findViewById(R.id.iNewPass);
+            final EditText iNewPass2 = vPass.findViewById(R.id.iNewPass2);
+            final AlertDialog alertDialog = new AlertDialog.Builder(this)
+                    .setTitle("Ubah password")
+                    .setView(vPass)
+                    .setPositiveButton("Simpan", null)
+                    .setNegativeButton("Batal", null).create();
+            alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialog) {
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // checking
+                            if(iOldPass.getText().toString().isEmpty() || iNewPass.getText().toString().isEmpty() || iNewPass2.getText().toString().isEmpty()){
+                                toast("Harap isi seluruh form");
+                                return;
+                            }
+                            if(!iOldPass.getText().toString().equals(driverModel.getPassword())){
+                                toast("Kata sandi lama tidak sesuai");
+                                return;
+                            }
+                            if(!iNewPass.getText().toString().equals(iNewPass2.getText().toString())){
+                                toast("Kata sandi baru tidak sama, cek kembali");
+                                return;
+                            }
+// TODO: 6/19/2018 do the update password
+                            toast("Do the update");
+                            alertDialog.dismiss();
+                        }
+                    });
+                }
+            });
+            alertDialog.show();
+        }
+    }
+
 
     @Override
     public void onStop() {
@@ -327,7 +380,6 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
 
     @Override
     public void onBackPressed() { //bisa dipake terus
-
         if (twice) {
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_HOME);

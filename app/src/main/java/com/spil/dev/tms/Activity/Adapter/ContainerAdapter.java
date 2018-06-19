@@ -33,7 +33,6 @@ public class ContainerAdapter extends ArrayAdapter<DetailKontainer> {
 
         vDepo.setVisibility(enableViewDepo ? View.VISIBLE : View.GONE);
 
-        // TODO: 6/18/2018 add container type
         DetailKontainer kontainer = getItem(position);
         tvNoKontainer.setText(kontainer.getContainerNo() );
         tvNamaKontainer.setText(kontainer.getContainerName());

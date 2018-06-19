@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by andresual on 1/30/2018.
  */
 
-public class DriverModel {
+public class DriverModel implements Parcelable {
 
     @SerializedName("nama")
     String username;
@@ -35,6 +35,16 @@ public class DriverModel {
     String idDriver;
     @SerializedName("kota")
     String kota;
+    @SerializedName("last_changepassword")
+    String lastChangePassword;
+
+    public String getLastChangePassword() {
+        return lastChangePassword;
+    }
+
+    public void setLastChangePassword(String lastChangePassword) {
+        this.lastChangePassword = lastChangePassword;
+    }
 
     public String getKota() {
         return kota;
@@ -128,4 +138,54 @@ public class DriverModel {
         return username.substring(0, 1);
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.username);
+        dest.writeString(this.password);
+        dest.writeString(this.token);
+        dest.writeValue(this.id);
+        dest.writeString(this.email);
+        dest.writeString(this.alamat);
+        dest.writeString(this.kode);
+        dest.writeString(this.telp);
+        dest.writeString(this.expiredToken);
+        dest.writeString(this.idDriver);
+        dest.writeString(this.kota);
+        dest.writeString(this.lastChangePassword);
+    }
+
+    public DriverModel() {
+    }
+
+    protected DriverModel(Parcel in) {
+        this.username = in.readString();
+        this.password = in.readString();
+        this.token = in.readString();
+        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.email = in.readString();
+        this.alamat = in.readString();
+        this.kode = in.readString();
+        this.telp = in.readString();
+        this.expiredToken = in.readString();
+        this.idDriver = in.readString();
+        this.kota = in.readString();
+        this.lastChangePassword = in.readString();
+    }
+
+    public static final Parcelable.Creator<DriverModel> CREATOR = new Parcelable.Creator<DriverModel>() {
+        @Override
+        public DriverModel createFromParcel(Parcel source) {
+            return new DriverModel(source);
+        }
+
+        @Override
+        public DriverModel[] newArray(int size) {
+            return new DriverModel[size];
+        }
+    };
 }

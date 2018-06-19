@@ -20,10 +20,11 @@ public class DF {
     public static final String DATE_US = "yyyy-MM-dd";
     public static final String DATE_PRODUKSI = "EEEE, dd/MM HH:mm";
     public static final String MYSQL = "yyyy-MM-dd HH:mm:ss";
+    public static final String ASP_FORMAT = "M/d/yyyy hh:mm:ss a";
 
-    public static Date parse(String date) {
+    public static Date parse(String aspDate) {
         try {
-            return new SimpleDateFormat(DEFAULT).parse(date);
+            return new SimpleDateFormat(ASP_FORMAT).parse(aspDate);
         } catch (ParseException e) {
             e.printStackTrace();
             return null;
