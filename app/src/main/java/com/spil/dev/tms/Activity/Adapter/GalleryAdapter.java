@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.spil.dev.tms.Activity.Model.Gallery;
 import com.spil.dev.tms.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -16,11 +17,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GalleryAdapter extends BaseRecyclerAdapter<String, GalleryAdapter.ViewHolder> {
+public class GalleryAdapter extends BaseRecyclerAdapter<Gallery, GalleryAdapter.ViewHolder> {
 
     Context context;
 
-    public GalleryAdapter(List<String> data) {
+    public GalleryAdapter(List<Gallery> data) {
         super(data);
     }
 
@@ -35,7 +36,7 @@ public class GalleryAdapter extends BaseRecyclerAdapter<String, GalleryAdapter.V
 
     @Override
     public void onBindViewHolder(GalleryAdapter.ViewHolder holder, int position) {
-        Glide.with(context).setDefaultRequestOptions(new RequestOptions().placeholder(R.drawable.ic_image_placeholder)).load(getData().get(position)).into(holder.img);
+        Glide.with(context).setDefaultRequestOptions(new RequestOptions().placeholder(R.drawable.ic_image_placeholder)).load(getData().get(position).url).into(holder.img);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

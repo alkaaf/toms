@@ -51,4 +51,9 @@ public class BaseActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    public void uiRunner(Runnable runnable) {
+        if (isFinishing() && runnable != null) {
+            runOnUiThread(runnable);
+        }
+    }
 }

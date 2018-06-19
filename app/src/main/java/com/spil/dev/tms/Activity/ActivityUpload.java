@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,16 +19,20 @@ import android.support.media.ExifInterface;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.spil.dev.tms.Activity.Adapter.BaseRecyclerAdapter;
 import com.spil.dev.tms.Activity.Adapter.GalleryAdapter;
+import com.spil.dev.tms.Activity.Model.Gallery;
 import com.spil.dev.tms.Activity.Model.SimpleJob;
+import com.spil.dev.tms.Activity.Util.DF;
 import com.spil.dev.tms.Activity.Util.QuickLocation;
 import com.spil.dev.tms.R;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
@@ -69,7 +75,7 @@ public class ActivityUpload extends BaseActivity {
 
 
     GalleryAdapter adapter;
-    List<String> photoUrl = new ArrayList<>();
+    List<Gallery> photoUrl = new ArrayList<>();
 
     public static final String INTENT_DATA = "datajob";
     SimpleJob simpleJob;
@@ -78,12 +84,13 @@ public class ActivityUpload extends BaseActivity {
     private final int REQUEST_IMAGE1 = 2;
     ProgressDialog pd;
     int counter = 0;
+    View overlayView;
 
     ChildEventListener cel = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             Log.i("CHILDADD", dataSnapshot.getValue().toString());
-            photoUrl.add(dataSnapshot.getValue().toString());
+            photoUrl.add(dataSnapshot.getValue(Gallery.class));
             adapter.notifyDataSetChanged();
             setOkResult();
         }
@@ -122,19 +129,35 @@ public class ActivityUpload extends BaseActivity {
         getSupportActionBar().setTitle("Job Gallery");
 
         simpleJob = getIntent().getParcelableExtra(INTENT_DATA);
-        jobId = "photo/job_" + simpleJob.getJobId() + "/";
+        jobId = "photov2/job_" + simpleJob.getJobId() + "/";
         fbdb = FirebaseDatabase.getInstance();
         fbstor = FirebaseStorage.getInstance();
         adapter = new GalleryAdapter(photoUrl);
+
         adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int pos, View v) {
+                overlayView = LayoutInflater.from(ActivityUpload.this).inflate(R.layout.image_overlay, null, false);
                 new ImageViewer.Builder<>(ActivityUpload.this, photoUrl).setCustomDraweeHierarchyBuilder(
                         GenericDraweeHierarchyBuilder.newInstance(getResources())
                                 .setFailureImage(R.drawable.ic_broken_image_black_24dp)
                                 .setProgressBarImage(R.drawable.ic_image_placeholder)
                                 .setPlaceholderImage(R.drawable.ic_image_black_24dp)
-                ).setStartPosition(pos).show();
+                ).setStartPosition(pos).setFormatter(new ImageViewer.Formatter<Gallery>() {
+                    @Override
+                    public String format(Gallery gallery) {
+                        return gallery.url;
+                    }
+                }).setImageChangeListener(new ImageViewer.OnImageChangeListener() {
+                    @Override
+                    public void onImageChange(int position) {
+                        TextView tv = overlayView.findViewById(R.id.tvDesc);
+                        TextView tvTanggal = overlayView.findViewById(R.id.tvTanggal);
+                        tv.setText(photoUrl.get(position).addr);
+                        tvTanggal.setText(DF.format(photoUrl.get(position).timestamp));
+                    }
+                }).setOverlayView(overlayView)
+                        .show();
             }
         });
         rvPhoto.setAdapter(adapter);
@@ -160,13 +183,6 @@ public class ActivityUpload extends BaseActivity {
         }
     }
 
-    public void takeCameraWithCrop() {
-        CropImage.activity()
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setActivityTitle("Tambah foto")
-                .setRequestedSize(1980, 1080)
-                .start(this);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -189,9 +205,10 @@ public class ActivityUpload extends BaseActivity {
                         @Override
                         public void onSuccess(Location location) {
                             geoTag(file.getPath(), location.getLatitude(), location.getLongitude());
+                            doUpload();
                         }
                     });
-                    doUpload();
+
                 } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                     Exception error = result.getError();
                 }
@@ -208,24 +225,55 @@ public class ActivityUpload extends BaseActivity {
         storef.child("job_" + simpleJob.getJobId() + "_" + System.currentTimeMillis()).putFile(file)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
                         pd.hide();
-                        dbref.push().setValue(taskSnapshot.getMetadata().getDownloadUrl().toString());
-                        setOkResult();
+                        QuickLocation.get(ActivityUpload.this, new OnSuccessListener<Location>() {
+                            @Override
+                            public void onSuccess(final Location location) {
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Geocoder gc = new Geocoder(ActivityUpload.this);
+                                        Gallery gallery = new Gallery();
+                                        try {
+                                            List<Address> addr = gc.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                                            gallery.addr = addr.get(0).getAddressLine(0);
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                        gallery.lat = location.getLatitude();
+                                        gallery.lng = location.getLongitude();
+                                        gallery.url = taskSnapshot.getMetadata().getDownloadUrl().toString();
+                                        gallery.timestamp = System.currentTimeMillis();
+                                        dbref.push().setValue(gallery);
+                                        uiRunner(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                setOkResult();
+                                            }
+                                        });
+                                    }
+                                }).start();
+
+                            }
+                        });
+
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                pd.dismiss();
-                Toast.makeText(ActivityUpload.this, "Gagal mengunggah foto", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                Log.i("FBUpload", "Uploading " + taskSnapshot.getBytesTransferred() + "/" + taskSnapshot.getTotalByteCount() + " B");
-                pd.setMessage("Mengunggah... (" + Math.round(100 * ((float) taskSnapshot.getBytesTransferred() / (float) taskSnapshot.getTotalByteCount())) + "%)");
-            }
-        });
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Toast.makeText(ActivityUpload.this, "Gagal mengunggah foto", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        Log.i("FBUpload", "Uploading " + taskSnapshot.getBytesTransferred() + "/" + taskSnapshot.getTotalByteCount() + " B");
+                        pd.setMessage("Mengunggah... (" + Math.round(100 * ((float) taskSnapshot.getBytesTransferred() / (float) taskSnapshot.getTotalByteCount())) + "%)");
+                    }
+                });
     }
 
     public static void start(Context context, SimpleJob simpleJob) {
