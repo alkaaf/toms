@@ -1,6 +1,7 @@
 package com.spil.dev.tms.Activity.Util;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -72,7 +73,7 @@ public class Netter {
     }
 
     public void byAmik(int method, Response.Listener<String> listener, Response.ErrorListener errorListener, Byamik func, final StringHashMap param) {
-        if(context!=null) {
+        if (context != null) {
             RequestQueue queue = Volley.newRequestQueue(context);
             param.putMore("f", func.func);
 
@@ -86,7 +87,7 @@ public class Netter {
     }
 
     public void webService(int method, Response.Listener<String> listener, Response.ErrorListener errorListener, Webservice func, final StringHashMap param) {
-        if(context!=null) {
+        if (context != null) {
             RequestQueue queue = Volley.newRequestQueue(context);
             param.putMore("f", func.func);
             queue.add(new StringRequest(method, WS_ADDR + WS, listener, errorListener) {
@@ -102,7 +103,10 @@ public class Netter {
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+//                if (!TextUtils.isEmpty(error.getLocalizedMessage())) {
+                    Toast.makeText(context, error.toString(), Toast.LENGTH_SHORT).show();
+                    error.printStackTrace();
+//                }
                 if (after != null) after.run();
             }
         };

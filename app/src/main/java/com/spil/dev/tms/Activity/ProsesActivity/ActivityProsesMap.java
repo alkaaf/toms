@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -137,9 +138,12 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     View vDestinationList;
     @BindView(R.id.lvContainer)
     ListView lvContainer;
+    @BindView(R.id.tvMuatanKosong)
+    View tvMuatanKosong;
 
     boolean debugGeofence = false;
     boolean enableGeofence = false;
+    boolean enableContainerCheck = false;
     double geofenceLat;
     double geofenceLng;
     public static final double GEOFENCE_RADIUS = 1000; // in meters, non retarded unit
@@ -345,6 +349,10 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     @SuppressLint("MissingPermission")
     public void setUpAll() {
         clearMapElement();
+
+        // tvMuatanKosong
+        tvMuatanKosong.setVisibility((realJob.getDetailkontainer() != null && realJob.getDetailkontainer().isEmpty()) ? View.VISIBLE : View.GONE);
+
         Log.i("JOBID", "JOBID " + realJob.getId());
         Log.i("JOBB", "JobStatus " + realJob.getJobDeliverStatus());
         tvDistance.setText(realJob.getJobDeliverDistancetext());
@@ -446,6 +454,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 }
                 break;
             }
+            // status pickup
             case 4: {
                 whatFunc = Netter.Webservice.JOB_READYJOB;
                 enableGeofence = true;
@@ -469,6 +478,10 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             case 6: {
                 whatFunc = Netter.Webservice.JOB_FINISHJOBDEPARTURE;
                 enableGeofence = true;
+                enableContainerCheck = true;
+                if ((realJob.getDetailkontainer() == null || realJob.getDetailkontainer().isEmpty()) && !isFinishing()) {
+                    new AlertDialog.Builder(this).setMessage("Belum ada kontainer dimuat").show();
+                }
                 setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
                 if (isJob12) {
                     vDestinationList.setVisibility(View.GONE);
@@ -477,21 +490,22 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 break;
             }
             case 7: {
+                // deliver
                 whatFunc = Netter.Webservice.JOB_DELIVERJOB;
-
                 enableGeofence = true;
+                enableContainerCheck = true;
                 setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
                 if (isJob12) {
                     vDestinationList.setVisibility(View.GONE);
-                    lvContainer.setVisibility(View.GONE);
+//                    lvContainer.setVisibility(View.GONE);
                 }
                 break;
             }
             case 8: {//deliver
                 whatFunc = Netter.Webservice.JOB_ARRIVEDESTINATION;
                 enableGeofence = true;
+                enableContainerCheck = true;
                 if (!isSingleBox && isJobTujuanMoreThanOne && !isJob89) {
-
                     if (realJob.statusKontainer() == 0) {
                         setGeofenceTarget(realJob.getDetailkontainer().get(0).getDestinationLat(), realJob.getDetailkontainer().get(0).getDestinationLng());
                     } else {
@@ -509,8 +523,8 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             }
             case 9: {
                 whatFunc = Netter.Webservice.JOB_STARTJOBARRIVAL;
-
                 enableGeofence = true;
+                enableContainerCheck = true;
                 if (!isSingleBox && isJobTujuanMoreThanOne && !isJob89) {
                     if (realJob.statusKontainer() == 0) {
                         setGeofenceTarget(realJob.getDetailkontainer().get(0).getDestinationLat(), realJob.getDetailkontainer().get(0).getDestinationLng());
@@ -525,12 +539,15 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             }
             case 10: {
                 if (isJob89) {
+                    // finish load
                     whatFunc = Netter.Webservice.JOB_FINISHJOBARRIVAL;
                 } else {
+                    // finish job
                     whatFunc = Netter.Webservice.JOB_FINISHJOB;
                 }
 
                 enableGeofence = true;
+                enableContainerCheck = true;
                 if (!isSingleBox && isJobTujuanMoreThanOne && !isJob89) {
                     if (realJob.statusKontainer() == 0) {
                         setGeofenceTarget(realJob.getDetailkontainer().get(0).getDestinationLat(), realJob.getDetailkontainer().get(0).getDestinationLng());
@@ -552,7 +569,6 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             case 12: {
                 if (isJob89) {
                     whatFunc = Netter.Webservice.JOB_UPLOADEMPTYDEPO;
-
                     enableGeofence = true;
                     setGeofenceTarget(realJob.getJobBalikLatitude(), realJob.getJobBalikLongitude());
                 }
@@ -561,8 +577,8 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             case 13: {
                 if (isJob89) {
                     whatFunc = Netter.Webservice.JOB_FINISHJOB;
-
                     enableGeofence = true;
+                    enableContainerCheck = true;
                     setGeofenceTarget(realJob.getJobBalikLatitude(), realJob.getJobBalikLongitude());
                 }
                 break;
@@ -751,9 +767,8 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
 
     public void buttonSwitch() {
         double distance = Haversine.calculate(geofenceLat, geofenceLng, location.getLatitude(), location.getLongitude());
-        Log.i("KANA_NISHINO", distance + "m");
-
-        if (!debugGeofence && enableGeofence && distance > GEOFENCE_RADIUS) {
+        if (!debugGeofence && ((enableGeofence && distance > GEOFENCE_RADIUS) || (enableContainerCheck && realJob.getDetailkontainer().isEmpty()))) {
+            // disable button
             bTerima.setEnabled(false);
             bTerima.setBackgroundColor(colorInactive);
         } else {

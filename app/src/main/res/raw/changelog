@@ -1,0 +1,9 @@
+1.8.142 - 17
+- fix tombol yang tidak sesuai kondisi ketika kontainer kosong
+
+1.8.141 - 16
+- geotag
+- auto refresh dashboard saat ada job baru
+- bug fix data tidak terhapus saat direject
+- bug fix notifikasi job yang sudah kadaluarsa
+- bug fix crash saat kontainer kosong (half-tested)

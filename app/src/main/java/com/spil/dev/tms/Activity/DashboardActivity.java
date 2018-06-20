@@ -290,15 +290,21 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
                     try {
                         obj = new JSONObject(response);
                         SimpleJob simpleJob = new Gson().fromJson(obj.getString("job-" + id), SimpleJob.class);
+
                         if (simpleJob != null) {
-                            if (simpleJob.getJobType() <= 2) {
-                                ActivityProses1And2.startProses(mContext, simpleJob);
-                            } else if (simpleJob.getJobType() <= 3) {
-                                ActivityProses3.startProses(mContext, simpleJob);
-                            } else if (simpleJob.getJobType() <= 7) {
-                                ActivityProsesFrom4To7.startProses(mContext, simpleJob);
+                            if (simpleJob.getFleetDriverId() == Integer.parseInt(driverModel.getIdDriver()) && simpleJob.getFleetNopol().equals(kendaraanModel.getIdNopol())) {
+
+                                if (simpleJob.getJobType() <= 2) {
+                                    ActivityProses1And2.startProses(mContext, simpleJob);
+                                } else if (simpleJob.getJobType() <= 3) {
+                                    ActivityProses3.startProses(mContext, simpleJob);
+                                } else if (simpleJob.getJobType() <= 7) {
+                                    ActivityProsesFrom4To7.startProses(mContext, simpleJob);
+                                } else {
+                                    ActivityProsesMoreThan8.startProses(mContext, simpleJob);
+                                }
                             } else {
-                                ActivityProsesMoreThan8.startProses(mContext, simpleJob);
+                                new AlertDialog.Builder(DashboardActivity.this).setMessage("Job telah kadaluarsa").show();
                             }
                         }
                     } catch (JSONException e) {
@@ -312,7 +318,7 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
                 }
             }), Netter.Webservice.DETAILPICKUP, new StringHashMap().putMore("id", id));
         }
-        checkObsoletePassword();
+//        checkObsoletePassword();
 
     }
 
@@ -345,15 +351,15 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
                         @Override
                         public void onClick(View v) {
                             // checking
-                            if(iOldPass.getText().toString().isEmpty() || iNewPass.getText().toString().isEmpty() || iNewPass2.getText().toString().isEmpty()){
+                            if (iOldPass.getText().toString().isEmpty() || iNewPass.getText().toString().isEmpty() || iNewPass2.getText().toString().isEmpty()) {
                                 toast("Harap isi seluruh form");
                                 return;
                             }
-                            if(!iOldPass.getText().toString().equals(driverModel.getPassword())){
+                            if (!iOldPass.getText().toString().equals(driverModel.getPassword())) {
                                 toast("Kata sandi lama tidak sesuai");
                                 return;
                             }
-                            if(!iNewPass.getText().toString().equals(iNewPass2.getText().toString())){
+                            if (!iNewPass.getText().toString().equals(iNewPass2.getText().toString())) {
                                 toast("Kata sandi baru tidak sama, cek kembali");
                                 return;
                             }

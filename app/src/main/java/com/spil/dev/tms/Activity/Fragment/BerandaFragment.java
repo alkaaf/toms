@@ -139,7 +139,6 @@ public class BerandaFragment extends FragmentBase {
             @Override
             public void onResponse(String response) {
                 swipe.setRefreshing(false);
-                fetchDashboard();
                 try {
                     JSONObject obj = new JSONObject(response);
                     ArrayList<SimpleJob> temp = new Gson().fromJson(obj.getString("job"), new TypeToken<ArrayList<SimpleJob>>() {
@@ -147,8 +146,10 @@ public class BerandaFragment extends FragmentBase {
                     jobList.clear();
                     jobList.addAll(temp);
                     mAdapter.notifyDataSetChanged();
-
+                    fetchDashboard();
                 } catch ( JSONException e) {
+                    jobList.clear();
+                    mAdapter.notifyDataSetChanged();
                     e.printStackTrace();
                 }
             }
@@ -167,10 +168,6 @@ public class BerandaFragment extends FragmentBase {
                 try {
                     JSONObject obj = new JSONObject(response);
                     DashboardModel dashboardModel = new Gson().fromJson(obj.getString("data"), DashboardModel.class);
-//                    tvBulanIni.setText(String.format("%02d", dashboardModel.bulan_ini));
-//                    tvHariIni.setText(String.format("%02d", dashboardModel.hari_ini));
-//                    tvProses.setText(String.format("%02d", dashboardModel.proses));
-//                    tvSelesai.setText(String.format("%02d", dashboardModel.selesai));
                     tvBulanIni.setInterpolator(new AccelerateDecelerateInterpolator())
                             .countAnimation(0, dashboardModel.bulan_ini);
                     tvHariIni.setInterpolator(new AccelerateDecelerateInterpolator())

@@ -2,6 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_changelog"
+        android:icon="@drawable/ic_list_black_24dp"
+        android:orderInCategory="100"
+        android:title="Search"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/action_logout"
         android:icon="@drawable/ic_power_settings_new_black_24dp"
         android:orderInCategory="100"

@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <ScrollView
                 android:fillViewport="true"
@@ -172,7 +172,13 @@
                 </LinearLayout>
             </ScrollView>
         </LinearLayout>
-
+        <TextView
+            android:textAlignment="center"
+            android:id="@+id/tvMuatanKosong"
+            android:text="(Muatan masih kosong)"
+            android:padding="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
         <ImageView
             android:id="@+id/bExpandInfo"
             android:layout_width="match_parent"

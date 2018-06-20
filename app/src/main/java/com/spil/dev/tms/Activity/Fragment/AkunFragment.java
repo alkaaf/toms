@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.spil.dev.tms.Activity.ChangelogActivity;
 import com.spil.dev.tms.Activity.DashboardActivity;
 import com.spil.dev.tms.Activity.MainActivity;
 import com.spil.dev.tms.Activity.Model.DriverModel;
@@ -47,6 +48,7 @@ public class AkunFragment extends Fragment {
     DriverModel driver;
     KendaraanModel kendaraan;
     ProgressDialog pd;
+
     public AkunFragment() {
         // Required empty public constructor
     }
@@ -87,8 +89,8 @@ public class AkunFragment extends Fragment {
         tvKotaScroll.setText(driver.getKota());
 
         try {
-            PackageInfo pi = getContext().getPackageManager().getPackageInfo(getActivity().getPackageName(),0);
-            tvVersion.setText(getString(R.string.app_name)+" "+pi.versionName+" ("+pi.versionCode+")");
+            PackageInfo pi = getContext().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
+            tvVersion.setText(getString(R.string.app_name) + " " + pi.versionName + " (" + pi.versionCode + ")");
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -104,7 +106,7 @@ public class AkunFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.action_logout){
+        if (item.getItemId() == R.id.action_logout) {
             new AlertDialog.Builder(getContext())
                     .setTitle("Keluar aplikasi")
                     .setMessage("Apakah anda yakin ingin keluar aplikasi?")
@@ -115,6 +117,9 @@ public class AkunFragment extends Fragment {
                         }
                     })
                     .setNegativeButton("TIDAK", null).show();
+        } else if (item.getItemId() == R.id.action_changelog) {
+            Intent intent = new Intent(getContext(), ChangelogActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -124,7 +129,7 @@ public class AkunFragment extends Fragment {
         StringHashMap shm = new StringHashMap()
                 .putMore("id_kendaraan", kendaraan.getIdKendaraan())
                 .putMore("id_driver", driver.getIdDriver())
-                .putMore("email", driver.getEmail())                ;
+                .putMore("email", driver.getEmail());
         new Netter(getContext()).byAmik(Request.Method.POST, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -134,10 +139,10 @@ public class AkunFragment extends Fragment {
                     int status = obj.getInt("status");
                     String message = obj.getString("message");
                     Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-                    if(status == 200){
+                    if (status == 200) {
                         pref.clearDriver();
                         pref.clearKendaraan();
-                        startActivity(new Intent(getContext(),MainActivity.class));
+                        startActivity(new Intent(getContext(), MainActivity.class));
                         getActivity().finish();
                     }
                 } catch (JSONException e) {

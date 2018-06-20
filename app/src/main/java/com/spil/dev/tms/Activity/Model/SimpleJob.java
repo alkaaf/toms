@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.SparseArray;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.text.SimpleDateFormat;
@@ -49,6 +50,30 @@ public class SimpleJob implements Parcelable {
     private String jobDeliverLongitude;
     @SerializedName("job_type")
     private Integer jobType;
+    @SerializedName("fleet_driver_id")
+    @Expose
+    private Integer fleetDriverId;
+    @SerializedName("fleet_nopol")
+    @Expose
+    private String fleetNopol;
+
+    public String getFleetNopol() {
+        return fleetNopol;
+    }
+
+    public void setFleetNopol(String fleetNopol) {
+        this.fleetNopol = fleetNopol;
+    }
+
+    public Integer getFleetDriverId() {
+        return fleetDriverId;
+    }
+
+    public void setFleetDriverId(Integer fleetDriverId) {
+        this.fleetDriverId = fleetDriverId;
+    }
+
+
 
     public String getStringDeliverStatus() {
         SparseArray<String> a = new SparseArray<>();
@@ -236,6 +261,9 @@ public class SimpleJob implements Parcelable {
         this.comodity = comodity;
     }
 
+    public SimpleJob() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -260,9 +288,8 @@ public class SimpleJob implements Parcelable {
         dest.writeString(this.jobDeliverLatitude);
         dest.writeString(this.jobDeliverLongitude);
         dest.writeValue(this.jobType);
-    }
-
-    public SimpleJob() {
+        dest.writeValue(this.fleetDriverId);
+        dest.writeString(this.fleetNopol);
     }
 
     protected SimpleJob(Parcel in) {
@@ -283,9 +310,11 @@ public class SimpleJob implements Parcelable {
         this.jobDeliverLatitude = in.readString();
         this.jobDeliverLongitude = in.readString();
         this.jobType = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.fleetDriverId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.fleetNopol = in.readString();
     }
 
-    public static final Parcelable.Creator<SimpleJob> CREATOR = new Parcelable.Creator<SimpleJob>() {
+    public static final Creator<SimpleJob> CREATOR = new Creator<SimpleJob>() {
         @Override
         public SimpleJob createFromParcel(Parcel source) {
             return new SimpleJob(source);
