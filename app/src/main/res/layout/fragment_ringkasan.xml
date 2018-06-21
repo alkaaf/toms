@@ -57,7 +57,7 @@ android:background="@color/colorPrimary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="00"
+                android:text="0"
                 android:textSize="60sp" />
 
             <TextView
@@ -80,7 +80,7 @@ android:background="@color/colorPrimary"
                 android:id="@+id/tv_hari_ini"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="00"
+                android:text="0"
                 android:textColor="@color/white"
                 android:textSize="60sp" />
 
@@ -105,7 +105,7 @@ android:background="@color/colorPrimary"
                 android:id="@+id/tv_selesai"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="00"
+                android:text="0"
                 android:textSize="60sp" />
 
             <TextView
@@ -129,7 +129,7 @@ android:background="@color/colorPrimary"
                 android:id="@+id/tv_proses"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="00"
+                android:text="0"
                 android:textSize="60sp" />
 
             <TextView

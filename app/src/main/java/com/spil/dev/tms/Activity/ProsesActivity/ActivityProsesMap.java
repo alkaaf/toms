@@ -374,8 +374,8 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         tvOrderId.setText(realJob.getOrderId());
         if (!isSingleBox && isJobTujuanMoreThanOne && !isJob89) {
             tvFirst.setText(realJob.getJobPickupName());
-            tvSecond.setText(realJob.getDetailkontainer().get(0).getCustomerName());
-            tvThird.setText(realJob.getDetailkontainer().get(1).getCustomerName());
+            tvSecond.setText(realJob.getDetailkontainer().get(0).getDestinationName());
+            tvThird.setText(realJob.getDetailkontainer().get(1).getDestinationName());
         } else if (isJob89) {
             tvFirst.setText(realJob.getJobPickupName());
             tvSecond.setText(realJob.getJobDeliverAddress());
@@ -402,14 +402,12 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                         drawRoute(dd(realJob.getJobPickupLatitude()), dd(realJob.getJobPickupLongitude()), dd(realJob.getJobDeliverLatitude()), dd(realJob.getJobDeliverLongitude()), MapColor.GREEN, realJob.getJobDeliverAddress());
                         drawRoute(dd(realJob.getJobDeliverLatitude()), dd(realJob.getJobDeliverLongitude()), dd(realJob.getJobBalikLatitude()), dd(realJob.getJobBalikLongitude()), MapColor.MAGENTA, realJob.getJobBalikAddress());
                     } else {
-
                         if (isSingleBox) {
                             drawRoute(dd(realJob.getJobPickupLatitude()), dd(realJob.getJobPickupLongitude()), dd(realJob.getJobDeliverLatitude()), dd(realJob.getJobDeliverLongitude()), MapColor.GREEN, realJob.getJobDeliverAddress());
                         } else {
                             if (isJobTujuanMoreThanOne) {
                                 drawRoute(dd(realJob.getJobPickupLatitude()), dd(realJob.getJobPickupLongitude()), realJob.getDetailkontainer().get(0).getDestinationLat(), realJob.getDetailkontainer().get(0).getDestinationLng(), MapColor.GREEN, realJob.getDetailkontainer().get(0).getDestinationName());
                                 drawRoute(realJob.getDetailkontainer().get(0).getDestinationLat(), realJob.getDetailkontainer().get(0).getDestinationLng(), realJob.getDetailkontainer().get(1).getDestinationLat(), realJob.getDetailkontainer().get(1).getDestinationLng(), MapColor.MAGENTA, realJob.getDetailkontainer().get(1).getDestinationName());
-
                             } else {
                                 drawRoute(dd(realJob.getJobPickupLatitude()), dd(realJob.getJobPickupLongitude()), dd(realJob.getJobDeliverLatitude()), dd(realJob.getJobDeliverLongitude()), MapColor.GREEN, realJob.getJobDeliverAddress());
                             }
@@ -418,7 +416,6 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 }
             });
         }
-
     }
 
     private void mockLocationTest(LatLng latLng) {
@@ -468,10 +465,14 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             case 5: {
                 whatFunc = Netter.Webservice.JOB_STARTJOBDEPARTURE;
                 enableGeofence = true;
+//                enableContainerCheck = true;
+                if ((realJob.getDetailkontainer() == null || realJob.getDetailkontainer().isEmpty()) && !isFinishing()) {
+                    new AlertDialog.Builder(this).setTitle("Kontainer kosong").setMessage("Belum ada kontainer dimuat").setPositiveButton("Ok", null).show();
+                }
                 setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
                 if (isJob12) {
-                    vDestinationList.setVisibility(View.GONE);
-                    lvContainer.setVisibility(View.GONE);
+                    vDestinationList.setVisibility(View.VISIBLE);
+                    lvContainer.setVisibility(View.VISIBLE);
                 }
                 break;
             }
@@ -480,12 +481,12 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 enableGeofence = true;
                 enableContainerCheck = true;
                 if ((realJob.getDetailkontainer() == null || realJob.getDetailkontainer().isEmpty()) && !isFinishing()) {
-                    new AlertDialog.Builder(this).setMessage("Belum ada kontainer dimuat").show();
+                    new AlertDialog.Builder(this).setTitle("Kontainer kosong").setMessage("Belum ada kontainer dimuat").setPositiveButton("Ok", null).show();
                 }
                 setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
                 if (isJob12) {
-                    vDestinationList.setVisibility(View.GONE);
-                    lvContainer.setVisibility(View.GONE);
+                    vDestinationList.setVisibility(View.VISIBLE);
+                    lvContainer.setVisibility(View.VISIBLE);
                 }
                 break;
             }

@@ -318,7 +318,7 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
                 }
             }), Netter.Webservice.DETAILPICKUP, new StringHashMap().putMore("id", id));
         }
-//        checkObsoletePassword();
+        checkObsoletePassword();
 
     }
 
@@ -333,6 +333,7 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
     }
 
     private void checkObsoletePassword() {
+        ProgressDialog pdPass = new ProgressDialog(mContext);
         long lastChange = DF.parse(driverModel.getLastChangePassword()).getTime();
         if (lastChange + FORCE_CHANGE_PASS_THRESHOLD <= System.currentTimeMillis()) {
             View vPass = LayoutInflater.from(this).inflate(R.layout.alert_change_password, null, false);
@@ -364,7 +365,21 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
                                 return;
                             }
 // TODO: 6/19/2018 do the update password
-                            toast("Do the update");
+                            new Netter(mContext).byAmik(Request.Method.POST, new Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String response) {
+                                            toast(response);
+                                        }
+                                    }, Netter.getDefaultErrorListener(mContext, new Runnable() {
+                                        @Override
+                                        public void run() {
+
+                                        }
+                                    }), Netter.Byamik.UPDATEPASSWORD, new StringHashMap()
+                                            .putMore("newpassword", iNewPass.getText().toString())
+                                            .putMore("oldpassword", iOldPass.getText().toString())
+                                            .putMore("email", driverModel.getEmail())
+                            );
                             alertDialog.dismiss();
                         }
                     });

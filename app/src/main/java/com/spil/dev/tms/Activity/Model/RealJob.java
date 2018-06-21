@@ -163,7 +163,11 @@ public class RealJob implements Parcelable {
         s.put(8, "ARRIVED AT DEPO");
         s.put(9, "START UNLOAD");
         s.put(10, "FINISH JOB");
-        s.put(14, "UPLOAD PHOTO");
+        if (statusKontainer() == 2) {
+            s.put(14, "UPLOAD PHOTO");
+        } else {
+            s.put(14, "DELIVER SECOND BOX");
+        }
         sp.put(1, s);
 
         // 2
@@ -176,7 +180,11 @@ public class RealJob implements Parcelable {
         s.put(8, "ARRIVED AT PORT");
         s.put(9, "START UNLOAD");
         s.put(10, "FINISH JOB");
-        s.put(14, "UPLOAD PHOTO");
+        if (statusKontainer() == 2) {
+            s.put(14, "UPLOAD PHOTO");
+        } else {
+            s.put(14, "DELIVER SECOND BOX");
+        }
         sp.put(2, s);
 
         // 3
@@ -189,7 +197,11 @@ public class RealJob implements Parcelable {
         s.put(8, "ARRIVED AT DEPO");
         s.put(9, "START UNLOAD");
         s.put(10, "FINISH JOB");
-        s.put(14, "UPLOAD PHOTO");
+        if (statusKontainer() == 2) {
+            s.put(14, "UPLOAD PHOTO");
+        } else {
+            s.put(14, "DELIVER SECOND BOX");
+        }
         sp.put(3, s);
 
         // 4
@@ -202,7 +214,11 @@ public class RealJob implements Parcelable {
         s.put(8, "ARRIVED AT CUSTOMER");
         s.put(9, "START UNLOAD");
         s.put(10, "FINISH JOB");
-        s.put(14, "UPLOAD PHOTO");
+        if (statusKontainer() == 2) {
+            s.put(14, "UPLOAD PHOTO");
+        } else {
+            s.put(14, "DELIVER SECOND BOX");
+        }
         sp.put(4, s);
 
         // 5
@@ -215,7 +231,11 @@ public class RealJob implements Parcelable {
         s.put(8, "ARRIVED AT DEPO");
         s.put(9, "FINISH LOAD");
         s.put(10, "FINISH JOB");
-        s.put(14, "UPLOAD PHOTO");
+        if (statusKontainer() == 2) {
+            s.put(14, "UPLOAD PHOTO");
+        } else {
+            s.put(14, "DELIVER SECOND BOX");
+        }
         sp.put(5, s);
 
         // 6
@@ -228,7 +248,11 @@ public class RealJob implements Parcelable {
         s.put(8, "ARRIVED AT PORT");
         s.put(9, "FINISH UNLOAD");
         s.put(10, "FINISH JOB");
-        s.put(14, "UPLOAD PHOTO");
+        if (statusKontainer() == 2) {
+            s.put(14, "UPLOAD PHOTO");
+        } else {
+            s.put(14, "DELIVER SECOND BOX");
+        }
         sp.put(6, s);
 
         // 7
@@ -241,7 +265,11 @@ public class RealJob implements Parcelable {
         s.put(8, "ARRIVED AT CUSTOMER");
         s.put(9, "FINISH UNLOAD");
         s.put(10, "FINISH JOB");
-        s.put(14, "UPLOAD PHOTO");
+        if (statusKontainer() == 2) {
+            s.put(14, "UPLOAD PHOTO");
+        } else {
+            s.put(14, "DELIVER SECOND BOX");
+        }
         sp.put(7, s);
 
         // 8
@@ -257,7 +285,11 @@ public class RealJob implements Parcelable {
         s.put(11, "DELIVER TO PORT");
         s.put(12, "ARRIVED AT PORT");
         s.put(13, "FINISH UNLOAD");
-        s.put(14, "UPLOAD PHOTO");
+        if (statusKontainer() == 2) {
+            s.put(14, "UPLOAD PHOTO");
+        } else {
+            s.put(14, "DELIVER SECOND BOX");
+        }
         sp.put(8, s);
 
         // 9
@@ -273,7 +305,11 @@ public class RealJob implements Parcelable {
         s.put(11, "DELIVER TO DEPO");
         s.put(12, "ARRIVED AT DEPO");
         s.put(13, "FINISH UNLOAD");
-        s.put(14, "UPLOAD PHOTO");
+        if (statusKontainer() == 2) {
+            s.put(14, "UPLOAD PHOTO");
+        } else {
+            s.put(14, "DELIVER SECOND BOX");
+        }
         sp.put(9, s);
 
         return sp.get(getJobType()).get(getJobDeliverStatus(), "-");
@@ -706,11 +742,17 @@ public class RealJob implements Parcelable {
         final boolean isJob89 = getJobType() == 8 || getJobType() == 9;
         final boolean isJobTujuanMoreThanOne = getJumlahtujuan() > 1;
         final boolean isSingleBox = Integer.parseInt(getJumlahbox()) == 1;
+
         if (!isJob89 && isJobTujuanMoreThanOne && !isSingleBox) {
+            // jika belum diantar semua
             if (getDetailkontainer().get(0).getJobStatus() < 14 && getDetailkontainer().get(1).getJobStatus() < 14)
                 return 0;
+
+                // jika sudah diantar mek 1
             else if (getDetailkontainer().get(0).getJobStatus() == 14 && getDetailkontainer().get(1).getJobStatus() < 14)
                 return 1;
+
+                // jika sudah diantar keduanya
             else if (getDetailkontainer().get(0).getJobStatus() == 14 && getDetailkontainer().get(1).getJobStatus() == 14)
                 return 2;
         }
