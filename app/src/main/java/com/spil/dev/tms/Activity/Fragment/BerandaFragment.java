@@ -86,12 +86,12 @@ public class BerandaFragment extends FragmentBase {
 
         //VIEW//
         tvBulanIni = view.findViewById(R.id.tv_bulan_ini);
-        tvBulanIni.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getContext(), Research.class));
-            }
-        });
+//        tvBulanIni.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(getContext(), Research.class));
+//            }
+//        });
         tvHariIni = view.findViewById(R.id.tv_hari_ini);
         tvSelesai = view.findViewById(R.id.tv_selesai);
         tvProses = view.findViewById(R.id.tv_proses);
@@ -168,14 +168,18 @@ public class BerandaFragment extends FragmentBase {
                 try {
                     JSONObject obj = new JSONObject(response);
                     DashboardModel dashboardModel = new Gson().fromJson(obj.getString("data"), DashboardModel.class);
-                    tvBulanIni.setInterpolator(new AccelerateDecelerateInterpolator())
+                    /*tvBulanIni.setInterpolator(new AccelerateDecelerateInterpolator())
                             .countAnimation(0, dashboardModel.bulan_ini);
                     tvHariIni.setInterpolator(new AccelerateDecelerateInterpolator())
                             .countAnimation(0, dashboardModel.hari_ini);
                     tvProses.setInterpolator(new AccelerateDecelerateInterpolator())
                             .countAnimation(0, dashboardModel.proses);
                     tvSelesai.setInterpolator(new AccelerateDecelerateInterpolator())
-                            .countAnimation(0, dashboardModel.selesai);
+                            .countAnimation(0, dashboardModel.selesai);*/
+                    tvBulanIni.setText(dashboardModel.bulan_ini+"");
+                    tvHariIni.setText(dashboardModel.hari_ini+"");
+                    tvProses.setText(dashboardModel.proses+"");
+                    tvSelesai.setText(dashboardModel.selesai+"");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

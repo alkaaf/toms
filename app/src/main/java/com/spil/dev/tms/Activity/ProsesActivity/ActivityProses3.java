@@ -186,7 +186,7 @@ public class ActivityProses3 extends BaseActivity {
                     tvEstimasiWaktu.setText(realJob.getJobDeliverEstimatetimetext());
                     tvOrderId.setText(realJob.getOrderId());
                     tvTanggal.setText(realJob.parsedPickupDate());
-                    getSupportActionBar().setSubtitle(realJob.getJobTypeName());
+                    getSupportActionBar().setSubtitle(realJob.getStringJobTypeName());
 
                     adapter = new ContainerAdapter(ActivityProses3.this, R.layout.list_container, realJob.getDetailkontainer());
                     adapter.enableViewDepo = true;

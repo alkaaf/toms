@@ -207,7 +207,7 @@ public class ActivityProses1And2 extends BaseActivity {
                     tvEstimasiWaktu.setText(realJob.getJobDeliverEstimatetimetext());
                     tvOrderId.setText(realJob.getOrderId());
                     tvTanggal.setText(realJob.parsedPickupDate());
-                    getSupportActionBar().setSubtitle(realJob.getJobTypeName());
+                    getSupportActionBar().setSubtitle(realJob.getStringJobTypeName());
 
                     adapter = new ContainerAdapter(ActivityProses1And2.this, R.layout.list_container, realJob.getDetailkontainer());
                     listContainer.setAdapter(adapter);

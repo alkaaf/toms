@@ -369,7 +369,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         isSudahAdaYangTerkirim = (isJobTujuanMoreThanOne && !isSingleBox) && realJob.getDetailkontainer().get(0).getJobStatus() == 10;
         isJob12 = realJob.getJobType() == 1 || realJob.getJobType() == 2;
         if (getSupportActionBar() != null)
-            getSupportActionBar().setSubtitle(realJob.getJobTypeName()/* + "("+realJob.getJobType()+")"*/);
+            getSupportActionBar().setSubtitle(realJob.getStringJobTypeName()/* + "("+realJob.getJobType()+")"*/);
 
         tvOrderId.setText(realJob.getOrderId());
         if (!isSingleBox && isJobTujuanMoreThanOne && !isJob89) {
@@ -768,6 +768,8 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
 
     public void buttonSwitch() {
         double distance = Haversine.calculate(geofenceLat, geofenceLng, location.getLatitude(), location.getLongitude());
+        Log.i("KANA_NISHINO", distance + "m " + location.getProvider());
+        if (!location.getProvider().equals("gps")) return;
         if (!debugGeofence && ((enableGeofence && distance > GEOFENCE_RADIUS) || (enableContainerCheck && realJob.getDetailkontainer().isEmpty()))) {
             // disable button
             bTerima.setEnabled(false);

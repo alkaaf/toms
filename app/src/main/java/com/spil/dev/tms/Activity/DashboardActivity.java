@@ -106,6 +106,7 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
     GoogleApiClient mGoogleApiClient;
     public static final int REQ_LOCATION_HIGH = 1000;
     public static final long FORCE_CHANGE_PASS_THRESHOLD = 1000 * 60 * 24 * 30 * 3;
+//    public static final long FORCE_CHANGE_PASS_THRESHOLD = 5000;
 
     BroadcastReceiver br = new BroadcastReceiver() {
         @Override
@@ -319,7 +320,6 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
             }), Netter.Webservice.DETAILPICKUP, new StringHashMap().putMore("id", id));
         }
         checkObsoletePassword();
-
     }
 
     @Override
@@ -328,12 +328,11 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
         isMockSettingsON(DashboardActivity.this);
         areThereMockPermissionApps(DashboardActivity.this);
         registerReceiver(br, filter);
-
-
     }
 
     private void checkObsoletePassword() {
-        ProgressDialog pdPass = new ProgressDialog(mContext);
+        final ProgressDialog pdPass = new ProgressDialog(mContext);
+        pdPass.setMessage("Mengubah password");
         long lastChange = DF.parse(driverModel.getLastChangePassword()).getTime();
         if (lastChange + FORCE_CHANGE_PASS_THRESHOLD <= System.currentTimeMillis()) {
             View vPass = LayoutInflater.from(this).inflate(R.layout.alert_change_password, null, false);
@@ -364,23 +363,36 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
                                 toast("Kata sandi baru tidak sama, cek kembali");
                                 return;
                             }
-// TODO: 6/19/2018 do the update password
-                            new Netter(mContext).byAmik(Request.Method.POST, new Response.Listener<String>() {
+
+                            pdPass.show();
+                            new Netter(mContext).webService(Request.Method.POST, new Response.Listener<String>() {
                                         @Override
                                         public void onResponse(String response) {
-                                            toast(response);
+                                            pdPass.dismiss();
+                                            try {
+                                                JSONObject obj = new JSONObject(response);
+                                                toast(obj.getString("message"));
+                                                if(obj.getInt("status") == 200){
+                                                    driverModel.setPassword(iNewPass.getText().toString());
+                                                    driverModel.setLastChangePassword(DF.format(DF.ASP_FORMAT, System.currentTimeMillis()));
+                                                    pref.putModelDriver(driverModel);
+                                                    alertDialog.dismiss();
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
                                         }
                                     }, Netter.getDefaultErrorListener(mContext, new Runnable() {
                                         @Override
                                         public void run() {
 
                                         }
-                                    }), Netter.Byamik.UPDATEPASSWORD, new StringHashMap()
+                                    }), Netter.Webservice.UPDATEPASSWORD, new StringHashMap()
                                             .putMore("newpassword", iNewPass.getText().toString())
                                             .putMore("oldpassword", iOldPass.getText().toString())
                                             .putMore("email", driverModel.getEmail())
                             );
-                            alertDialog.dismiss();
+
                         }
                     });
                 }

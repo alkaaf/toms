@@ -163,7 +163,7 @@ public class RealJob implements Parcelable {
         s.put(8, "ARRIVED AT DEPO");
         s.put(9, "START UNLOAD");
         s.put(10, "FINISH JOB");
-        if (statusKontainer() == 2) {
+        if (statusKontainer() == 2 || jumlahtujuan == 1) {
             s.put(14, "UPLOAD PHOTO");
         } else {
             s.put(14, "DELIVER SECOND BOX");
@@ -180,7 +180,7 @@ public class RealJob implements Parcelable {
         s.put(8, "ARRIVED AT PORT");
         s.put(9, "START UNLOAD");
         s.put(10, "FINISH JOB");
-        if (statusKontainer() == 2) {
+        if (statusKontainer() == 2 || jumlahtujuan == 1) {
             s.put(14, "UPLOAD PHOTO");
         } else {
             s.put(14, "DELIVER SECOND BOX");
@@ -197,7 +197,7 @@ public class RealJob implements Parcelable {
         s.put(8, "ARRIVED AT DEPO");
         s.put(9, "START UNLOAD");
         s.put(10, "FINISH JOB");
-        if (statusKontainer() == 2) {
+        if (statusKontainer() == 2 || jumlahtujuan == 1) {
             s.put(14, "UPLOAD PHOTO");
         } else {
             s.put(14, "DELIVER SECOND BOX");
@@ -311,8 +311,184 @@ public class RealJob implements Parcelable {
             s.put(14, "DELIVER SECOND BOX");
         }
         sp.put(9, s);
-
         return sp.get(getJobType()).get(getJobDeliverStatus(), "-");
+    }
+    /*public String getButtonLabel() {
+        SparseArray<SparseArray<String>> sp = new SparseArray<>();
+
+        // 1
+        SparseArray<String> s = new SparseArray<>();
+        s.put(3, "ANGKUT");
+        s.put(4, "SAMPAI DI LINI 1");
+        s.put(5, "MULAI MUAT");
+        s.put(6, "SELESAI MUAT");
+        s.put(7, "KIRIM KE DEPO");
+        s.put(8, "SAMPAI DI DEPO");
+        s.put(9, "MULAI BONKAR");
+        s.put(10, "SELESAI ORDER");
+        if (statusKontainer() == 2 || jumlahtujuan == 1) {
+            s.put(14, "UNGGAH FOTO");
+        } else {
+            s.put(14, "KIRIM ORDER SELANJUTNYA");
+        }
+        sp.put(1, s);
+
+        // 2
+        s = new SparseArray<>();
+        s.put(3, "ANGKUT");
+        s.put(4, "SAMPAI DI DEPO");
+        s.put(5, "MULAI MUAT");
+        s.put(6, "SELESAI MUAT");
+        s.put(7, "KIRIM KE LINI 1");
+        s.put(8, "SAMPAI DI LINI 1");
+        s.put(9, "MULAI BONGKAR");
+        s.put(10, "SELESAI ORDER");
+        if (statusKontainer() == 2 || jumlahtujuan == 1) {
+            s.put(14, "UNGGAH FOTO");
+        } else {
+            s.put(14, "KIRIM ORDER SELANJUTNYA");
+        }
+        sp.put(2, s);
+
+        // 3
+        s = new SparseArray<>();
+        s.put(3, "ANGKUT");
+        s.put(4, "SAMPAI DI DEPO");
+        s.put(5, "MULAI MUAT");
+        s.put(6, "SELESAI MUAT");
+        s.put(7, "KIRIM KE DEPO");
+        s.put(8, "SAMPAI DI DEPO");
+        s.put(9, "MULAI BONGKAR");
+        s.put(10, "SELESAI ORDER");
+        if (statusKontainer() == 2 || jumlahtujuan == 1) {
+            s.put(14, "UNGGAH FOTO");
+        } else {
+            s.put(14, "KIRIM ORDER SELANJUTNYA");
+        }
+        sp.put(3, s);
+
+        // 4
+        s = new SparseArray<>();
+        s.put(3, "ANGKUT");
+        s.put(4, "SAMPAI DI DEPO");
+        s.put(5, "MULAI MUAT");
+        s.put(6, "SELESAI MUAT");
+        s.put(7, "KIRIM KE PABRIK");
+        s.put(8, "SAMPAI DI PABRIK");
+        s.put(9, "MULAI BONGKAR");
+        s.put(10, "SELESAI ORDER");
+        if (statusKontainer() == 2) {
+            s.put(14, "UNGGAH FOTO");
+        } else {
+            s.put(14, "KIRIM ORDER SELANJUTNYA");
+        }
+        sp.put(4, s);
+
+        // 5
+        s = new SparseArray<>();
+        s.put(3, "ANGKUT");
+        s.put(4, "SAMPAI DI PABRIK");
+        s.put(5, "MULAI ISI");
+        s.put(6, "SELESAI ISI");
+        s.put(7, "KIRIM KE DEPO");
+        s.put(8, "SAMPAI DI DEPO");
+        s.put(9, "SELESAI MUAT");
+        s.put(10, "SELESAI ORDER");
+        if (statusKontainer() == 2) {
+            s.put(14, "UNGGAH FOTO");
+        } else {
+            s.put(14, "KIRIM ORDER SELANJUTNYA");
+        }
+        sp.put(5, s);
+
+        // 6
+        s = new SparseArray<>();
+        s.put(3, "ANGKUT");
+        s.put(4, "SAMPAI DI PABRIK");
+        s.put(5, "MULAI MUAT");
+        s.put(6, "SELESAI MUAT");
+        s.put(7, "KIRIM KE LINI 1");
+        s.put(8, "SAMPAI DI LINI 1");
+        s.put(9, "SELESAI BONGKAR");
+        s.put(10, "SELESAI ORDER");
+        if (statusKontainer() == 2) {
+            s.put(14, "UNGGAH FOTO");
+        } else {
+            s.put(14, "KIRIM ORDER SELANJUTNYA");
+        }
+        sp.put(6, s);
+
+        // 7
+        s = new SparseArray<>();
+        s.put(3, "ANGKUT");
+        s.put(4, "SAMPAI DI LINI 1");
+        s.put(5, "MULAI MUAT");
+        s.put(6, "SELESAI MUAT");
+        s.put(7, "DELIVER TO CUSTOMER");
+        s.put(8, "ARRIVED AT CUSTOMER");
+        s.put(9, "FINISH UNLOAD");
+        s.put(10, "FINISH JOB");
+        if (statusKontainer() == 2) {
+            s.put(14, "UPLOAD PHOTO");
+        } else {
+            s.put(14, "DELIVER SECOND BOX");
+        }
+        sp.put(7, s);
+
+        // 8
+        s = new SparseArray<>();
+        s.put(3, "PICK UP");
+        s.put(4, "ARRIVED AT DEPO");
+        s.put(5, "START LOAD");
+        s.put(6, "FINISH LOAD");
+        s.put(7, "DELIVER TO CUSTOMER");
+        s.put(8, "ARRIVED AT CUSTOMER");
+        s.put(9, "START STUFFING");
+        s.put(10, "FINISH STUFFING");
+        s.put(11, "DELIVER TO PORT");
+        s.put(12, "ARRIVED AT PORT");
+        s.put(13, "FINISH UNLOAD");
+        if (statusKontainer() == 2) {
+            s.put(14, "UPLOAD PHOTO");
+        } else {
+            s.put(14, "DELIVER SECOND BOX");
+        }
+        sp.put(8, s);
+
+        // 9
+        s = new SparseArray<>();
+        s.put(3, "ANGKUT");
+        s.put(4, "SAMPAI DI LINI 1");
+        s.put(5, "MULAI MUAT");
+        s.put(6, "SELESAI MUAT");
+        s.put(7, "KIRIM KE PABRIK");
+        s.put(8, "SAMPAI DI PABRIK");
+        s.put(9, "START STRIPPING");
+        s.put(10, "FINISH STRIPPING");
+        s.put(11, "DELIVER TO DEPO");
+        s.put(12, "ARRIVED AT DEPO");
+        s.put(13, "FINISH UNLOAD");
+        if (statusKontainer() == 2) {
+            s.put(14, "UPLOAD PHOTO");
+        } else {
+            s.put(14, "DELIVER SECOND BOX");
+        }
+        sp.put(9, s);
+        return sp.get(getJobType()).get(getJobDeliverStatus(), "-");
+    }*/
+
+    public String getStringJobTypeName(){
+        SparseArray<String> s = new SparseArray<>();
+        s.put(1, "Lini 1 ke Depo");
+        s.put(2, "Depo ke Lini 1");
+        s.put(3, "Depo ke Depo");
+        s.put(4, "Depo ke Pabrik");
+        s.put(5, "Pabrik ke Depo");
+        s.put(6, "Pabrik ke Lini 1");
+        s.put(7, "Lini 1 ke Pabrik");
+        s.put(8, "Depo - Pabrik - Lini 1");
+        s.put(9, "Lini 1 - Pabrik - Depo");
+        return s.get(getJobType(),"-");
     }
 
     public int getJumlahterkirim() {
@@ -517,21 +693,21 @@ public class RealJob implements Parcelable {
 
     public String getStringDeliverStatus() {
         SparseArray<String> a = new SparseArray<>();
-        a.put(1, "Waiting");
-        a.put(2, "Assigned");
-        a.put(3, "Accepted");
-        a.put(4, "Go To Pickup");
-        a.put(5, "Ready To Stuff");
-        a.put(6, "Start Stuff/Strip");
-        a.put(7, "Finish Stuff/Strip");
-        a.put(8, "Deliver");
-        a.put(9, "Arrive at Destination");
-        a.put(10, "Start Stuff/Strip");
-        a.put(11, "Finish Stuff/Strip");
-        a.put(12, "Go empty to depo");
-        a.put(13, "Upload empty to depo");
-        a.put(14, "Finish Job");
-        a.put(15, "Finish empty depo discarge");
+        a.put(1, "Menunggu");
+        a.put(2, "Ditugaskan");
+        a.put(3, "Diterima");
+        a.put(4, "Menuju lokasi awal");
+        a.put(5, "Siap Muat/Bongkar");
+        a.put(6, "Mulai Muat/Bongkar");
+        a.put(7, "Selesai Muat/Bongkar");
+        a.put(8, "Kirim");
+        a.put(9, "Sampai Tujuan");
+        a.put(10, "Mulai Muat/Bongkar");
+        a.put(11, "Selesai Muat/Bongkar");
+        a.put(12, "Bawa Kosong ke Depo");
+        a.put(13, "Turunkan Kosong di Depo");
+        a.put(14, "Order Selesai");
+        a.put(15, "Batal");
         a.put(16, "Finish job");
         a.put(17, "Cancel pickup");
         a.put(18, "Cancel job");

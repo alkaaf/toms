@@ -193,7 +193,7 @@ public class ActivityProsesFrom4To7 extends BaseActivity {
                     tvDeliver.setText(realJob.getJobDeliverAddress());
                     adapter = new ContainerAdapter(ActivityProsesFrom4To7.this, R.layout.list_container, realJob.getDetailkontainer());
                     listContainer.setAdapter(adapter);
-                    getSupportActionBar().setSubtitle(realJob.getJobTypeName());
+                    getSupportActionBar().setSubtitle(realJob.getStringJobTypeName());
 
                 } catch (JSONException e) {
                     e.printStackTrace();

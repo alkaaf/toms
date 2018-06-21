@@ -1,8 +1,11 @@
 1.8.143 - 18
 - fix label mapping di ribbon dan detail job
-- fixing label tombol
+- fixing label tombol untuk kontainer 2 tujuan
 - fixing container visibility
-- password separuh
+- force update password if threshold got hit (3 months)
+- penggantian label (progress)
+- optimisasi penonaktifan tombol
+
 
 1.8.142 - 17
 - fix tombol yang tidak sesuai kondisi ketika kontainer kosong

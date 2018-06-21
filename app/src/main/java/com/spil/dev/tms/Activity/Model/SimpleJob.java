@@ -73,30 +73,28 @@ public class SimpleJob implements Parcelable {
         this.fleetDriverId = fleetDriverId;
     }
 
-
-
     public String getStringDeliverStatus() {
         SparseArray<String> a = new SparseArray<>();
-        a.put(1, "Waiting");
-        a.put(2, "Assigned");
-        a.put(3, "Accepted");
-        a.put(4, "Go To Pickup");
-        a.put(5, "Ready To Stuff");
-        a.put(6, "Start Stuff/Strip");
-        a.put(7, "Finish Stuff/Strip");
-        a.put(8, "Deliver");
-        a.put(9, "Arrive at Destination");
-        a.put(10, "Start Stuff/Strip");
-        a.put(11, "Finish Stuff/Strip");
-        a.put(12, "Go empty to depo");
-        a.put(13, "Upload empty to depo");
-        a.put(14, "Finish Job");
-        a.put(15, "Finish empty depo discarge");
+        a.put(1, "Menunggu");
+        a.put(2, "Ditugaskan");
+        a.put(3, "Diterima");
+        a.put(4, "Menuju lokasi awal");
+        a.put(5, "Siap Muat/Bongkar");
+        a.put(6, "Mulai Muat/Bongkar");
+        a.put(7, "Selesai Muat/Bongkar");
+        a.put(8, "Kirim");
+        a.put(9, "Sampai Tujuan");
+        a.put(10, "Mulai Muat/Bongkar");
+        a.put(11, "Selesai Muat/Bongkar");
+        a.put(12, "Bawa Kosong ke Depo");
+        a.put(13, "Turunkan Kosong di Depo");
+        a.put(14, "Order Selesai");
+        a.put(15, "Batal");
         a.put(16, "Finish job");
         a.put(17, "Cancel pickup");
         a.put(18, "Cancel job");
         a.put(19, "Reject job");
-        return a.get(jobDeliverStatus, "");
+        return a.get(jobDeliverStatus);
     }
 
     public int getStatusColor() {

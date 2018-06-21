@@ -22,7 +22,7 @@ public class Netter {
     Context context;
 
     public enum Byamik {
-        UPDATEPASSWORD("SaveUpdatePassword"),
+
         LOGINAPP("loginapp"),
         GETLOGOUT("getlogout");
         String func;
@@ -46,7 +46,7 @@ public class Netter {
         JOB_GOEMPTYDEPO("goemptytoDepo"),
         JOB_UPLOADEMPTYDEPO("uploademptytodepo"),
 
-
+        UPDATEPASSWORD("SaveUpdatePassword"),
         REPORTLIST("ShowListInfoDriver"),
         REJECT("rejectjob"),
         DETAILPICKUP("getDetailPengangkutan"),
