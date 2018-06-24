@@ -3,8 +3,11 @@ package com.spil.dev.tms.Activity.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class DetailKontainer implements Parcelable {
     @SerializedName("iddetail")
@@ -48,6 +51,44 @@ public class DetailKontainer implements Parcelable {
     private double destinationLng;
     @SerializedName("job_status")
     int jobStatus;
+
+    List<Fence> geofence_asal;
+    List<Fence> geofence_tujuan;
+    List<Fence> geofence_balik;
+
+    public List<LatLng> getGeofence_asal() {
+        if (geofence_asal != null && !geofence_asal.isEmpty()) {
+            return geofence_asal.get(0).getDecodedPath();
+        }
+        return null;
+    }
+
+    public void setGeofence_asal(List<Fence> geofence_asal) {
+        this.geofence_asal = geofence_asal;
+    }
+
+    public List<LatLng> getGeofence_tujuan() {
+        if (geofence_tujuan != null && !geofence_tujuan.isEmpty()) {
+            return geofence_tujuan.get(0).getDecodedPath();
+        }
+        return null;
+    }
+
+    public void setGeofence_tujuan(List<Fence> geofence_tujuan) {
+        this.geofence_tujuan = geofence_tujuan;
+    }
+
+    public List<LatLng> getGeofence_balik() {
+        if (geofence_balik != null && !geofence_balik.isEmpty()) {
+            return geofence_balik.get(0).getDecodedPath();
+        }
+        return null;
+    }
+
+    public void setGeofence_balik(List<Fence> geofence_balik) {
+        this.geofence_balik = geofence_balik;
+    }
+
 
     public int getJobStatus() {
         return jobStatus;
@@ -185,6 +226,9 @@ public class DetailKontainer implements Parcelable {
         dest.writeDouble(this.destinationLat);
         dest.writeDouble(this.destinationLng);
         dest.writeInt(this.jobStatus);
+        dest.writeTypedList(this.geofence_asal);
+        dest.writeTypedList(this.geofence_tujuan);
+        dest.writeTypedList(this.geofence_balik);
     }
 
     protected DetailKontainer(Parcel in) {
@@ -202,6 +246,9 @@ public class DetailKontainer implements Parcelable {
         this.destinationLat = in.readDouble();
         this.destinationLng = in.readDouble();
         this.jobStatus = in.readInt();
+        this.geofence_asal = in.createTypedArrayList(Fence.CREATOR);
+        this.geofence_tujuan = in.createTypedArrayList(Fence.CREATOR);
+        this.geofence_balik = in.createTypedArrayList(Fence.CREATOR);
     }
 
     public static final Creator<DetailKontainer> CREATOR = new Creator<DetailKontainer>() {
