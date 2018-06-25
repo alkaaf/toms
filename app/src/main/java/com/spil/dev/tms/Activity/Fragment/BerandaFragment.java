@@ -86,12 +86,13 @@ public class BerandaFragment extends FragmentBase {
 
         //VIEW//
         tvBulanIni = view.findViewById(R.id.tv_bulan_ini);
-//        tvBulanIni.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
+        tvBulanIni.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 //                startActivity(new Intent(getContext(), Research.class));
-//            }
-//        });
+//                ((DashboardActivity) getActivity()).checkUpdate();
+            }
+        });
         tvHariIni = view.findViewById(R.id.tv_hari_ini);
         tvSelesai = view.findViewById(R.id.tv_selesai);
         tvProses = view.findViewById(R.id.tv_proses);

@@ -23,7 +23,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activity.Resarch.Research"/>
-        <activity android:name=".Activity.MainActivity">
+        <activity android:name=".Activity.MainActivity"/>
+        <activity android:name=".Activity.ActivitySplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

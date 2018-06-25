@@ -150,7 +150,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     double geofenceLat;
     double geofenceLng;
     List<LatLng> polyFence;
-    public static final double GEOFENCE_RADIUS = 1000; // in meters, non retarded unit
+    public static final double GEOFENCE_RADIUS = 500; // in meters, non retarded unit
     LocationManager lm;
 
     enum MapColor {
@@ -702,6 +702,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         } else {
             PolygonOptions polygonOptions = new PolygonOptions().addAll(geoFence).fillColor(color.getRgbTransparent(0.6f)).strokeColor(Color.TRANSPARENT);
             Polygon polygon = gmap.addPolygon(polygonOptions);
+
             polygonList.add(polygon);
         }
     }
@@ -799,9 +800,10 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
 
     public void buttonSwitch() {
         if(polyFence != null){
+            boolean isInEdge = PolyUtil.isLocationOnEdge(new LatLng(location.getLatitude(),location.getLongitude()),polyFence,true,GEOFENCE_RADIUS);
             boolean isInside = PolyUtil.containsLocation(new LatLng(location.getLatitude(),location.getLongitude()),polyFence,true);
             if (!location.getProvider().equals("gps")) return;
-            if (!debugGeofence && ((!isInside) || (enableContainerCheck && realJob.getDetailkontainer().isEmpty()))) {
+            if (!debugGeofence && (!(isInside || isInEdge) || (enableContainerCheck && realJob.getDetailkontainer().isEmpty()))) {
                 // disable button
                 bTerima.setEnabled(false);
                 bTerima.setBackgroundColor(colorInactive);

@@ -15,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -28,6 +29,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -35,6 +37,16 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.github.javiersantos.appupdater.AppUpdater;
+import com.github.javiersantos.appupdater.AppUpdaterUtils;
+import com.github.javiersantos.appupdater.enums.AppUpdaterError;
+import com.github.javiersantos.appupdater.enums.UpdateFrom;
+import com.github.javiersantos.appupdater.objects.Update;
+import com.google.android.gms.maps.model.Dash;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.spil.dev.tms.Activity.Fragment.AkunFragment;
 import com.spil.dev.tms.Activity.Fragment.BerandaFragment;
 import com.spil.dev.tms.Activity.Fragment.RejectFragment;
@@ -175,7 +187,6 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         mContext = this;
-
 
         mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
@@ -322,6 +333,8 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
         checkObsoletePassword();
     }
 
+
+
     @Override
     public void onStart() {
         super.onStart();
@@ -333,71 +346,77 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
     private void checkObsoletePassword() {
         final ProgressDialog pdPass = new ProgressDialog(mContext);
         pdPass.setMessage("Mengubah password");
-        long lastChange = DF.parse(driverModel.getLastChangePassword()).getTime();
-        if (lastChange + FORCE_CHANGE_PASS_THRESHOLD <= System.currentTimeMillis()) {
-            View vPass = LayoutInflater.from(this).inflate(R.layout.alert_change_password, null, false);
-            final EditText iOldPass = vPass.findViewById(R.id.iOldPass);
-            final EditText iNewPass = vPass.findViewById(R.id.iNewPass);
-            final EditText iNewPass2 = vPass.findViewById(R.id.iNewPass2);
-            final AlertDialog alertDialog = new AlertDialog.Builder(this)
-                    .setTitle("Ubah password")
-                    .setView(vPass)
-                    .setPositiveButton("Simpan", null)
-                    .setNegativeButton("Batal", null).create();
-            alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                @Override
-                public void onShow(DialogInterface dialog) {
-                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // checking
-                            if (iOldPass.getText().toString().isEmpty() || iNewPass.getText().toString().isEmpty() || iNewPass2.getText().toString().isEmpty()) {
-                                toast("Harap isi seluruh form");
-                                return;
-                            }
-                            if (!iOldPass.getText().toString().equals(driverModel.getPassword())) {
-                                toast("Kata sandi lama tidak sesuai");
-                                return;
-                            }
-                            if (!iNewPass.getText().toString().equals(iNewPass2.getText().toString())) {
-                                toast("Kata sandi baru tidak sama, cek kembali");
-                                return;
-                            }
 
-                            pdPass.show();
-                            new Netter(mContext).webService(Request.Method.POST, new Response.Listener<String>() {
-                                        @Override
-                                        public void onResponse(String response) {
-                                            pdPass.dismiss();
-                                            try {
-                                                JSONObject obj = new JSONObject(response);
-                                                toast(obj.getString("message"));
-                                                if(obj.getInt("status") == 200){
-                                                    driverModel.setPassword(iNewPass.getText().toString());
-                                                    driverModel.setLastChangePassword(DF.format(DF.ASP_FORMAT, System.currentTimeMillis()));
-                                                    pref.putModelDriver(driverModel);
-                                                    alertDialog.dismiss();
+        if (TextUtils.isEmpty(driverModel.getLastChangePassword())) {
+            long lastChange = DF.parse(driverModel.getLastChangePassword()).getTime();
+            if (lastChange + FORCE_CHANGE_PASS_THRESHOLD <= System.currentTimeMillis()) {
+                View vPass = LayoutInflater.from(this).inflate(R.layout.alert_change_password, null, false);
+                final EditText iOldPass = vPass.findViewById(R.id.iOldPass);
+                final EditText iNewPass = vPass.findViewById(R.id.iNewPass);
+                final EditText iNewPass2 = vPass.findViewById(R.id.iNewPass2);
+                final AlertDialog alertDialog = new AlertDialog.Builder(this)
+                        .setTitle("Ubah password")
+                        .setView(vPass)
+                        .setPositiveButton("Simpan", null)
+                        .setNegativeButton("Batal", null).create();
+                alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                // checking
+                                if (iOldPass.getText().toString().isEmpty() || iNewPass.getText().toString().isEmpty() || iNewPass2.getText().toString().isEmpty()) {
+                                    toast("Harap isi seluruh form");
+                                    return;
+                                }
+                                if (!iOldPass.getText().toString().equals(driverModel.getPassword())) {
+                                    toast("Kata sandi lama tidak sesuai");
+                                    return;
+                                }
+                                if (!iNewPass.getText().toString().equals(iNewPass2.getText().toString())) {
+                                    toast("Kata sandi baru tidak sama, cek kembali");
+                                    return;
+                                }
+
+                                pdPass.show();
+                                new Netter(mContext).webService(Request.Method.POST, new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                pdPass.dismiss();
+                                                try {
+                                                    JSONObject obj = new JSONObject(response);
+                                                    toast(obj.getString("message"));
+                                                    if (obj.getInt("status") == 200) {
+                                                        driverModel.setPassword(iNewPass.getText().toString());
+                                                        driverModel.setLastChangePassword(DF.format(DF.ASP_FORMAT, System.currentTimeMillis()));
+                                                        pref.putModelDriver(driverModel);
+                                                        alertDialog.dismiss();
+                                                    }
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
                                                 }
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
                                             }
-                                        }
-                                    }, Netter.getDefaultErrorListener(mContext, new Runnable() {
-                                        @Override
-                                        public void run() {
+                                        }, Netter.getDefaultErrorListener(mContext, new Runnable() {
+                                            @Override
+                                            public void run() {
 
-                                        }
-                                    }), Netter.Webservice.UPDATEPASSWORD, new StringHashMap()
-                                            .putMore("newpassword", iNewPass.getText().toString())
-                                            .putMore("oldpassword", iOldPass.getText().toString())
-                                            .putMore("email", driverModel.getEmail())
-                            );
+                                            }
+                                        }), Netter.Webservice.UPDATEPASSWORD, new StringHashMap()
+                                                .putMore("newpassword", iNewPass.getText().toString())
+                                                .putMore("oldpassword", iOldPass.getText().toString())
+                                                .putMore("email", driverModel.getEmail())
+                                );
 
-                        }
-                    });
-                }
-            });
-            alertDialog.show();
+                            }
+                        });
+                    }
+                });
+                alertDialog.show();
+            } else {
+                driverModel.setLastChangePassword(DF.format(DF.ASP_FORMAT, System.currentTimeMillis()));
+                pref.putModelDriver(driverModel);
+            }
         }
     }
 

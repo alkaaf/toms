@@ -106,7 +106,7 @@ public class Netter {
             @Override
             public void onErrorResponse(VolleyError error) {
 //                if (!TextUtils.isEmpty(error.getLocalizedMessage())) {
-                    Toast.makeText(context, error.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Gagal menghubungi server", Toast.LENGTH_SHORT).show();
                     error.printStackTrace();
 //                }
                 if (after != null) after.run();

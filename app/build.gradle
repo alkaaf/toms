@@ -2,6 +2,7 @@ buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
         maven { url 'http://dl.bintray.com/amulyakhare/maven' }
+        maven { url "https://jitpack.io" }
     }
 
     dependencies {
@@ -13,6 +14,7 @@ apply plugin: 'io.fabric'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+    maven { url "https://jitpack.io" }
 }
 
 
@@ -22,8 +24,8 @@ android {
         applicationId "com.spil.dev.tms"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 18
-        versionName "1.8.143"
+        versionCode 20
+        versionName "1.8.145"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -75,6 +77,10 @@ dependencies {
     implementation 'com.faendir:acra:4.10.0'
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.+'
     implementation 'com.daasuu:CountAnimationTextView:0.1.1'
+    implementation 'com.github.javiersantos:AppUpdater:2.6.5'
+    implementation 'com.github.yeriomin:play-store-api:0.19'
+    implementation 'com.google.firebase:firebase-config:11.8.0'
+    implementation 'com.wang.avi:library:2.1.3'
 }
 
 apply plugin: 'com.google.gms.google-services'

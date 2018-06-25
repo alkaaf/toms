@@ -1,3 +1,14 @@
+1.8.145 - 20
+- Implementasi splash
+- Implementasi cek update saat membuka aplikasi
+
+1.8.144 - 19
+- Translasi tombol menjadi bahasa indonesia
+- Implementasi geofence polygon
+- Implementasi geofence 500m dari perimeter polygon
+- Perbaikan bug force close saat memilih nopol
+- Perubahan pesan eror jika tidak terkoneksi dengan internet
+
 1.8.143 - 18
 - fix label mapping di ribbon dan detail job
 - fixing label tombol untuk kontainer 2 tujuan
