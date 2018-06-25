@@ -455,7 +455,7 @@ public class RealJob implements Parcelable {
 //
         s = new SparseArray<>();
         s.put(3, "ANGKUT");
-        s.put(4, "DAMPAI DI DEPO");
+        s.put(4, "SAMPAI DI DEPO");
         s.put(5, "MULAI MUAT");
         s.put(6, "SELESAI MUAT");
         s.put(7, "KIRIM KE PABRIK");

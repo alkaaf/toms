@@ -347,7 +347,7 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
         final ProgressDialog pdPass = new ProgressDialog(mContext);
         pdPass.setMessage("Mengubah password");
 
-        if (TextUtils.isEmpty(driverModel.getLastChangePassword())) {
+        if (!TextUtils.isEmpty(driverModel.getLastChangePassword())) {
             long lastChange = DF.parse(driverModel.getLastChangePassword()).getTime();
             if (lastChange + FORCE_CHANGE_PASS_THRESHOLD <= System.currentTimeMillis()) {
                 View vPass = LayoutInflater.from(this).inflate(R.layout.alert_change_password, null, false);
