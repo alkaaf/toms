@@ -2,6 +2,7 @@ package com.spil.dev.tms.Activity.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 import android.util.SparseArray;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -191,24 +192,6 @@ public class RealJob implements Parcelable {
 
     public String getButtonLabel() {
         SparseArray<SparseArray<String>> sp = new SparseArray<>();
-
-        // 1
-//        SparseArray<String> s = new SparseArray<>();
-//        s.put(3, "PICK UP");
-//        s.put(4, "ARRIVED AT PORT");
-//        s.put(5, "START LOAD");
-//        s.put(6, "FINISH LOAD");
-//        s.put(7, "DELIVER TO DEPO");
-//        s.put(8, "ARRIVED AT DEPO");
-//        s.put(9, "START UNLOAD");
-//        s.put(10, "FINISH JOB");
-//        if (statusKontainer() == 2 || jumlahtujuan == 1) {
-//            s.put(14, "UPLOAD PHOTO");
-//        } else {
-//            s.put(14, "DELIVER SECOND BOX");
-//        }
-//        sp.put(1, s);
-
         // 1
         SparseArray<String> s = new SparseArray<>();
         s.put(3, "ANGKUT");
@@ -220,28 +203,14 @@ public class RealJob implements Parcelable {
         s.put(9, "MULAI BONGKAR");
         s.put(10, "SELESAI ORDER");
         if (statusKontainer() == 2 || jumlahtujuan == 1) {
+            s.put(10, "SELESAI ORDER");
             s.put(14, "UNGGAH FOTO");
         } else {
-            s.put(14, "KIRIM ORDER SELANJUTNYA");
+            s.put(10, "ORDER PERTAMA SELESAI");
+            s.put(14, "KIRIM SELANJUTNYA");
         }
         sp.put(1, s);
 
-        // 2
-//        s = new SparseArray<>();
-//        s.put(3, "PICK UP");
-//        s.put(4, "ARRIVED AT DEPO");
-//        s.put(5, "START LOAD");
-//        s.put(6, "FINISH LOAD");
-//        s.put(7, "DELIVER TO PORT");
-//        s.put(8, "ARRIVED AT PORT");
-//        s.put(9, "START UNLOAD");
-//        s.put(10, "FINISH JOB");
-//        if (statusKontainer() == 2 || jumlahtujuan == 1) {
-//            s.put(14, "UPLOAD PHOTO");
-//        } else {
-//            s.put(14, "DELIVER SECOND BOX");
-//        }
-//        sp.put(2, s);
 
         // 2
         s = new SparseArray<>();
@@ -254,28 +223,14 @@ public class RealJob implements Parcelable {
         s.put(9, "MULAI BONGKAR");
         s.put(10, "SELESAI ORDER");
         if (statusKontainer() == 2 || jumlahtujuan == 1) {
+            s.put(10, "SELESAI ORDER");
             s.put(14, "UNGGAH FOTO");
         } else {
-            s.put(14, "KIRIM ORDER SELANJUTNYA");
+            s.put(10, "ORDER PERTAMA SELESAI");
+            s.put(14, "KIRIM SELANJUTNYA");
         }
         sp.put(2, s);
 
-        // 3
-//        s = new SparseArray<>();
-//        s.put(3, "PICK UP");
-//        s.put(4, "ARRIVED AT DEPO");
-//        s.put(5, "START LOAD");
-//        s.put(6, "FINISH LOAD");
-//        s.put(7, "DELIVER TO DEPO");
-//        s.put(8, "ARRIVED AT DEPO");
-//        s.put(9, "START UNLOAD");
-//        s.put(10, "FINISH JOB");
-//        if (statusKontainer() == 2 || jumlahtujuan == 1) {
-//            s.put(14, "UPLOAD PHOTO");
-//        } else {
-//            s.put(14, "DELIVER SECOND BOX");
-//        }
-//        sp.put(3, s);
 
         // 3
         s = new SparseArray<>();
@@ -288,29 +243,14 @@ public class RealJob implements Parcelable {
         s.put(9, "MULAI BONGKAR");
         s.put(10, "SELESAI ORDER");
         if (statusKontainer() == 2 || jumlahtujuan == 1) {
+            s.put(10, "SELESAI ORDER");
             s.put(14, "UNGGAH FOTO");
         } else {
-            s.put(14, "KIRIM ORDER SELANJUTNYA");
+            s.put(10, "ORDER PERTAMA SELESAI");
+            s.put(14, "KIRIM SELANJUTNYA");
         }
         sp.put(3, s);
-
-
-        // 4
-//        s = new SparseArray<>();
-//        s.put(3, "PICK UP");
-//        s.put(4, "ARRIVED AT DEPO");
-//        s.put(5, "START LOAD");
-//        s.put(6, "FINISH LOAD");
-//        s.put(7, "DELIVER TO CUSTOMER");
-//        s.put(8, "ARRIVED AT CUSTOMER");
-//        s.put(9, "START UNLOAD");
-//        s.put(10, "FINISH JOB");
-//        if (statusKontainer() == 2) {
-//            s.put(14, "UPLOAD PHOTO");
-//        } else {
-//            s.put(14, "DELIVER SECOND BOX");
-//        }
-//        sp.put(4, s);
+        
 
         // 4
         s = new SparseArray<>();
@@ -323,30 +263,14 @@ public class RealJob implements Parcelable {
         s.put(9, "MULAI BONGKAR");
         s.put(10, "SELESAI ORDER");
         if (statusKontainer() == 2) {
+            s.put(10, "SELESAI ORDER");
             s.put(14, "UNGGAH FOTO");
         } else {
-            s.put(14, "KIRIM ORDER SELANJUTNYA");
+            s.put(10, "ORDER PERTAMA SELESAI");
+            s.put(14, "KIRIM SELANJUTNYA");
         }
         sp.put(4, s);
-
-
-        // 5
-//        s = new SparseArray<>();
-//        s.put(3, "PICK UP");
-//        s.put(4, "ARRIVED AT CUSTOMER");
-//        s.put(5, "START STUFFING");
-//        s.put(6, "FINISH STUFFING");
-//        s.put(7, "DELIVER TO DEPO");
-//        s.put(8, "ARRIVED AT DEPO");
-//        s.put(9, "FINISH LOAD");
-//        s.put(10, "FINISH JOB");
-//        if (statusKontainer() == 2) {
-//            s.put(14, "UPLOAD PHOTO");
-//        } else {
-//            s.put(14, "DELIVER SECOND BOX");
-//        }
-//        sp.put(5, s);
-//
+        
 
         s = new SparseArray<>();
         s.put(3, "ANGKUT");
@@ -358,29 +282,14 @@ public class RealJob implements Parcelable {
         s.put(9, "SELESAI MUAT");
         s.put(10, "SELESAI ORDER");
         if (statusKontainer() == 2) {
+            s.put(10, "SELESAI ORDER");
             s.put(14, "UNGGAH FOTO");
         } else {
-            s.put(14, "KIRIM ORDER SELANJUTNYA");
+            s.put(10, "ORDER PERTAMA SELESAI");
+            s.put(14, "KIRIM SELANJUTNYA");
         }
         sp.put(5, s);
-
-
-//        // 6
-//        s = new SparseArray<>();
-//        s.put(3, "PICK UP");
-//        s.put(4, "ARRIVED AT CUSTOMER");
-//        s.put(5, "START STUFFING");
-//        s.put(6, "FINISH STUFFING");
-//        s.put(7, "DELIVER TO PORT");
-//        s.put(8, "ARRIVED AT PORT");
-//        s.put(9, "FINISH UNLOAD");
-//        s.put(10, "FINISH JOB");
-//        if (statusKontainer() == 2) {
-//            s.put(14, "UPLOAD PHOTO");
-//        } else {
-//            s.put(14, "DELIVER SECOND BOX");
-//        }
-//        sp.put(6, s);
+        
 
         // 6
         s = new SparseArray<>();
@@ -393,30 +302,14 @@ public class RealJob implements Parcelable {
         s.put(9, "SELESAI BONGKAR");
         s.put(10, "SELESAI ORDER");
         if (statusKontainer() == 2) {
+            s.put(10, "SELESAI ORDER");
             s.put(14, "UNGGAH FOTO");
         } else {
-            s.put(14, "KIRIM ORDER SELANJUTNYA");
+            s.put(10, "ORDER PERTAMA SELESAI");
+            s.put(14, "KIRIM SELANJUTNYA");
         }
         sp.put(6, s);
-
-
-        // 7
-//        s = new SparseArray<>();
-//        s.put(3, "PICK UP");
-//        s.put(4, "ARRIVED AT PORT");
-//        s.put(5, "START LOAD");
-//        s.put(6, "FINISH LOAD");
-//        s.put(7, "DELIVER TO CUSTOMER");
-//        s.put(8, "ARRIVED AT CUSTOMER");
-//        s.put(9, "FINISH UNLOAD");
-//        s.put(10, "FINISH JOB");
-//        if (statusKontainer() == 2) {
-//            s.put(14, "UPLOAD PHOTO");
-//        } else {
-//            s.put(14, "DELIVER SECOND BOX");
-//        }
-//        sp.put(7, s);
-
+        
         s = new SparseArray<>();
         s.put(3, "ANGKUT");
         s.put(4, "SAMPAI DI LINI 1");
@@ -425,34 +318,16 @@ public class RealJob implements Parcelable {
         s.put(7, "KIRIM DI PABRIK");
         s.put(8, "SAMPAI DI PABRIK");
         s.put(9, "SELESAI BONGKAR");
-        s.put(10, "SELESAI ORDER");
         if (statusKontainer() == 2) {
+            s.put(10, "SELESAI ORDER");
             s.put(14, "UNGGAH FOTO");
         } else {
-            s.put(14, "KIRIM ORDER SELANJUTNYA");
+            s.put(10, "ORDER PERTAMA SELESAI");
+            s.put(14, "KIRIM SELANJUTNYA");
         }
         sp.put(7, s);
 
-        // 8
-//        s = new SparseArray<>();
-//        s.put(3, "PICK UP");
-//        s.put(4, "ARRIVED AT DEPO");
-//        s.put(5, "START LOAD");
-//        s.put(6, "FINISH LOAD");
-//        s.put(7, "DELIVER TO CUSTOMER");
-//        s.put(8, "ARRIVED AT CUSTOMER");
-//        s.put(9, "START STUFFING");
-//        s.put(10, "FINISH STUFFING");
-//        s.put(11, "DELIVER TO PORT");
-//        s.put(12, "ARRIVED AT PORT");
-//        s.put(13, "FINISH UNLOAD");
-//        if (statusKontainer() == 2) {
-//            s.put(14, "UPLOAD PHOTO");
-//        } else {
-//            s.put(14, "DELIVER SECOND BOX");
-//        }
-//        sp.put(8, s);
-//
+
         s = new SparseArray<>();
         s.put(3, "ANGKUT");
         s.put(4, "SAMPAI DI DEPO");
@@ -468,29 +343,10 @@ public class RealJob implements Parcelable {
 //        if (statusKontainer() == 2) {
         s.put(14, "UNGGAH FOTO");
 //        } else {
-//            s.put(14, "KIRIM ORDER SELANJUTNYA");
+//            s.put(14, "KIRIM SELANJUTNYA");
 //        }
         sp.put(8, s);
 
-        // 9
-//        s = new SparseArray<>();
-//        s.put(3, "PICK UP");
-//        s.put(4, "ARRIVED AT PORT");
-//        s.put(5, "START LOAD");
-//        s.put(6, "FINISH LOAD");
-//        s.put(7, "DELIVER TO CUSTOMER");
-//        s.put(8, "ARRIVED AT CUSTOMER");
-//        s.put(9, "START STRIPPING");
-//        s.put(10, "FINISH STRIPPING");
-//        s.put(11, "DELIVER TO DEPO");
-//        s.put(12, "ARRIVED AT DEPO");
-//        s.put(13, "FINISH UNLOAD");
-//        if (statusKontainer() == 2) {
-//            s.put(14, "UPLOAD PHOTO");
-//        } else {
-//            s.put(14, "DELIVER SECOND BOX");
-//        }
-//        sp.put(9, s);
 
         s = new SparseArray<>();
         s.put(3, "ANGKUT");
@@ -512,170 +368,23 @@ public class RealJob implements Parcelable {
         sp.put(9, s);
         return sp.get(getJobType()).get(getJobDeliverStatus(), "-");
     }
-    /*public String getButtonLabel() {
-        SparseArray<SparseArray<String>> sp = new SparseArray<>();
 
-        // 1
-        SparseArray<String> s = new SparseArray<>();
-        s.put(3, "ANGKUT");
-        s.put(4, "SAMPAI DI LINI 1");
-        s.put(5, "MULAI MUAT");
-        s.put(6, "SELESAI MUAT");
-        s.put(7, "KIRIM KE DEPO");
-        s.put(8, "SAMPAI DI DEPO");
-        s.put(9, "MULAI BONKAR");
-        s.put(10, "SELESAI ORDER");
-        if (statusKontainer() == 2 || jumlahtujuan == 1) {
-            s.put(14, "UNGGAH FOTO");
-        } else {
-            s.put(14, "KIRIM ORDER SELANJUTNYA");
+    public boolean isContainerValid(){
+        return detailkontainer!= null && !detailkontainer.isEmpty() && isNomorContainerAvailable();
+    }
+
+    public boolean isNomorContainerAvailable(){
+        if(detailkontainer == null || detailkontainer.isEmpty()){
+            return false;
         }
-        sp.put(1, s);
 
-        // 2
-        s = new SparseArray<>();
-        s.put(3, "ANGKUT");
-        s.put(4, "SAMPAI DI DEPO");
-        s.put(5, "MULAI MUAT");
-        s.put(6, "SELESAI MUAT");
-        s.put(7, "KIRIM KE LINI 1");
-        s.put(8, "SAMPAI DI LINI 1");
-        s.put(9, "MULAI BONGKAR");
-        s.put(10, "SELESAI ORDER");
-        if (statusKontainer() == 2 || jumlahtujuan == 1) {
-            s.put(14, "UNGGAH FOTO");
-        } else {
-            s.put(14, "KIRIM ORDER SELANJUTNYA");
+        for (int i = 0; i < detailkontainer.size(); i++) {
+            if(TextUtils.isEmpty(detailkontainer.get(i).getContainerNo())){
+                return false;
+            }
         }
-        sp.put(2, s);
-
-        // 3
-        s = new SparseArray<>();
-        s.put(3, "ANGKUT");
-        s.put(4, "SAMPAI DI DEPO");
-        s.put(5, "MULAI MUAT");
-        s.put(6, "SELESAI MUAT");
-        s.put(7, "KIRIM KE DEPO");
-        s.put(8, "SAMPAI DI DEPO");
-        s.put(9, "MULAI BONGKAR");
-        s.put(10, "SELESAI ORDER");
-        if (statusKontainer() == 2 || jumlahtujuan == 1) {
-            s.put(14, "UNGGAH FOTO");
-        } else {
-            s.put(14, "KIRIM ORDER SELANJUTNYA");
-        }
-        sp.put(3, s);
-
-        // 4
-        s = new SparseArray<>();
-        s.put(3, "ANGKUT");
-        s.put(4, "SAMPAI DI DEPO");
-        s.put(5, "MULAI MUAT");
-        s.put(6, "SELESAI MUAT");
-        s.put(7, "KIRIM KE PABRIK");
-        s.put(8, "SAMPAI DI PABRIK");
-        s.put(9, "MULAI BONGKAR");
-        s.put(10, "SELESAI ORDER");
-        if (statusKontainer() == 2) {
-            s.put(14, "UNGGAH FOTO");
-        } else {
-            s.put(14, "KIRIM ORDER SELANJUTNYA");
-        }
-        sp.put(4, s);
-
-        // 5
-        s = new SparseArray<>();
-        s.put(3, "ANGKUT");
-        s.put(4, "SAMPAI DI PABRIK");
-        s.put(5, "MULAI ISI");
-        s.put(6, "SELESAI ISI");
-        s.put(7, "KIRIM KE DEPO");
-        s.put(8, "SAMPAI DI DEPO");
-        s.put(9, "SELESAI MUAT");
-        s.put(10, "SELESAI ORDER");
-        if (statusKontainer() == 2) {
-            s.put(14, "UNGGAH FOTO");
-        } else {
-            s.put(14, "KIRIM ORDER SELANJUTNYA");
-        }
-        sp.put(5, s);
-
-        // 6
-        s = new SparseArray<>();
-        s.put(3, "ANGKUT");
-        s.put(4, "SAMPAI DI PABRIK");
-        s.put(5, "MULAI MUAT");
-        s.put(6, "SELESAI MUAT");
-        s.put(7, "KIRIM KE LINI 1");
-        s.put(8, "SAMPAI DI LINI 1");
-        s.put(9, "SELESAI BONGKAR");
-        s.put(10, "SELESAI ORDER");
-        if (statusKontainer() == 2) {
-            s.put(14, "UNGGAH FOTO");
-        } else {
-            s.put(14, "KIRIM ORDER SELANJUTNYA");
-        }
-        sp.put(6, s);
-
-        // 7
-        s = new SparseArray<>();
-        s.put(3, "ANGKUT");
-        s.put(4, "SAMPAI DI LINI 1");
-        s.put(5, "MULAI MUAT");
-        s.put(6, "SELESAI MUAT");
-        s.put(7, "DELIVER TO CUSTOMER");
-        s.put(8, "ARRIVED AT CUSTOMER");
-        s.put(9, "FINISH UNLOAD");
-        s.put(10, "FINISH JOB");
-        if (statusKontainer() == 2) {
-            s.put(14, "UPLOAD PHOTO");
-        } else {
-            s.put(14, "DELIVER SECOND BOX");
-        }
-        sp.put(7, s);
-
-        // 8
-        s = new SparseArray<>();
-        s.put(3, "PICK UP");
-        s.put(4, "ARRIVED AT DEPO");
-        s.put(5, "START LOAD");
-        s.put(6, "FINISH LOAD");
-        s.put(7, "DELIVER TO CUSTOMER");
-        s.put(8, "ARRIVED AT CUSTOMER");
-        s.put(9, "START STUFFING");
-        s.put(10, "FINISH STUFFING");
-        s.put(11, "DELIVER TO PORT");
-        s.put(12, "ARRIVED AT PORT");
-        s.put(13, "FINISH UNLOAD");
-        if (statusKontainer() == 2) {
-            s.put(14, "UPLOAD PHOTO");
-        } else {
-            s.put(14, "DELIVER SECOND BOX");
-        }
-        sp.put(8, s);
-
-        // 9
-        s = new SparseArray<>();
-        s.put(3, "ANGKUT");
-        s.put(4, "SAMPAI DI LINI 1");
-        s.put(5, "MULAI MUAT");
-        s.put(6, "SELESAI MUAT");
-        s.put(7, "KIRIM KE PABRIK");
-        s.put(8, "SAMPAI DI PABRIK");
-        s.put(9, "START STRIPPING");
-        s.put(10, "FINISH STRIPPING");
-        s.put(11, "DELIVER TO DEPO");
-        s.put(12, "ARRIVED AT DEPO");
-        s.put(13, "FINISH UNLOAD");
-        if (statusKontainer() == 2) {
-            s.put(14, "UPLOAD PHOTO");
-        } else {
-            s.put(14, "DELIVER SECOND BOX");
-        }
-        sp.put(9, s);
-        return sp.get(getJobType()).get(getJobDeliverStatus(), "-");
-    }*/
-
+        return true;
+    }
     public String getStringJobTypeName() {
         SparseArray<String> s = new SparseArray<>();
         s.put(1, "Lini 1 ke Depo");
@@ -1095,15 +804,7 @@ public class RealJob implements Parcelable {
         }
     }
 
-    public static void main(String[] args) {
-        SimpleDateFormat parser = new SimpleDateFormat("M/d/yyyy hh:mm:ss a");
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-        try {
-            System.out.println(formatter.format(parser.parse("6/1/2018 10:03:12 PM")));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
+
 
     public RealJob() {
     }

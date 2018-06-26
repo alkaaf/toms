@@ -121,8 +121,10 @@ public class ActivityProses1And2 extends BaseActivity {
         if (job.getJobDeliverStatus() >= 3 && !isPreview) {
             ActivityProsesMap.start(this, job);
             finish();
+        } else {
+            setContent();
         }
-        setContent();
+
         findViewById(R.id.llBottom).setVisibility(isPreview ? View.GONE : View.VISIBLE);
         bTerima.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,7 +198,7 @@ public class ActivityProses1And2 extends BaseActivity {
         pd.show();
         new Netter(this).webService(Request.Method.POST, new Response.Listener<String>() {
             @Override
-            public void onResponse(String response) {
+            public void onResponse(final String response) {
                 pd.dismiss();
                 try {
                     JSONObject obj = new JSONObject(response);
@@ -234,6 +236,8 @@ public class ActivityProses1And2 extends BaseActivity {
                     Toast.makeText(ActivityProses1And2.this, "Gagal memuat data", Toast.LENGTH_SHORT).show();
                     finish();
                 }
+
+
             }
         }, Netter.getDefaultErrorListener(this, new Runnable() {
             @Override
