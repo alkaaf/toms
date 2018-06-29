@@ -343,6 +343,9 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                         try {
                             obj = new JSONObject(response);
                             realJob = new Gson().fromJson(obj.getString("job-" + simpleJob.getJobId()), RealJob.class);
+                            if (realJob == null) {
+                                finish();
+                            }
                             setUpAll();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -383,24 +386,28 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         tvTanggal.setText(realJob.parsedPickupDate());
 
         isJob89 = realJob.getJobType() == 8 || realJob.getJobType() == 9;
-        isJobTujuanMoreThanOne = realJob.getJumlahtujuan() > 1;
-        isSingleBox = Integer.parseInt(realJob.getJumlahbox()) == 1;
+        isJobTujuanMoreThanOne = realJob.fTotalDest() == 2;
+        isSingleBox = realJob.fTotalBox() <= 1;
         isSudahAdaYangTerkirim = (isJobTujuanMoreThanOne && !isSingleBox) && realJob.getDetailkontainer().get(0).getJobStatus() == 10;
         isJob12 = realJob.getJobType() == 1 || realJob.getJobType() == 2;
         if (getSupportActionBar() != null)
             getSupportActionBar().setSubtitle(realJob.getStringJobTypeName()/* + "("+realJob.getJobType()+")"*/);
 
         tvOrderId.setText(realJob.getOrderId());
-        if (!isSingleBox && isJobTujuanMoreThanOne && !isJob89) {
-            tvFirst.setText(realJob.getJobPickupName());
+        tvFirst.setText(realJob.getJobPickupName());
+        if (realJob.getDetailkontainer().size() > 0 && !isJob89) {
             tvSecond.setText(realJob.getDetailkontainer().get(0).getDestinationName());
-            tvThird.setText(realJob.getDetailkontainer().get(1).getDestinationName());
+            tvThird.setVisibility(View.GONE);
+            if (realJob.getDetailkontainer().size() > 1 && realJob.getJumlahtujuan() == 2) {
+                tvThird.setText(realJob.getDetailkontainer().get(1).getDestinationName());
+                tvThird.setVisibility(View.VISIBLE);
+            }
         } else if (isJob89) {
-            tvFirst.setText(realJob.getJobPickupName());
+//            tvFirst.setText(realJob.getJobPickupName());
             tvSecond.setText(realJob.getJobDeliverAddress());
             tvThird.setText(realJob.getJobBalikAddress());
         } else {
-            tvFirst.setText(realJob.getJobPickupName());
+//            tvFirst.setText(realJob.getJobPickupName());
             tvSecond.setText(realJob.getJobDeliverAddress());
             tvThird.setVisibility(View.GONE);
         }
@@ -813,14 +820,16 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     }
 
     public void buttonSwitch() {
+        if (realJob == null) return;
         Log.i("LOC_PROVIDER", location.toString());
-        Log.i("Container",  "valid "+realJob.isContainerValid());
+        Log.i("Container", "valid " + realJob.isContainerValid());
         if (polyFence != null) {
             boolean isInEdge = PolyUtil.isLocationOnEdge(new LatLng(location.getLatitude(), location.getLongitude()), polyFence, true, GEOFENCE_RADIUS);
             boolean isInside = PolyUtil.containsLocation(new LatLng(location.getLatitude(), location.getLongitude()), polyFence, true);
 
             if (location.getProvider().equals("network")) return;
-            if (enableGeofence && (!(isInside || isInEdge) || (enableContainerCheck && !realJob.isContainerValid()))) {
+            if ((enableGeofence && !(isInside || isInEdge)) || (enableContainerCheck && !realJob.isContainerValid())) {
+//            if (enableGeofence && (!(isInside || isInEdge) || (enableContainerCheck && !realJob.isContainerValid()))) {
                 // disable button
                 bTerima.setEnabled(false);
                 bTerima.setBackgroundColor(colorInactive);
@@ -831,8 +840,8 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         } else {
             double distance = Haversine.calculate(geofenceLat, geofenceLng, location.getLatitude(), location.getLongitude());
             if (location.getProvider().equals("network")) return;
-            if ((enableGeofence && (distance > GEOFENCE_RADIUS || (enableContainerCheck && !realJob.isContainerValid())))) {
-//            if ((enableGeofence && distance > GEOFENCE_RADIUS) || (enableContainerCheck && realJob.getDetailkontainer().isEmpty() && !realJob.isNomorContainerAvailable())) {
+//            if ((enableGeofence && (distance > GEOFENCE_RADIUS || (enableContainerCheck && !realJob.isContainerValid())))) {
+            if ((enableGeofence && distance > GEOFENCE_RADIUS) || (enableContainerCheck && !realJob.isContainerValid())) {
                 // disable button
                 bTerima.setEnabled(false);
                 bTerima.setBackgroundColor(colorInactive);

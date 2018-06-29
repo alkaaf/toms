@@ -1,4 +1,19 @@
-1.8.145 - 21
+1.8.148 - 23
+- perbaikan bug tombol deliver tetap ter-enable walau kontainer belum full
+- force close pada job 1 dan 2 dan 3
+
+1.8.147 - 22
+- Perbaikan isu label tidak sesuai dengan job yang memiliki 1 atua lebih dari 1 tujuan
+- Tambahan kondisi tombol tidak dapat ditekan jika kondisi kontainer masih kosong atau belum dimuat
+
+* Kemungkinan masih terdapat isu terhadap label pada tombol. Jika terjadi isu tidak sesuai dengan kondisi job, silahkan hubungi developer dengan informasi:
+> Tipe job
+> jumlah muatan
+> jumlah tujuan
+> status job terakhir
+
+
+1.8.146 - 21
 - Perbaikan bug kondisi terbalik
 
 1.8.145 - 20

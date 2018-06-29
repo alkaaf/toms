@@ -3,6 +3,7 @@ package com.spil.dev.tms.Activity.Adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,7 @@ public class ContainerAdapter extends ArrayAdapter<DetailKontainer> {
         vDepo.setVisibility(enableViewDepo ? View.VISIBLE : View.GONE);
 
         DetailKontainer kontainer = getItem(position);
-        tvNoKontainer.setText(kontainer.getContainerNo() );
+        tvNoKontainer.setText(TextUtils.isEmpty(kontainer.getContainerNo()) ? "(Kontainer belum diisi)" : kontainer.getContainerNo());
         tvNamaKontainer.setText(kontainer.getContainerName());
         tvDepo1.setText(kontainer.getPickupLocationName());
         tvDepo2.setText(kontainer.getDestinationName());
