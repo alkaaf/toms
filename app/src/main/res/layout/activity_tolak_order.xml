@@ -35,7 +35,6 @@
             android:id="@+id/rb2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
             android:text="Order tidak jelas" />
 
         <RadioButton
@@ -56,6 +55,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Kendaraan bermasalah" />
+        <RadioButton
+            android:id="@+id/rb6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Depo macet" />
+        <RadioButton
+            android:id="@+id/rb7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Alat berat rusak" />
 
     </RadioGroup>
 

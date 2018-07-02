@@ -54,7 +54,7 @@ public class ActivityReject extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tolak_order);
 
-        if(getSupportActionBar()!=null)getSupportActionBar().setTitle("Tolak job");
+        if (getSupportActionBar() != null) getSupportActionBar().setTitle("Tolak job");
 
         ButterKnife.bind(this);
         pref = new Pref(this);

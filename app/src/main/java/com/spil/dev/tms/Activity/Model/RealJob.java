@@ -194,7 +194,7 @@ public class RealJob implements Parcelable {
         SparseArray<SparseArray<String>> sp = new SparseArray<>();
         // 1
         SparseArray<String> s = new SparseArray<>();
-        s.put(3, "ANGKUT");
+        s.put(3, "JEMPUT");
         s.put(4, "SAMPAI DI PORT");
         s.put(5, "MULAI MUAT");
         s.put(6, "SELESAI MUAT");
@@ -214,7 +214,7 @@ public class RealJob implements Parcelable {
 
         // 2
         s = new SparseArray<>();
-        s.put(3, "ANGKUT");
+        s.put(3, "JEMPUT");
         s.put(4, "SAMPAI DI DEPO");
         s.put(5, "MULAI MUAT");
         s.put(6, "SELESAI MUAT");
@@ -234,7 +234,7 @@ public class RealJob implements Parcelable {
 
         // 3
         s = new SparseArray<>();
-        s.put(3, "ANGKUT");
+        s.put(3, "JEMPUT");
         s.put(4, "SAMPAI DI DEPO");
         s.put(5, "MULAI MUAT");
         s.put(6, "SELESAI MUAT");
@@ -254,7 +254,7 @@ public class RealJob implements Parcelable {
 
         // 4
         s = new SparseArray<>();
-        s.put(3, "ANGKUT");
+        s.put(3, "JEMPUT");
         s.put(4, "SAMPAI DI DEPO");
         s.put(5, "MULAI MUAT");
         s.put(6, "SELESAI MUAT");
@@ -273,7 +273,7 @@ public class RealJob implements Parcelable {
 
 
         s = new SparseArray<>();
-        s.put(3, "ANGKUT");
+        s.put(3, "JEMPUT");
         s.put(4, "SAMPAI DI PABRIK");
         s.put(5, "MULAI ISI");
         s.put(6, "SELESAI ISI");
@@ -293,7 +293,7 @@ public class RealJob implements Parcelable {
 
         // 6
         s = new SparseArray<>();
-        s.put(3, "ANGKUT");
+        s.put(3, "JEMPUT");
         s.put(4, "SAMPAI DI PABRIK");
         s.put(5, "MULAI ISI");
         s.put(6, "SELESAI ISI");
@@ -311,7 +311,7 @@ public class RealJob implements Parcelable {
         sp.put(6, s);
 
         s = new SparseArray<>();
-        s.put(3, "ANGKUT");
+        s.put(3, "JEMPUT");
         s.put(4, "SAMPAI DI PORT");
         s.put(5, "MULAI MUAT");
         s.put(6, "SELESAI MUAT");
@@ -329,7 +329,7 @@ public class RealJob implements Parcelable {
 
 
         s = new SparseArray<>();
-        s.put(3, "ANGKUT");
+        s.put(3, "JEMPUT");
         s.put(4, "SAMPAI DI DEPO");
         s.put(5, "MULAI MUAT");
         s.put(6, "SELESAI MUAT");
@@ -349,7 +349,7 @@ public class RealJob implements Parcelable {
 
 
         s = new SparseArray<>();
-        s.put(3, "ANGKUT");
+        s.put(3, "JEMPUT");
         s.put(4, "SAMPAI DI PORT");
         s.put(5, "MULAI MUAT");
         s.put(6, "SELESAI MUAT");

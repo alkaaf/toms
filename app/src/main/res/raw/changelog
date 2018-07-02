@@ -1,3 +1,7 @@
+1.8.149 - 24
+- ringkasan pada dashboard tidak terload saat data job kosong
+- penambahan alasan pada batal job
+
 1.8.148 - 23
 - perbaikan bug tombol deliver tetap ter-enable walau kontainer belum full
 - force close pada job 1 dan 2 dan 3

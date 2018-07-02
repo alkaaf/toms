@@ -191,7 +191,8 @@ public class ActivityUpload extends BaseActivity {
             case REQUEST_IMAGE1: {
                 if (resultCode == RESULT_OK) {
 //                    doUpload();
-                    CropImage.activity(file).start(ActivityUpload.this);
+                    CropImage.activity(file)
+                            .start(ActivityUpload.this);
                     // set the geotag
 
                 }

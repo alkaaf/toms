@@ -69,7 +69,7 @@ public class BerandaFragment extends FragmentBase {
         uiRunner(new Runnable() {
             @Override
             public void run() {
-                fetchListJob();
+                fetchDashboard();
             }
         });
     }
@@ -122,7 +122,7 @@ public class BerandaFragment extends FragmentBase {
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetchListJob();
+                fetchDashboard();
             }
         });
         return view;
@@ -131,7 +131,7 @@ public class BerandaFragment extends FragmentBase {
     @Override
     public void onResume() {
         super.onResume();
-        fetchListJob();
+        fetchDashboard();
     }
 
     public void fetchListJob() {
@@ -147,7 +147,6 @@ public class BerandaFragment extends FragmentBase {
                     jobList.clear();
                     jobList.addAll(temp);
                     mAdapter.notifyDataSetChanged();
-                    fetchDashboard();
                 } catch ( JSONException e) {
                     jobList.clear();
                     mAdapter.notifyDataSetChanged();
@@ -166,17 +165,10 @@ public class BerandaFragment extends FragmentBase {
         new Netter(getContext()).webService(Request.Method.POST, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                fetchListJob();
                 try {
                     JSONObject obj = new JSONObject(response);
                     DashboardModel dashboardModel = new Gson().fromJson(obj.getString("data"), DashboardModel.class);
-                    /*tvBulanIni.setInterpolator(new AccelerateDecelerateInterpolator())
-                            .countAnimation(0, dashboardModel.bulan_ini);
-                    tvHariIni.setInterpolator(new AccelerateDecelerateInterpolator())
-                            .countAnimation(0, dashboardModel.hari_ini);
-                    tvProses.setInterpolator(new AccelerateDecelerateInterpolator())
-                            .countAnimation(0, dashboardModel.proses);
-                    tvSelesai.setInterpolator(new AccelerateDecelerateInterpolator())
-                            .countAnimation(0, dashboardModel.selesai);*/
                     tvBulanIni.setText(dashboardModel.bulan_ini+"");
                     tvHariIni.setText(dashboardModel.hari_ini+"");
                     tvProses.setText(dashboardModel.proses+"");
