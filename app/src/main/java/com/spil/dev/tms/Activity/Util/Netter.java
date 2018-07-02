@@ -46,6 +46,7 @@ public class Netter {
         JOB_GOEMPTYDEPO("goemptytoDepo"),
         JOB_UPLOADEMPTYDEPO("uploademptytodepo"),
 
+        GETDATAUSER("GetDataUser"),
         UPDATEPASSWORD("SaveUpdatePassword"),
         REPORTLIST("ShowListInfoDriver"),
         REJECT("rejectjob"),

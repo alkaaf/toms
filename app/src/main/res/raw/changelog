@@ -1,6 +1,12 @@
+1.8.150 - 25
+- session checking
+- perbaikan dialog ganti password yang tidak muncul sesuai waktu
+
 1.8.149 - 24
 - ringkasan pada dashboard tidak terload saat data job kosong
 - penambahan alasan pada batal job
+- resize gambar
+- leveling rute
 
 1.8.148 - 23
 - perbaikan bug tombol deliver tetap ter-enable walau kontainer belum full

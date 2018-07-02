@@ -192,6 +192,7 @@ public class ActivityUpload extends BaseActivity {
                 if (resultCode == RESULT_OK) {
 //                    doUpload();
                     CropImage.activity(file)
+                            .setRequestedSize(1024,768)
                             .start(ActivityUpload.this);
                     // set the geotag
 

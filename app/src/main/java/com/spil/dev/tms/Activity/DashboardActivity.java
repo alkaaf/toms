@@ -117,7 +117,7 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
     Fragment selectedFragment;
     GoogleApiClient mGoogleApiClient;
     public static final int REQ_LOCATION_HIGH = 1000;
-    public static final long FORCE_CHANGE_PASS_THRESHOLD = 1000 * 60 * 24 * 30 * 3;
+    public static final long FORCE_CHANGE_PASS_THRESHOLD = 1000L * 60L * 60L * 24L * 30L * 3L;
 //    public static final long FORCE_CHANGE_PASS_THRESHOLD = 5000;
 
     BroadcastReceiver br = new BroadcastReceiver() {
@@ -349,6 +349,10 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
 
         if (!TextUtils.isEmpty(driverModel.getLastChangePassword())) {
             long lastChange = DF.parse(driverModel.getLastChangePassword()).getTime();
+            Log.i("DATE_NOW" ,""+ System.currentTimeMillis());
+            Log.i("DATE_LAST" ,""+ (lastChange));
+            Log.i("DATE_Should_EXP" ,""+ (lastChange + FORCE_CHANGE_PASS_THRESHOLD));
+
             if (lastChange + FORCE_CHANGE_PASS_THRESHOLD <= System.currentTimeMillis()) {
                 View vPass = LayoutInflater.from(this).inflate(R.layout.alert_change_password, null, false);
                 final EditText iOldPass = vPass.findViewById(R.id.iOldPass);

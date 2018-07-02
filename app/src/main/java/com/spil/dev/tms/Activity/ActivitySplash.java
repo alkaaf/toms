@@ -11,13 +11,26 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
+import com.google.gson.Gson;
+import com.spil.dev.tms.Activity.Model.DriverModel;
+import com.spil.dev.tms.Activity.Model.UserData;
+import com.spil.dev.tms.Activity.Util.Netter;
+import com.spil.dev.tms.Activity.Util.Pref;
+import com.spil.dev.tms.Activity.Util.StringHashMap;
 import com.spil.dev.tms.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimerTask;
@@ -29,13 +42,19 @@ public class ActivitySplash extends BaseActivity {
     @BindView(R.id.tvUpdate)
     TextView tvUpdate;
 
+    Pref pref;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
         ButterKnife.bind(this);
+
+        pref = new Pref(this);
+
         checkUpdate();
     }
+
     public void checkUpdate() {
         final String FC_UPDATE_NOTES = "update_notes";
         final String FC_UPDATE_CODE = "update_version_code";
@@ -75,13 +94,13 @@ public class ActivitySplash extends BaseActivity {
                                     .setNegativeButton("nanti", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            cont();
+                                            sessionCheck();
                                         }
                                     })
                                     .show();
                         } else {
                             tvUpdate.setText("Poof!");
-                            cont();
+                            sessionCheck();
                         }
 
                     } catch (PackageManager.NameNotFoundException e) {
@@ -89,7 +108,7 @@ public class ActivitySplash extends BaseActivity {
                     }
                 } else {
                     tvUpdate.setText("Error while checking update");
-                    cont();
+                    sessionCheck();
                 }
             }
         });
@@ -98,9 +117,48 @@ public class ActivitySplash extends BaseActivity {
         getSupportActionBar().hide();
     }
 
-    public void cont(){
+    public void cont() {
+
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    public void sessionCheck() {
+        tvUpdate.setText("Checking session");
+        DriverModel dm = pref.getDriverModel();
+        // jika driver ada
+        if (dm != null) {
+            new Netter(this).webService(Request.Method.POST, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONObject ob = new JSONObject(response);
+                        if (ob.getInt("status") == 200) {
+                            UserData ud = new Gson().fromJson(ob.getString("data"), UserData.class);
+                            if (ud.sttlogin) {
+                                tvUpdate.setText("Session valid");
+                                cont();
+                            } else {
+                                tvUpdate.setText("Please login to continue");
+                                pref.clearDriver();
+                                pref.clearKendaraan();
+                                cont();
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        cont();
+                    }
+                }
+            }, Netter.getSilentErrorListener(this, new Runnable() {
+                @Override
+                public void run() {
+                    cont();
+                }
+            }), Netter.Webservice.GETDATAUSER, new StringHashMap().putMore("email", pref.getDriverModel().getEmail()));
+        } else {
+            cont();
+        }
     }
 }

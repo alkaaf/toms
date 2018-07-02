@@ -150,6 +150,9 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     double geofenceLat;
     double geofenceLng;
     List<LatLng> polyFence;
+    double nextTargetLat;
+    double nextTargetLng;
+
     public static final double GEOFENCE_RADIUS = 500; // in meters, non retarded unit
     LocationManager lm;
 
@@ -191,6 +194,16 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     List<Polygon> polygonList = new ArrayList<>();
 
     Marker mockMarker;
+
+    public void setNextTarget(double lat, double lng) {
+        this.nextTargetLat = lat;
+        this.nextTargetLng = lng;
+    }
+
+    public void setNextTarget(String lat, String lng) {
+        this.nextTargetLat = dd(lat);
+        this.nextTargetLng = dd(lng);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -421,8 +434,10 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 public void onSuccess(Location location) {
                     setUpLocation(location);
                     prepareButton();
-                    drawRoute(location.getLatitude(), location.getLongitude(), dd(realJob.getJobPickupLatitude()), dd(realJob.getJobPickupLongitude()), MapColor.BLUE, realJob.getJobPickupName(), realJob.getGeofence_asal());
-                    if (isJob89) {
+
+                    // drawing lines
+                    drawRoute(location.getLatitude(), location.getLongitude(), nextTargetLat, nextTargetLng, MapColor.BLUE, realJob.getJobPickupName(), polyFence );
+                   /* if (isJob89) {
                         drawRoute(location.getLatitude(), location.getLongitude(), dd(realJob.getJobPickupLatitude()), dd(realJob.getJobPickupLongitude()), MapColor.BLUE, realJob.getJobPickupName(), realJob.getGeofence_asal());
                         drawRoute(dd(realJob.getJobPickupLatitude()), dd(realJob.getJobPickupLongitude()), dd(realJob.getJobDeliverLatitude()), dd(realJob.getJobDeliverLongitude()), MapColor.GREEN, realJob.getJobDeliverAddress(), realJob.getGeofence_tujuan());
                         drawRoute(dd(realJob.getJobDeliverLatitude()), dd(realJob.getJobDeliverLongitude()), dd(realJob.getJobBalikLatitude()), dd(realJob.getJobBalikLongitude()), MapColor.MAGENTA, realJob.getJobBalikAddress(), realJob.getGeofence_balik());
@@ -437,7 +452,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                                 drawRoute(dd(realJob.getJobPickupLatitude()), dd(realJob.getJobPickupLongitude()), dd(realJob.getJobDeliverLatitude()), dd(realJob.getJobDeliverLongitude()), MapColor.GREEN, realJob.getJobDeliverAddress(), realJob.getGeofence_tujuan());
                             }
                         }
-                    }
+                    }*/
                     pdLoading.dismiss();
                 }
             });
@@ -475,6 +490,9 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                     vDestinationList.setVisibility(View.GONE);
                     lvContainer.setVisibility(View.GONE);
                 }
+                setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
+                setGeofenceTarget(realJob.getGeofence_asal());
+                setNextTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
                 break;
             }
             // status pickup
@@ -483,6 +501,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 enableGeofence = true;
                 setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
                 setGeofenceTarget(realJob.getGeofence_asal());
+                setNextTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
                 if (isJob12) {
                     vDestinationList.setVisibility(View.GONE);
                     lvContainer.setVisibility(View.GONE);
@@ -498,6 +517,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 }
                 setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
                 setGeofenceTarget(realJob.getGeofence_asal());
+                setNextTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
                 if (isJob12) {
                     vDestinationList.setVisibility(View.VISIBLE);
                     lvContainer.setVisibility(View.VISIBLE);
@@ -513,6 +533,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 }
                 setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
                 setGeofenceTarget(realJob.getGeofence_asal());
+                setNextTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
                 if (isJob12) {
                     vDestinationList.setVisibility(View.VISIBLE);
                     lvContainer.setVisibility(View.VISIBLE);
@@ -526,6 +547,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 enableContainerCheck = true;
                 setGeofenceTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
                 setGeofenceTarget(realJob.getGeofence_asal());
+                setNextTarget(realJob.getJobPickupLatitude(), realJob.getJobPickupLongitude());
                 if (isJob12) {
                     vDestinationList.setVisibility(View.GONE);
 //                    lvContainer.setVisibility(View.GONE);
@@ -540,13 +562,16 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                     if (realJob.statusKontainer() == 0) {
                         setGeofenceTarget(realJob.getDetailkontainer().get(0).getDestinationLat(), realJob.getDetailkontainer().get(0).getDestinationLng());
                         setGeofenceTarget(realJob.getDetailkontainer().get(0).getGeofence_tujuan());
+                        setNextTarget(realJob.getDetailkontainer().get(0).getDestinationLat(), realJob.getDetailkontainer().get(0).getDestinationLng());
                     } else {
                         setGeofenceTarget(realJob.getDetailkontainer().get(1).getDestinationLat(), realJob.getDetailkontainer().get(1).getDestinationLng());
                         setGeofenceTarget(realJob.getDetailkontainer().get(1).getGeofence_tujuan());
+                        setNextTarget(realJob.getDetailkontainer().get(1).getDestinationLat(), realJob.getDetailkontainer().get(1).getDestinationLng());
                     }
                 } else {
                     setGeofenceTarget(realJob.getJobDeliverLatitude(), realJob.getJobDeliverLongitude());
                     setGeofenceTarget(realJob.getGeofence_tujuan());
+                    setNextTarget(realJob.getJobDeliverLatitude(), realJob.getJobDeliverLongitude());
                 }
                 if (isJob12) {
                     vDestinationList.setVisibility(View.VISIBLE);
@@ -563,13 +588,16 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                     if (realJob.statusKontainer() == 0) {
                         setGeofenceTarget(realJob.getDetailkontainer().get(0).getDestinationLat(), realJob.getDetailkontainer().get(0).getDestinationLng());
                         setGeofenceTarget(realJob.getDetailkontainer().get(0).getGeofence_tujuan());
+                        setNextTarget(realJob.getDetailkontainer().get(0).getDestinationLat(), realJob.getDetailkontainer().get(0).getDestinationLng());
                     } else {
                         setGeofenceTarget(realJob.getDetailkontainer().get(1).getDestinationLat(), realJob.getDetailkontainer().get(1).getDestinationLng());
                         setGeofenceTarget(realJob.getDetailkontainer().get(1).getGeofence_tujuan());
+                        setNextTarget(realJob.getDetailkontainer().get(1).getDestinationLat(), realJob.getDetailkontainer().get(1).getDestinationLng());
                     }
                 } else {
                     setGeofenceTarget(realJob.getJobDeliverLatitude(), realJob.getJobDeliverLongitude());
                     setGeofenceTarget(realJob.getGeofence_tujuan());
+                    setNextTarget(realJob.getJobDeliverLatitude(), realJob.getJobDeliverLongitude());
                 }
 
                 break;
@@ -589,13 +617,16 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                     if (realJob.statusKontainer() == 0) {
                         setGeofenceTarget(realJob.getDetailkontainer().get(0).getDestinationLat(), realJob.getDetailkontainer().get(0).getDestinationLng());
                         setGeofenceTarget(realJob.getDetailkontainer().get(0).getGeofence_tujuan());
+                        setNextTarget(realJob.getDetailkontainer().get(0).getDestinationLat(), realJob.getDetailkontainer().get(0).getDestinationLng());
                     } else {
                         setGeofenceTarget(realJob.getDetailkontainer().get(1).getDestinationLat(), realJob.getDetailkontainer().get(1).getDestinationLng());
                         setGeofenceTarget(realJob.getDetailkontainer().get(1).getGeofence_tujuan());
+                        setNextTarget(realJob.getDetailkontainer().get(1).getDestinationLat(), realJob.getDetailkontainer().get(1).getDestinationLng());
                     }
                 } else {
                     setGeofenceTarget(realJob.getJobDeliverLatitude(), realJob.getJobDeliverLongitude());
                     setGeofenceTarget(realJob.getGeofence_tujuan());
+                    setNextTarget(realJob.getJobDeliverLatitude(), realJob.getJobDeliverLongitude());
                 }
 
                 break;
@@ -612,6 +643,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                     enableGeofence = true;
                     setGeofenceTarget(realJob.getJobBalikLatitude(), realJob.getJobBalikLongitude());
                     setGeofenceTarget(realJob.getGeofence_balik());
+                    setNextTarget(realJob.getJobBalikLatitude(), realJob.getJobBalikLongitude());
                 }
                 break;
             }
@@ -622,6 +654,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                     enableContainerCheck = true;
                     setGeofenceTarget(realJob.getJobBalikLatitude(), realJob.getJobBalikLongitude());
                     setGeofenceTarget(realJob.getGeofence_balik());
+                    setNextTarget(realJob.getJobBalikLatitude(), realJob.getJobBalikLongitude());
                 }
                 break;
             }
