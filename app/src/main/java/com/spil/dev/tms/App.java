@@ -8,17 +8,28 @@ import android.content.IntentFilter;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.google.gson.Gson;
+import com.spil.dev.tms.Activity.BaseActivity;
 import com.spil.dev.tms.Activity.Maps.LocationBroadcaster;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.facebook.imagepipeline.decoder.SimpleProgressiveJpegConfig;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
+import com.spil.dev.tms.Activity.Model.DriverModel;
+import com.spil.dev.tms.Activity.Model.UserData;
+import com.spil.dev.tms.Activity.Util.Netter;
+import com.spil.dev.tms.Activity.Util.Pref;
+import com.spil.dev.tms.Activity.Util.StringHashMap;
 
 import org.acra.ACRA;
 import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
 import org.acra.sender.HttpSender;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 @ReportsCrashes(/*mailTo = "alfa.alkaaf@gmail.com",*/
         httpMethod = HttpSender.Method.PUT,
@@ -35,7 +46,36 @@ public class App extends Application {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.i("TIME_TICK", "Time is tick tock");
-//            startService(new Intent(App.this, LocationBroadcaster.class));
+            // auto logout belong here
+            Pref pref = new Pref(App.this);
+            DriverModel dm = pref.getDriverModel();
+            // jika driver ada
+            if (dm != null) {
+                new Netter(App.this).webService(Request.Method.POST, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject ob = new JSONObject(response);
+                            if (ob.getInt("status") == 200) {
+                                UserData ud = new Gson().fromJson(ob.getString("data"), UserData.class);
+                                if (ud.sttlogin) {
+                                    // logged in, do nothing
+                                    Log.i("SESSION_VALID", "TRUE");
+                                } else {
+                                    Intent intentLogout = new Intent(BaseActivity.ACTION_GO_LOGOUT);
+                                    sendBroadcast(intentLogout);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, Netter.getSilentErrorListener(App.this, new Runnable() {
+                    @Override
+                    public void run() {
+                    }
+                }), Netter.Webservice.GETDATAUSER, new StringHashMap().putMore("email", pref.getDriverModel().getEmail()));
+            }
         }
     };
 
@@ -49,8 +89,8 @@ public class App extends Application {
                 .setDownsampleEnabled(true)
                 .build();
         Fresco.initialize(this, config);
-//        IntentFilter filter = new IntentFilter(Intent.ACTION_TIME_TICK);
-//        registerReceiver(receiver, filter);
+        IntentFilter filter = new IntentFilter(Intent.ACTION_TIME_TICK);
+        registerReceiver(receiver, filter);
     }
 
 

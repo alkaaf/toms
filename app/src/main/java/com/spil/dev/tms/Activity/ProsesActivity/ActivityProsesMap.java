@@ -417,6 +417,14 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             }
         } else if (isJob89) {
 //            tvFirst.setText(realJob.getJobPickupName());
+            if(realJob.getDetailkontainer().size() > 0){
+                tvSecond.setVisibility(View.VISIBLE);
+                tvThird.setVisibility(View.VISIBLE);
+            } else {
+                tvSecond.setVisibility(View.GONE);
+                tvThird.setVisibility(View.GONE);
+
+            }
             tvSecond.setText(realJob.getJobDeliverAddress());
             tvThird.setText(realJob.getJobBalikAddress());
         } else {

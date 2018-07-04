@@ -165,7 +165,7 @@
             android:layout_gravity="bottom"
             android:layout_weight="1"
             android:background="@color/colorPrimaryDark"
-            android:text="Reject"
+            android:text="Tolak"
             android:textColor="@color/textColor1"
             android:textStyle="bold" />
 
@@ -176,7 +176,7 @@
             android:layout_gravity="bottom"
             android:layout_weight="1"
             android:background="@color/colorPrimary"
-            android:text="Accept"
+            android:text="Terima"
             android:textColor="@color/textColor1"
             android:textStyle="bold" />
 

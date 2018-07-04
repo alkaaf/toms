@@ -194,9 +194,13 @@ public class ActivityProsesMoreThan8 extends BaseActivity {
                     tvOrderId.setText(realJob.getOrderId());
                     tvTanggal.setText(realJob.parsedPickupDate());
 
-                    tvReturn.setText(realJob.getJobBalikAddress());
                     tvPickup.setText(realJob.getJobPickupName());
+                    if(realJob.getDetailkontainer().isEmpty()){
+                        tvDeliver.setVisibility(View.GONE);
+                        tvReturn.setVisibility(View.GONE);
+                    }
                     tvDeliver.setText(realJob.getJobDeliverAddress());
+                    tvReturn.setText(realJob.getJobBalikAddress());
                     adapter = new ContainerAdapter(ActivityProsesMoreThan8.this, R.layout.list_container, realJob.getDetailkontainer());
                     listContainer.setAdapter(adapter);
                     getSupportActionBar().setSubtitle(realJob.getStringJobTypeName());

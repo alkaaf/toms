@@ -611,8 +611,14 @@ public class RealJob implements Parcelable {
         a.put(9, "Sampai Tujuan");
         a.put(10, "Mulai Muat/Bongkar");
         a.put(11, "Selesai Muat/Bongkar");
-        a.put(12, "Bawa Kosong ke Depo");
-        a.put(13, "Turunkan Kosong di Depo");
+        if(jobType == 8){
+            a.put(12, "Bawa penuh ke Port");
+            a.put(13, "Turunkan penuh di Port");
+
+        } else if(jobType == 9 ){
+            a.put(12, "Bawa kosong ke Depo");
+            a.put(13, "Turunkan kosong di Depo");
+        }
         a.put(14, "Order Selesai");
         a.put(15, "Batal");
         a.put(16, "Finish job");

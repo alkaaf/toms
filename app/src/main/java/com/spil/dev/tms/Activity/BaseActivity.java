@@ -1,7 +1,10 @@
 package com.spil.dev.tms.Activity;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,11 +18,14 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.Dash;
+import com.spil.dev.tms.Activity.Util.Pref;
 
 import static com.spil.dev.tms.Activity.DashboardActivity.REQ_LOCATION_HIGH;
 
 public class BaseActivity extends AppCompatActivity {
     private int PERM_REQ;
+    IntentFilter filter;
+    public static final String ACTION_GO_LOGOUT = "lougto kono";
 
     public void toast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
@@ -27,6 +33,33 @@ public class BaseActivity extends AppCompatActivity {
 
     public void longToast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+    }
+
+    BroadcastReceiver br = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            logout();
+        }
+    };
+
+    public void logout() {
+        Pref pref = new Pref(this);
+        pref.clearKendaraan();
+        pref.clearDriver();
+        finish();
+        startActivity(new Intent(this, ActivitySplash.class));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        registerReceiver(br, filter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(br);
     }
 
     @Override
@@ -38,6 +71,7 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,34 +82,7 @@ public class BaseActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERM_REQ);
         }
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-//        DashboardActivity.locationChecker(new GoogleApiClient
-//                .Builder(this)
-//                .enableAutoManage(this, 34992, new GoogleApiClient.OnConnectionFailedListener() {
-//                    @Override
-//                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-//
-//                    }
-//                })
-//                .addApi(LocationServices.API)
-//                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-//                    @Override
-//                    public void onConnected(@Nullable Bundle bundle) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onConnectionSuspended(int i) {
-//
-//                    }
-//                })
-//                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
-//                    @Override
-//                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-//
-//                    }
-//                })
-//                .build(),this);
+        filter = new IntentFilter(ACTION_GO_LOGOUT);
     }
 
     @Override
@@ -91,11 +98,12 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }
+
     public void uiRunner(Runnable runnable) {
         if (!isFinishing() && runnable != null) {
             runOnUiThread(runnable);
