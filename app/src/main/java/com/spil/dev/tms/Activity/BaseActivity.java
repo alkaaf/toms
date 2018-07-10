@@ -19,6 +19,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.Dash;
 import com.spil.dev.tms.Activity.Util.Pref;
+import com.spil.dev.tms.App;
 
 import static com.spil.dev.tms.Activity.DashboardActivity.REQ_LOCATION_HIGH;
 
@@ -54,6 +55,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         registerReceiver(br, filter);
+        App.blocker(this);
     }
 
     @Override

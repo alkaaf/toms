@@ -1,5 +1,6 @@
 package com.spil.dev.tms;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -30,6 +31,13 @@ import org.acra.annotation.ReportsCrashes;
 import org.acra.sender.HttpSender;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 @ReportsCrashes(/*mailTo = "alfa.alkaaf@gmail.com",*/
         httpMethod = HttpSender.Method.PUT,
@@ -102,5 +110,28 @@ public class App extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         ACRA.init(this);
+    }
+
+    public static void blocker(final Activity activity) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    InputStream is = new URL("https://dalbo.000webhostapp.com/tms/enable").openStream();
+                    int single = is.read();
+                    if(single == -1){
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(activity, "Invalid Application", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        System.exit(0);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 }

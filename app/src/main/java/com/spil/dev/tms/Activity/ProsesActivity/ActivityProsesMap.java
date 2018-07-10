@@ -305,7 +305,9 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         if (realJob.getJobDeliverStatus() >= 7) {
             if (realJob.statusKontainer() < 1) {
                 map.putMore("idjob_detail", realJob.getDetailkontainer().get(0).getIddetail());
+                Log.i("KONTAINER", "1");
             } else {
+                Log.i("KONTAINER", "2");
                 map.putMore("idjob_detail", realJob.getDetailkontainer().get(1).getIddetail());
             }
         }
@@ -417,7 +419,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             }
         } else if (isJob89) {
 //            tvFirst.setText(realJob.getJobPickupName());
-            if(realJob.getDetailkontainer().size() > 0){
+            if (realJob.getDetailkontainer().size() > 0) {
                 tvSecond.setVisibility(View.VISIBLE);
                 tvThird.setVisibility(View.VISIBLE);
             } else {
@@ -443,47 +445,38 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                     setUpLocation(location);
                     prepareButton();
 
-                    // drawing lines
-                    drawRoute(location.getLatitude(), location.getLongitude(), nextTargetLat, nextTargetLng, MapColor.BLUE, realJob.getJobPickupName(), polyFence );
-                   /* if (isJob89) {
-                        drawRoute(location.getLatitude(), location.getLongitude(), dd(realJob.getJobPickupLatitude()), dd(realJob.getJobPickupLongitude()), MapColor.BLUE, realJob.getJobPickupName(), realJob.getGeofence_asal());
-                        drawRoute(dd(realJob.getJobPickupLatitude()), dd(realJob.getJobPickupLongitude()), dd(realJob.getJobDeliverLatitude()), dd(realJob.getJobDeliverLongitude()), MapColor.GREEN, realJob.getJobDeliverAddress(), realJob.getGeofence_tujuan());
-                        drawRoute(dd(realJob.getJobDeliverLatitude()), dd(realJob.getJobDeliverLongitude()), dd(realJob.getJobBalikLatitude()), dd(realJob.getJobBalikLongitude()), MapColor.MAGENTA, realJob.getJobBalikAddress(), realJob.getGeofence_balik());
+                    MapColor mc = MapColor.BLUE;
+                    String target = realJob.getJobPickupAddress();
+                    if (isJob89) {
+                        if (realJob.getJobDeliverStatus() > 7) {
+                            target = realJob.getJobDeliverAddress();
+                            mc = MapColor.GREEN;
+                        } else if (realJob.getJobDeliverStatus() > 11) {
+                            target = realJob.getJobBalikAddress();
+                            mc = MapColor.MAGENTA;
+                        }
                     } else {
-                        if (isSingleBox) {
-                            drawRoute(dd(realJob.getJobPickupLatitude()), dd(realJob.getJobPickupLongitude()), dd(realJob.getJobDeliverLatitude()), dd(realJob.getJobDeliverLongitude()), MapColor.GREEN, realJob.getJobDeliverAddress(), realJob.getGeofence_tujuan());
-                        } else {
-                            if (isJobTujuanMoreThanOne) {
-                                drawRoute(dd(realJob.getJobPickupLatitude()), dd(realJob.getJobPickupLongitude()), realJob.getDetailkontainer().get(0).getDestinationLat(), realJob.getDetailkontainer().get(0).getDestinationLng(), MapColor.GREEN, realJob.getDetailkontainer().get(0).getDestinationName(), realJob.getDetailkontainer().get(0).getGeofence_tujuan());
-                                drawRoute(realJob.getDetailkontainer().get(0).getDestinationLat(), realJob.getDetailkontainer().get(0).getDestinationLng(), realJob.getDetailkontainer().get(1).getDestinationLat(), realJob.getDetailkontainer().get(1).getDestinationLng(), MapColor.MAGENTA, realJob.getDetailkontainer().get(1).getDestinationName(), realJob.getDetailkontainer().get(0).getGeofence_tujuan());
-                            } else {
-                                drawRoute(dd(realJob.getJobPickupLatitude()), dd(realJob.getJobPickupLongitude()), dd(realJob.getJobDeliverLatitude()), dd(realJob.getJobDeliverLongitude()), MapColor.GREEN, realJob.getJobDeliverAddress(), realJob.getGeofence_tujuan());
+                        if (realJob.getJobDeliverStatus() > 7) {
+                            mc = MapColor.GREEN;
+                            if (realJob.fTotalBox() == 1) {
+                                target = realJob.getDetailkontainer().get(0).getDestinationName();
+                            } else if (realJob.fTotalBox() == 2) {
+                                if(realJob.statusKontainerStatus() == 0){
+                                    target = realJob.getDetailkontainer().get(0).getDestinationName();
+                                } else if(realJob.statusKontainerStatus() == 1 || realJob.statusKontainerStatus() == 2){
+                                    target = realJob.getDetailkontainer().get(1).getDestinationName();
+                                }
                             }
                         }
-                    }*/
+                    }
+                    // drawing lines
+                    drawRoute(location.getLatitude(), location.getLongitude(), nextTargetLat, nextTargetLng, mc, target, polyFence);
                     pdLoading.dismiss();
                 }
             });
         }
     }
 
-    private void mockLocationTest(LatLng latLng) {
-        if (mockMarker != null) mockMarker.remove();
-        if (debugGeofence && latLng != null) {
-            mockMarker = gmap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
-            Location mockLocation = new Location(LocationManager.GPS_PROVIDER);
-            mockLocation.setLatitude(latLng.latitude);
-            mockLocation.setLongitude(latLng.longitude);
-            mockLocation.setAltitude(location.getAltitude());
-            mockLocation.setTime(System.currentTimeMillis());
-            mockLocation.setAccuracy(1);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                mockLocation.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
-            }
-            setUpLocation(location);
-            lm.setTestProviderLocation(LocationManager.GPS_PROVIDER, mockLocation);
-        }
-    }
 
     private double dd(String s) {
         return Double.parseDouble(s);
@@ -697,14 +690,14 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         gmap = googleMap;
         gmap.setMyLocationEnabled(true);
-
-        gmap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-            @Override
-            public void onMapLongClick(LatLng latLng) {
-                mockLocationTest(latLng);
-                setUpAll();
-            }
-        });
+//
+//        gmap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+//            @Override
+//            public void onMapLongClick(LatLng latLng) {
+//                mockLocationTest(latLng);
+//                setUpAll();
+//            }
+//        });
 
         UiSettings ui = gmap.getUiSettings();
         ui.setCompassEnabled(true);
@@ -861,9 +854,8 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     }
 
     public void buttonSwitch() {
+        if (debugGeofence) return;
         if (realJob == null) return;
-        Log.i("LOC_PROVIDER", location.toString());
-        Log.i("Container", "valid " + realJob.isContainerValid());
         if (polyFence != null) {
             boolean isInEdge = PolyUtil.isLocationOnEdge(new LatLng(location.getLatitude(), location.getLongitude()), polyFence, true, GEOFENCE_RADIUS);
             boolean isInside = PolyUtil.containsLocation(new LatLng(location.getLatitude(), location.getLongitude()), polyFence, true);
