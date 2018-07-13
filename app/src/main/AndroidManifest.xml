@@ -8,8 +8,8 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!--<uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/>-->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
@@ -17,14 +17,18 @@
     <application
         android:name=".App"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/ic_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.Resarch.Research"/>
-        <activity android:name=".Activity.MainActivity"/>
-        <activity android:name=".Activity.ActivitySplash">
+        <activity android:name=".Activity.Resarch.Research" />
+        <activity
+            android:name=".Activity.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.ActivitySplash"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,19 +37,24 @@
         </activity>
         <activity
             android:name=".Activity.ForgotPasswordActivity"
-            android:label="Forgot Password" />
+            android:label="Forgot Password"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.ResetConfirmationActivity"
-            android:label="Reset Password" />
+            android:label="Reset Password"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.RegisterActivity"
-            android:label="Register" />
+            android:label="Register"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.RegisterConfirmationActivity"
-            android:label="Register" />
+            android:label="Register"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.DashboardActivity"
-            android:label="@string/title_activity_dashboard" />
+            android:label="@string/title_activity_dashboard"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".Activity.Maps.LocationBroadcaster"
@@ -98,7 +107,8 @@
         <activity android:name=".Activity.SiapAntarActivity" />
         <activity android:name=".Activity.MengantarActivity" />
         <activity android:name=".Activity.MenurunkanActivity" />
-        <activity android:name=".Activity.ReportListActivity"/>
+        <activity android:name=".Activity.ReportListActivity" />
+
         <service
             android:name=".Activity.Util.MyJobService"
             android:exported="false">
@@ -112,7 +122,7 @@
             android:label="Order Baru" />
         <activity
             android:name=".Activity.PilihKendaraanActivity"
-            android:label="Pilih Kendaraan" />
+            android:label="Pilih Kendaraan" android:screenOrientation="portrait"/>
         <activity android:name=".Activity.Notification.JemputNotificationActivity" />
         <activity android:name=".Activity.Notification.MengantarNotificationActivity" />
         <activity android:name=".Activity.Notification.SiapAntarNotificationActivity" />
@@ -134,7 +144,7 @@
 
         <activity
             android:name=".Activity.UploadFotoActivity"
-            android:label="Upload Foto" />
+            android:label="Upload Foto" android:screenOrientation="portrait"/>
         <activity android:name=".Activity.ReadyToStuffPickupActivity" />
         <activity android:name=".Activity.StartStuffPickupActivity" />
         <activity android:name=".Activity.FinishStuffPickupActivity" />
@@ -143,28 +153,44 @@
         <activity android:name=".Activity.FinishDischargeActivity" />
         <activity
             android:name=".Activity.ListDepoActivity"
-            android:label="List Depo" />
+            android:label="List Depo" android:screenOrientation="portrait"/>
         <activity
             android:name=".Activity.ListDermagaActivity"
-            android:label="List Dermaga" />
+            android:label="List Dermaga" android:screenOrientation="portrait"/>
         <!--<activity-->
-            <!--android:name=".depocustomerport.OrderBaruDCPActivity"-->
-            <!--android:label="Order Baru DCP" />-->
+        <!--android:name=".depocustomerport.OrderBaruDCPActivity"-->
+        <!--android:label="Order Baru DCP" />-->
         <!--<activity android:name=".depocustomerport.MapsOrderDCPActivity" />-->
         <activity android:name=".Activity.GoEmptyToDepoActivity" />
         <activity android:name=".Activity.UploadEmptyToDepoActivity"></activity>
-        <activity android:name=".Activity.DCP.OrderBaruDCPActivity"/>
-        <activity android:name=".Activity.DCP.SiapAntarDCPActivity"/>
-        <activity android:name=".Activity.DCP.MapsOrderDCPActivity"/>
-        <activity android:name=".Activity.ProsesActivity.ActivityProsesMap"/>
-        <activity android:name=".Activity.ProsesActivity.ActivityProses3"/>
-        <activity android:name=".Activity.ProsesActivity.ActivityProses1And2"/>
-        <activity android:name=".Activity.ProsesActivity.ActivityProsesMoreThan8"/>
-        <activity android:name=".Activity.ProsesActivity.ActivityProsesFrom4To7"/>
-        <activity android:name=".Activity.ActivityUpload"/>
-        <activity android:name=".Activity.ProsesActivity.ActivityReject"/>
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"/>
-        <activity android:name=".Activity.ChangelogActivity"/>
+        <activity android:name=".Activity.DCP.OrderBaruDCPActivity" />
+        <activity android:name=".Activity.DCP.SiapAntarDCPActivity" />
+        <activity android:name=".Activity.DCP.MapsOrderDCPActivity" />
+        <activity
+            android:name=".Activity.ProsesActivity.ActivityProsesMap"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.ProsesActivity.ActivityProses3"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.ProsesActivity.ActivityProses1And2"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.ProsesActivity.ActivityProsesMoreThan8"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.ProsesActivity.ActivityProsesFrom4To7"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.ActivityUpload"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.ProsesActivity.ActivityReject"
+            android:screenOrientation="portrait" />
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
+        <activity
+            android:name=".Activity.ChangelogActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

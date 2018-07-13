@@ -41,7 +41,7 @@
                 android:id="@+id/tvJobPickupName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Kalisari"
+                android:text="-"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold" />
 
@@ -50,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tvJobPickupName"
-                android:text="Kontainernya wkwkwkw"
+                android:text="-"
                 android:textStyle="bold" />
 
         </RelativeLayout>
@@ -75,6 +75,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
+                    android:id="@+id/tvEstimasiJarakTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Estimasi jarak" />
@@ -84,7 +85,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:text="43 km"
+                    android:text="0 km"
                     android:textColor="@color/colorPrimary"
                     android:textStyle="bold" />
             </RelativeLayout>
@@ -94,6 +95,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
+                    android:id="@+id/tvEstimasiWaktuTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Estimasi waktu" />
@@ -103,7 +105,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:text="4 Jam"
+                    android:text="0 Jam"
                     android:textColor="@color/colorPrimary"
                     android:textStyle="bold" />
             </RelativeLayout>

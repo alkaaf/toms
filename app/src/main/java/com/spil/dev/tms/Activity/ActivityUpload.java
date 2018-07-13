@@ -92,7 +92,6 @@ public class ActivityUpload extends BaseActivity {
             Log.i("CHILDADD", dataSnapshot.getValue().toString());
             photoUrl.add(dataSnapshot.getValue(Gallery.class));
             adapter.notifyDataSetChanged();
-            setOkResult();
         }
 
         @Override
@@ -282,6 +281,11 @@ public class ActivityUpload extends BaseActivity {
         Intent intent = new Intent(context, ActivityUpload.class);
         intent.putExtra(INTENT_DATA, simpleJob);
         ((Activity) context).startActivityForResult(intent, REQ_CODE);
+    }
+    public static void start(Context context, SimpleJob simpleJob, int code) {
+        Intent intent = new Intent(context, ActivityUpload.class);
+        intent.putExtra(INTENT_DATA, simpleJob);
+        ((Activity) context).startActivityForResult(intent, code);
     }
 
     @Override

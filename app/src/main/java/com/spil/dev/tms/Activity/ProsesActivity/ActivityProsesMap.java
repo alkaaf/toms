@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -29,6 +30,11 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.maps.android.PolyUtil;
 import com.spil.dev.tms.Activity.ActivityUpload;
 import com.spil.dev.tms.Activity.Adapter.ContainerAdapter;
@@ -79,6 +85,10 @@ import butterknife.ButterKnife;
 
 public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallback {
     public static final String INTENT_DATA = "data.job.hehe";
+    public static final int REQ_FIRST = 1;
+    public static final int REQ_SECOND = 2;
+    public static final int REQ_THIRD = 3;
+    public static final int REQ_OPT = 99;
 
     static ActivityProsesMap instance;
 
@@ -194,6 +204,17 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     List<Polygon> polygonList = new ArrayList<>();
 
     Marker mockMarker;
+    DatabaseReference root;
+    DatabaseReference finishFirst;
+    DatabaseReference finishSecond;
+    DatabaseReference finishThird;
+    DatabaseReference finishOpt;
+
+    boolean isFinishFirst = false;
+    boolean isFinishSecond = false;
+    boolean isFinishThird = false;
+    boolean isFinishOpt = false;
+
 
     public void setNextTarget(double lat, double lng) {
         this.nextTargetLat = lat;
@@ -209,6 +230,8 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_order);
+
+
         pref = new Pref(this);
         driver = pref.getDriverModel();
         kendaraan = pref.getKendaraan();
@@ -224,6 +247,73 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         lm = ((LocationManager) getSystemService(Context.LOCATION_SERVICE));
 
         simpleJob = getIntent().getParcelableExtra(INTENT_DATA);
+        root = FirebaseDatabase.getInstance().getReference("uploadstatus").child("job_" + simpleJob.getJobId());
+        finishFirst = root.child("first");
+        finishSecond = root.child("second");
+        finishThird = root.child("third");
+        finishOpt = root.child("opt");
+
+        finishFirst.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    isFinishFirst = dataSnapshot.getValue(Boolean.class);
+                } catch (NullPointerException e) {
+                    isFinishFirst = false;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        finishSecond.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    isFinishSecond = dataSnapshot.getValue(Boolean.class);
+                } catch (NullPointerException e) {
+                    isFinishSecond = false;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        finishThird.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    isFinishThird = dataSnapshot.getValue(Boolean.class);
+                } catch (NullPointerException e) {
+                    isFinishThird = false;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        finishOpt.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    isFinishOpt = dataSnapshot.getValue(Boolean.class);
+                } catch (NullPointerException e) {
+                    isFinishOpt = false;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         bExpandInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -288,8 +378,33 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         if (requestCode == ActivityReject.REQ_CODE && resultCode == Activity.RESULT_OK) {
             finish();
         }
-        if (requestCode == ActivityUpload.REQ_CODE && resultCode == Activity.RESULT_OK) {
-
+        if (requestCode == REQ_FIRST) {
+            if (resultCode == Activity.RESULT_OK) {
+                finishFirst.setValue(true);
+            } else {
+                showUploadPrompt(REQ_FIRST);
+            }
+        }
+        if (requestCode == REQ_SECOND) {
+            if (resultCode == Activity.RESULT_OK) {
+                finishSecond.setValue(true);
+            } else {
+                showUploadPrompt(REQ_SECOND);
+            }
+        }
+        if (requestCode == REQ_THIRD) {
+            if (resultCode == Activity.RESULT_OK) {
+                finishThird.setValue(true);
+            } else {
+                showUploadPrompt(REQ_THIRD);
+            }
+        }
+        if (requestCode == REQ_OPT) {
+            if (resultCode == Activity.RESULT_OK) {
+                finishOpt.setValue(true);
+            } else {
+                showUploadPrompt(REQ_OPT);
+            }
         }
     }
 
@@ -461,9 +576,9 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                             if (realJob.fTotalBox() == 1) {
                                 target = realJob.getDetailkontainer().get(0).getDestinationName();
                             } else if (realJob.fTotalBox() == 2) {
-                                if(realJob.statusKontainerStatus() == 0){
+                                if (realJob.statusKontainerStatus() == 0) {
                                     target = realJob.getDetailkontainer().get(0).getDestinationName();
-                                } else if(realJob.statusKontainerStatus() == 1 || realJob.statusKontainerStatus() == 2){
+                                } else if (realJob.statusKontainerStatus() == 1 || realJob.statusKontainerStatus() == 2) {
                                     target = realJob.getDetailkontainer().get(1).getDestinationName();
                                 }
                             }
@@ -553,6 +668,10 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                     vDestinationList.setVisibility(View.GONE);
 //                    lvContainer.setVisibility(View.GONE);
                 }
+
+                if (!isFinishFirst) {
+                    showUploadPrompt(REQ_FIRST);
+                }
                 break;
             }
             case 8: {//deliver
@@ -578,6 +697,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                     vDestinationList.setVisibility(View.VISIBLE);
                     lvContainer.setVisibility(View.VISIBLE);
                 }
+
 
                 break;
             }
@@ -619,15 +739,24 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                         setGeofenceTarget(realJob.getDetailkontainer().get(0).getDestinationLat(), realJob.getDetailkontainer().get(0).getDestinationLng());
                         setGeofenceTarget(realJob.getDetailkontainer().get(0).getGeofence_tujuan());
                         setNextTarget(realJob.getDetailkontainer().get(0).getDestinationLat(), realJob.getDetailkontainer().get(0).getDestinationLng());
+                        if(!isFinishSecond){
+                            showUploadPrompt(REQ_SECOND);
+                        }
                     } else {
                         setGeofenceTarget(realJob.getDetailkontainer().get(1).getDestinationLat(), realJob.getDetailkontainer().get(1).getDestinationLng());
                         setGeofenceTarget(realJob.getDetailkontainer().get(1).getGeofence_tujuan());
                         setNextTarget(realJob.getDetailkontainer().get(1).getDestinationLat(), realJob.getDetailkontainer().get(1).getDestinationLng());
+                        if(!isFinishThird){
+                            showUploadPrompt(REQ_THIRD);
+                        }
                     }
                 } else {
                     setGeofenceTarget(realJob.getJobDeliverLatitude(), realJob.getJobDeliverLongitude());
                     setGeofenceTarget(realJob.getGeofence_tujuan());
                     setNextTarget(realJob.getJobDeliverLatitude(), realJob.getJobDeliverLongitude());
+                    if(!isFinishSecond){
+                        showUploadPrompt(REQ_SECOND);
+                    }
                 }
 
                 break;
@@ -656,6 +785,10 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                     setGeofenceTarget(realJob.getJobBalikLatitude(), realJob.getJobBalikLongitude());
                     setGeofenceTarget(realJob.getGeofence_balik());
                     setNextTarget(realJob.getJobBalikLatitude(), realJob.getJobBalikLongitude());
+
+                    if(!isFinishOpt){
+                        showUploadPrompt(REQ_OPT);
+                    }
                 }
                 break;
             }
@@ -924,5 +1057,17 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
 //            e.printStackTrace();
 //        }
 //        mockLocationTest(null);
+    }
+
+    private void showUploadPrompt(final int code) {
+        new AlertDialog.Builder(this).setTitle("Upload foto")
+                .setMessage("Silahkan unggah foto untuk melanjutkan")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ActivityUpload.start(ActivityProsesMap.this, simpleJob, code);
+                    }
+                }).setCancelable(false)
+                .show();
     }
 }
