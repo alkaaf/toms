@@ -25,6 +25,7 @@ import com.spil.dev.tms.Activity.Model.DriverModel;
 import com.spil.dev.tms.Activity.Model.RealJob;
 import com.spil.dev.tms.Activity.Model.SimpleJob;
 import com.spil.dev.tms.Activity.Model.KendaraanModel;
+import com.spil.dev.tms.Activity.Util.MyTimeUtil;
 import com.spil.dev.tms.Activity.Util.Netter;
 import com.spil.dev.tms.Activity.Util.Pref;
 import com.spil.dev.tms.Activity.Util.StringHashMap;
@@ -71,6 +72,9 @@ public class ActivityProses1And2 extends BaseActivity {
     TextView tv2;
     @BindView(R.id.tv3)
     TextView tv3;
+    @BindView(R.id.tvEstimasiWaktuTitle)
+    TextView tvEstimasiWaktuTitle;
+
     ContainerAdapter adapter;
 
     public static final String INTENT_DATA = "datajob1-2";
@@ -205,8 +209,15 @@ public class ActivityProses1And2 extends BaseActivity {
                     realJob = new Gson().fromJson(obj.getString("job-" + job.getJobId()), RealJob.class);
                     tvJobDesc.setText(realJob.getJobDescription());
                     tvJobPickupName.setText(realJob.getJobPickupAddress());
-                    tvEstimasiJarak.setText(realJob.getJobDeliverDistancetext());
-                    tvEstimasiWaktu.setText(realJob.getJobDeliverEstimatetimetext());
+
+                    if(realJob.getJobDeliverStatus() == 14){
+                        tvEstimasiWaktuTitle.setText("Durasi job");
+                        tvEstimasiWaktu.setText(MyTimeUtil.minToStringDuration(realJob.getTotaldurasi()));
+                    } else {
+                        tvEstimasiWaktu.setText(realJob.getJobDeliverEstimatetimetext());
+                    }
+
+
                     tvOrderId.setText(realJob.getOrderId());
                     tvTanggal.setText(realJob.parsedPickupDate());
                     getSupportActionBar().setSubtitle(realJob.getStringJobTypeName());

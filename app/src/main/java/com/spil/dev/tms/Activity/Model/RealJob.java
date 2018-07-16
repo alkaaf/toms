@@ -155,7 +155,33 @@ public class RealJob implements Parcelable {
     List<Fence> geofence_asal;
     List<Fence> geofence_tujuan;
     List<Fence> geofence_balik;
+    int totaldurasi;
+    String job_arrivalmuat;
+    String job_finish;
 
+    public int getTotaldurasi() {
+        return totaldurasi;
+    }
+
+    public void setTotaldurasi(int totaldurasi) {
+        this.totaldurasi = totaldurasi;
+    }
+
+    public String getJob_arrivalmuat() {
+        return job_arrivalmuat;
+    }
+
+    public void setJob_arrivalmuat(String job_arrivalmuat) {
+        this.job_arrivalmuat = job_arrivalmuat;
+    }
+
+    public String getJob_finish() {
+        return job_finish;
+    }
+
+    public void setJob_finish(String job_finish) {
+        this.job_finish = job_finish;
+    }
 
     public List<LatLng> getGeofence_asal() {
         if (geofence_asal != null && !geofence_asal.isEmpty()) {
@@ -946,6 +972,9 @@ public class RealJob implements Parcelable {
         dest.writeTypedList(this.geofence_asal);
         dest.writeTypedList(this.geofence_tujuan);
         dest.writeTypedList(this.geofence_balik);
+        dest.writeInt(this.totaldurasi);
+        dest.writeString(this.job_arrivalmuat);
+        dest.writeString(this.job_finish);
     }
 
     protected RealJob(Parcel in) {
@@ -998,6 +1027,9 @@ public class RealJob implements Parcelable {
         this.geofence_asal = in.createTypedArrayList(Fence.CREATOR);
         this.geofence_tujuan = in.createTypedArrayList(Fence.CREATOR);
         this.geofence_balik = in.createTypedArrayList(Fence.CREATOR);
+        this.totaldurasi = in.readInt();
+        this.job_arrivalmuat = in.readString();
+        this.job_finish = in.readString();
     }
 
     public static final Creator<RealJob> CREATOR = new Creator<RealJob>() {
