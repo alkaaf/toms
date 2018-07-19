@@ -734,13 +734,14 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 break;
             }
             case 10: {
-                if (isJob89) {
+                whatFunc = Netter.Webservice.JOB_FINISHJOBARRIVAL;
+               /* if (isJob89) {
                     // finish load
                     whatFunc = Netter.Webservice.JOB_FINISHJOBARRIVAL;
                 } else {
                     // finish job
                     whatFunc = Netter.Webservice.JOB_FINISHJOB;
-                }
+                }*/
 
                 enableGeofence = true;
                 enableContainerCheck = true;
@@ -774,6 +775,9 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             case 11: {
                 if (isJob89) {
                     whatFunc = Netter.Webservice.JOB_GOEMPTYDEPO;
+                } else {
+                    // finish job
+                    whatFunc = Netter.Webservice.JOB_FINISHJOB;
                 }
                 break;
             }
@@ -1108,7 +1112,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             }
             case 9: {
                 if (status == 9 && !isFinishSecond) showUploadPrompt(REQ_FIRST);
-                if (status == 10 && !isFinishSecond) showUploadPrompt(REQ_SECOND);
+                if (status == 11 && !isFinishSecond) showUploadPrompt(REQ_SECOND);
                 break;
             }
         }
