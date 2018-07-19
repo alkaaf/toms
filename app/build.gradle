@@ -24,8 +24,8 @@ android {
         applicationId "com.spil.dev.tms"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 31
-        versionName "1.8.156"
+        versionCode 32
+        versionName "1.8.157"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
