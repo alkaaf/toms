@@ -364,9 +364,9 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
                 if (whatFunc == null) {
-                    if (!job123) {
-                        ActivityUpload.start(ActivityProsesMap.this, simpleJob);
-                    }
+//                    if (!job123) {
+//                        ActivityUpload.start(ActivityProsesMap.this, simpleJob);
+//                    }
                     finish();
                 } else {
                     nextStep();
@@ -562,6 +562,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         // setup container adapter
         lvContainer.setAdapter(new ContainerAdapter(this, R.layout.list_container, realJob.getDetailkontainer()));
         UIUtils.setListViewHeightBasedOnItems(lvContainer);
+        promptUpload(realJob);
         // draw route from start to end
         if (gmap != null) {
             LocationServices.getFusedLocationProviderClient(this).getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
@@ -569,7 +570,6 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 public void onSuccess(Location location) {
                     setUpLocation(location);
                     prepareButton();
-
                     MapColor mc = MapColor.BLUE;
                     String target = realJob.getJobPickupAddress();
                     if (isJob89) {
@@ -679,9 +679,9 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
 //                    lvContainer.setVisibility(View.GONE);
                 }
 
-                if (!isFinishFirst) {
-                    showUploadPrompt(REQ_FIRST);
-                }
+//                if (!isFinishFirst) {
+//                    showUploadPrompt(REQ_FIRST);
+//                }
                 break;
             }
             case 8: {//deliver
@@ -749,24 +749,24 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                         setGeofenceTarget(realJob.getDetailkontainer().get(0).getDestinationLat(), realJob.getDetailkontainer().get(0).getDestinationLng());
                         setGeofenceTarget(realJob.getDetailkontainer().get(0).getGeofence_tujuan());
                         setNextTarget(realJob.getDetailkontainer().get(0).getDestinationLat(), realJob.getDetailkontainer().get(0).getDestinationLng());
-                        if (!isFinishSecond) {
-                            showUploadPrompt(REQ_SECOND);
-                        }
+//                        if (!isFinishSecond) {
+//                            showUploadPrompt(REQ_SECOND);
+//                        }
                     } else {
                         setGeofenceTarget(realJob.getDetailkontainer().get(1).getDestinationLat(), realJob.getDetailkontainer().get(1).getDestinationLng());
                         setGeofenceTarget(realJob.getDetailkontainer().get(1).getGeofence_tujuan());
                         setNextTarget(realJob.getDetailkontainer().get(1).getDestinationLat(), realJob.getDetailkontainer().get(1).getDestinationLng());
-                        if (!isFinishThird) {
-                            showUploadPrompt(REQ_THIRD);
-                        }
+//                        if (!isFinishThird) {
+//                            showUploadPrompt(REQ_THIRD);
+//                        }
                     }
                 } else {
                     setGeofenceTarget(realJob.getJobDeliverLatitude(), realJob.getJobDeliverLongitude());
                     setGeofenceTarget(realJob.getGeofence_tujuan());
                     setNextTarget(realJob.getJobDeliverLatitude(), realJob.getJobDeliverLongitude());
-                    if (!isFinishSecond) {
-                        showUploadPrompt(REQ_SECOND);
-                    }
+//                    if (!isFinishSecond) {
+//                        showUploadPrompt(REQ_SECOND);
+//                    }
                 }
 
                 break;
@@ -796,9 +796,9 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                     setGeofenceTarget(realJob.getGeofence_balik());
                     setNextTarget(realJob.getJobBalikLatitude(), realJob.getJobBalikLongitude());
 
-                    if (!isFinishOpt) {
-                        showUploadPrompt(REQ_OPT);
-                    }
+//                    if (!isFinishOpt) {
+//                        showUploadPrompt(REQ_OPT);
+//                    }
                 }
                 break;
             }
@@ -921,7 +921,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(!job123) {
+        if (!job123) {
             getMenuInflater().inflate(R.menu.menu_view_photo, menu);
         }
         return super.onCreateOptionsMenu(menu);
@@ -1081,5 +1081,36 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                     }
                 }).setCancelable(false)
                 .show();
+    }
+
+    private void promptUpload(RealJob realJob) {
+        int status = realJob.getJobDeliverStatus();
+        switch (realJob.getJobType()) {
+            case 4: {
+                if (status == 7 && !isFinishFirst) showUploadPrompt(REQ_FIRST);
+                if (status == 10 && !isFinishSecond) showUploadPrompt(REQ_SECOND);
+                break;
+            }
+            case 5: {
+                if (status == 7 && !isFinishFirst) showUploadPrompt(REQ_FIRST);
+                if (status == 10 && !isFinishSecond) showUploadPrompt(REQ_SECOND);
+                break;
+            }
+            case 6: {
+                if (status == 7 && !isFinishFirst) showUploadPrompt(REQ_FIRST);
+                if (status == 10 && !isFinishSecond) showUploadPrompt(REQ_SECOND);
+                break;
+            }
+            case 8: {
+                if (status == 7 && !isFinishFirst) showUploadPrompt(REQ_FIRST);
+                if (status == 10 && !isFinishSecond) showUploadPrompt(REQ_SECOND);
+                break;
+            }
+            case 9: {
+                if (status == 9 && !isFinishSecond) showUploadPrompt(REQ_FIRST);
+                if (status == 10 && !isFinishSecond) showUploadPrompt(REQ_SECOND);
+                break;
+            }
+        }
     }
 }
