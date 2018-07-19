@@ -63,7 +63,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ActivityUpload extends BaseActivity {
-    public static final int REQ_CODE = 3;
+    public static final int REQ_CODE = 20;
 
     FirebaseDatabase fbdb;
     FirebaseStorage fbstor;

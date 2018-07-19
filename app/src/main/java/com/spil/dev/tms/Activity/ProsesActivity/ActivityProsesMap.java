@@ -215,6 +215,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     boolean isFinishThird = false;
     boolean isFinishOpt = false;
 
+    boolean job123;
 
     public void setNextTarget(double lat, double lng) {
         this.nextTargetLat = lat;
@@ -253,13 +254,20 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         finishThird = root.child("third");
         finishOpt = root.child("opt");
 
+        job123 = simpleJob.getJobType() >= 1 && simpleJob.getJobType() <= 3;
+        if (job123) {
+            isFinishFirst = true;
+            isFinishSecond = true;
+            isFinishThird = true;
+            isFinishOpt = true;
+        }
         finishFirst.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try {
                     isFinishFirst = dataSnapshot.getValue(Boolean.class);
                 } catch (NullPointerException e) {
-                    isFinishFirst = false;
+                    isFinishFirst = job123;
                 }
             }
 
@@ -274,7 +282,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 try {
                     isFinishSecond = dataSnapshot.getValue(Boolean.class);
                 } catch (NullPointerException e) {
-                    isFinishSecond = false;
+                    isFinishSecond = job123;
                 }
             }
 
@@ -289,7 +297,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 try {
                     isFinishThird = dataSnapshot.getValue(Boolean.class);
                 } catch (NullPointerException e) {
-                    isFinishThird = false;
+                    isFinishThird = job123;
                 }
             }
 
@@ -304,7 +312,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 try {
                     isFinishOpt = dataSnapshot.getValue(Boolean.class);
                 } catch (NullPointerException e) {
-                    isFinishOpt = false;
+                    isFinishOpt = job123;
                 }
             }
 
@@ -356,7 +364,9 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
                 if (whatFunc == null) {
-                    ActivityUpload.start(ActivityProsesMap.this, simpleJob);
+                    if (!job123) {
+                        ActivityUpload.start(ActivityProsesMap.this, simpleJob);
+                    }
                     finish();
                 } else {
                     nextStep();
@@ -739,14 +749,14 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                         setGeofenceTarget(realJob.getDetailkontainer().get(0).getDestinationLat(), realJob.getDetailkontainer().get(0).getDestinationLng());
                         setGeofenceTarget(realJob.getDetailkontainer().get(0).getGeofence_tujuan());
                         setNextTarget(realJob.getDetailkontainer().get(0).getDestinationLat(), realJob.getDetailkontainer().get(0).getDestinationLng());
-                        if(!isFinishSecond){
+                        if (!isFinishSecond) {
                             showUploadPrompt(REQ_SECOND);
                         }
                     } else {
                         setGeofenceTarget(realJob.getDetailkontainer().get(1).getDestinationLat(), realJob.getDetailkontainer().get(1).getDestinationLng());
                         setGeofenceTarget(realJob.getDetailkontainer().get(1).getGeofence_tujuan());
                         setNextTarget(realJob.getDetailkontainer().get(1).getDestinationLat(), realJob.getDetailkontainer().get(1).getDestinationLng());
-                        if(!isFinishThird){
+                        if (!isFinishThird) {
                             showUploadPrompt(REQ_THIRD);
                         }
                     }
@@ -754,7 +764,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                     setGeofenceTarget(realJob.getJobDeliverLatitude(), realJob.getJobDeliverLongitude());
                     setGeofenceTarget(realJob.getGeofence_tujuan());
                     setNextTarget(realJob.getJobDeliverLatitude(), realJob.getJobDeliverLongitude());
-                    if(!isFinishSecond){
+                    if (!isFinishSecond) {
                         showUploadPrompt(REQ_SECOND);
                     }
                 }
@@ -786,7 +796,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                     setGeofenceTarget(realJob.getGeofence_balik());
                     setNextTarget(realJob.getJobBalikLatitude(), realJob.getJobBalikLongitude());
 
-                    if(!isFinishOpt){
+                    if (!isFinishOpt) {
                         showUploadPrompt(REQ_OPT);
                     }
                 }
@@ -911,7 +921,9 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_view_photo, menu);
+        if(!job123) {
+            getMenuInflater().inflate(R.menu.menu_view_photo, menu);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 

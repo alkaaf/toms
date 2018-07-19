@@ -230,7 +230,7 @@ public class RealJob implements Parcelable {
         s.put(10, "SELESAI ORDER");
         if (statusKontainerStatus() >= 1) {
             s.put(10, "SELESAI ORDER");
-            s.put(14, "UNGGAH FOTO");
+            s.put(14, "TUTUP");
         } else {
             s.put(10, "ORDER PERTAMA SELESAI");
             s.put(14, "KIRIM SELANJUTNYA");
@@ -250,7 +250,7 @@ public class RealJob implements Parcelable {
         s.put(10, "SELESAI ORDER");
         if (statusKontainerStatus() >= 1) {
             s.put(10, "SELESAI ORDER");
-            s.put(14, "UNGGAH FOTO");
+            s.put(14, "TUTUP");
         } else {
             s.put(10, "ORDER PERTAMA SELESAI");
             s.put(14, "KIRIM SELANJUTNYA");
@@ -269,7 +269,7 @@ public class RealJob implements Parcelable {
         s.put(9, "MULAI BONGKAR");
         s.put(10, "SELESAI ORDER");
         if (statusKontainerStatus() >= 1) {
-            s.put(10, "SELESAI ORDER");
+            s.put(10, "TUTUP");
             s.put(14, "UNGGAH FOTO");
         } else {
             s.put(10, "ORDER PERTAMA SELESAI");
