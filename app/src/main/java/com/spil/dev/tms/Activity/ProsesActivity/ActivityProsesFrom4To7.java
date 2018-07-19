@@ -189,18 +189,19 @@ public class ActivityProsesFrom4To7 extends BaseActivity {
                     tvJobDesc.setText(realJob.getJobDescription());
                     tvJobPickupName.setText(realJob.getJobPickupAddress());
                     tvEstimasiJarak.setText(realJob.getJobDeliverDistancetext());
+                    tvTanggal.setText(realJob.parsedPickupDate());
 
 
                     if(realJob.getJobDeliverStatus() == 14){
                         tvEstimasiWaktuTitle.setText("Durasi job");
                         tvEstimasiWaktu.setText(MyTimeUtil.minToStringDuration(realJob.getTotaldurasi()));
+                        tvTanggal.setText(realJob.getJob_arrivalmuat());
                     } else {
                         tvEstimasiWaktu.setText(realJob.getJobDeliverEstimatetimetext());
                     }
 
 
                     tvOrderId.setText(realJob.getOrderId());
-                    tvTanggal.setText(realJob.parsedPickupDate());
 
                     tvPickup.setText(realJob.getJobPickupName());
                     tvDeliver.setText(realJob.getJobDeliverAddress());

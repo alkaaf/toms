@@ -187,17 +187,18 @@ public class ActivityProses3 extends BaseActivity {
                     tvJobDesc.setText(realJob.getJobDescription());
                     tvJobPickupName.setText(realJob.getJobPickupAddress());
                     tvEstimasiJarak.setText(realJob.getJobDeliverDistancetext());
-
+                    tvTanggal.setText(realJob.parsedPickupDate());
 
                     if(realJob.getJobDeliverStatus() == 14){
                         tvEstimasiWaktuTitle.setText("Durasi job");
                         tvEstimasiWaktu.setText(MyTimeUtil.minToStringDuration(realJob.getTotaldurasi()));
+                        tvTanggal.setText(realJob.getJob_arrivalmuat());
                     } else {
                         tvEstimasiWaktu.setText(realJob.getJobDeliverEstimatetimetext());
                     }
 
                     tvOrderId.setText(realJob.getOrderId());
-                    tvTanggal.setText(realJob.parsedPickupDate());
+
                     getSupportActionBar().setSubtitle(realJob.getStringJobTypeName());
 
                     adapter = new ContainerAdapter(ActivityProses3.this, R.layout.list_container, realJob.getDetailkontainer());

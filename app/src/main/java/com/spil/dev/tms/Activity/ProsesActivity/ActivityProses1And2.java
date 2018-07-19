@@ -209,17 +209,18 @@ public class ActivityProses1And2 extends BaseActivity {
                     realJob = new Gson().fromJson(obj.getString("job-" + job.getJobId()), RealJob.class);
                     tvJobDesc.setText(realJob.getJobDescription());
                     tvJobPickupName.setText(realJob.getJobPickupAddress());
+                    tvTanggal.setText(realJob.parsedPickupDate());
 
                     if(realJob.getJobDeliverStatus() == 14){
                         tvEstimasiWaktuTitle.setText("Durasi job");
                         tvEstimasiWaktu.setText(MyTimeUtil.minToStringDuration(realJob.getTotaldurasi()));
+                        tvTanggal.setText(realJob.getJob_arrivalmuat());
                     } else {
                         tvEstimasiWaktu.setText(realJob.getJobDeliverEstimatetimetext());
                     }
 
 
                     tvOrderId.setText(realJob.getOrderId());
-                    tvTanggal.setText(realJob.parsedPickupDate());
                     getSupportActionBar().setSubtitle(realJob.getStringJobTypeName());
 
                     adapter = new ContainerAdapter(ActivityProses1And2.this, R.layout.list_container, realJob.getDetailkontainer());

@@ -838,6 +838,19 @@ public class RealJob implements Parcelable {
     }
 
 
+    public String parsedArrivalMuat() {
+//        6/1/2018 10:03:12 AM
+        SimpleDateFormat parser = new SimpleDateFormat("M/d/yyyy hh:mm:ss a");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        try {
+            Date d = parser.parse(getJob_arrivalmuat());
+            return formatter.format(d);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return "00-00-0000 00:00";
+        }
+    }
+
     public RealJob() {
     }
 
