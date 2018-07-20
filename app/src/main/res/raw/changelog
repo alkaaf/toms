@@ -1,4 +1,7 @@
-1.8.156 - 32
+1.8.158 - 33
+- perubahan tombol tolak menjadi lapor jika job sudah finish load
+
+1.8.157 - 32
 - perubahan alur upload foto
 - waktu aktual saat job telah selesai
 - perbaikan tombol ke 11 yang tidak muncul

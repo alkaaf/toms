@@ -39,6 +39,7 @@ import com.google.maps.android.PolyUtil;
 import com.spil.dev.tms.Activity.ActivityUpload;
 import com.spil.dev.tms.Activity.Adapter.ContainerAdapter;
 import com.spil.dev.tms.Activity.BaseActivity;
+import com.spil.dev.tms.Activity.Fragment.RejectFragment;
 import com.spil.dev.tms.Activity.Maps.DirectionFinder;
 import com.spil.dev.tms.Activity.Maps.DirectionFinderListener;
 import com.spil.dev.tms.Activity.Maps.LocationBroadcaster;
@@ -373,12 +374,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 }
             }
         });
-        bTolak.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ActivityReject.start(ActivityProsesMap.this, simpleJob);
-            }
-        });
+        bTolak.setText("");
 
     }
 
@@ -511,6 +507,25 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     @SuppressLint("MissingPermission")
     public void setUpAll() {
         clearMapElement();
+
+
+        if(realJob.getJobDeliverStatus() > 6){
+            bTolak.setText("Lapor");
+            bTolak.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ActivityLapor.start(ActivityProsesMap.this);
+                }
+            });
+        } else {
+            bTolak.setText("Tolak");
+            bTolak.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ActivityReject.start(ActivityProsesMap.this, simpleJob);
+                }
+            });
+        }
 
         // tvMuatanKosong
         tvMuatanKosong.setVisibility((realJob.getDetailkontainer() != null && realJob.getDetailkontainer().isEmpty()) ? View.VISIBLE : View.GONE);

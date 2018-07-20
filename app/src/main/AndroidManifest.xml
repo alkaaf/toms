@@ -151,6 +151,7 @@
         <activity android:name=".Activity.ArriveDestinationActivity" />
         <activity android:name=".Activity.StartDischargeActivity" />
         <activity android:name=".Activity.FinishDischargeActivity" />
+        <activity android:name=".Activity.ProsesActivity.ActivityLapor"/>
         <activity
             android:name=".Activity.ListDepoActivity"
             android:label="List Depo" android:screenOrientation="portrait"/>
