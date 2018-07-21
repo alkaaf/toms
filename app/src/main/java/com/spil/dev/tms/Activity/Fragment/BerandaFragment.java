@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import com.spil.dev.tms.Activity.Model.DriverModel;
 import com.spil.dev.tms.Activity.Model.SimpleJob;
 import com.spil.dev.tms.Activity.ProsesActivity.ActivityProsesMap;
 import com.spil.dev.tms.Activity.Resarch.Research;
+import com.spil.dev.tms.Activity.Util.DistanceMatrix;
 import com.spil.dev.tms.Activity.Util.Netter;
 import com.spil.dev.tms.Activity.Util.Pref;
 import com.spil.dev.tms.Activity.Util.StringHashMap;
@@ -89,8 +91,14 @@ public class BerandaFragment extends FragmentBase {
         tvBulanIni.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(getContext(), Research.class));
-//                ((DashboardActivity) getActivity()).checkUpdate();
+                DistanceMatrix.get(-7.337389, 112.753870, -7.303988, 112.736513, new DistanceMatrix.DistanceResult() {
+                    @Override
+                    public void onResult(String status, String distanceText, long distanceMeter, String durationText, long durationMin) {
+                        Log.i("MATRIX", status);
+                        Log.i("MATRIX", distanceText+"");
+                        Log.i("MATRIX", durationText+"");
+                    }
+                });
             }
         });
         tvHariIni = view.findViewById(R.id.tv_hari_ini);

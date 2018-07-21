@@ -233,7 +233,6 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_order);
 
-
         pref = new Pref(this);
         driver = pref.getDriverModel();
         kendaraan = pref.getKendaraan();

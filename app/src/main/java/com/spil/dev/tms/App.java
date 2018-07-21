@@ -21,6 +21,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
 import com.spil.dev.tms.Activity.Model.DriverModel;
 import com.spil.dev.tms.Activity.Model.UserData;
+import com.spil.dev.tms.Activity.Util.DistanceMatrix;
 import com.spil.dev.tms.Activity.Util.Netter;
 import com.spil.dev.tms.Activity.Util.Pref;
 import com.spil.dev.tms.Activity.Util.StringHashMap;
@@ -97,6 +98,7 @@ public class App extends Application {
                 .setDownsampleEnabled(true)
                 .build();
         Fresco.initialize(this, config);
+        DistanceMatrix.init(this);
         IntentFilter filter = new IntentFilter(Intent.ACTION_TIME_TICK);
         registerReceiver(receiver, filter);
     }
