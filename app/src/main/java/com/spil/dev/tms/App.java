@@ -13,12 +13,9 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.google.gson.Gson;
 import com.spil.dev.tms.Activity.BaseActivity;
-import com.spil.dev.tms.Activity.Maps.LocationBroadcaster;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.facebook.imagepipeline.decoder.SimpleProgressiveJpegConfig;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationServices;
 import com.spil.dev.tms.Activity.Model.DriverModel;
 import com.spil.dev.tms.Activity.Model.UserData;
 import com.spil.dev.tms.Activity.Util.DistanceMatrix;
@@ -33,11 +30,8 @@ import org.acra.sender.HttpSender;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 @ReportsCrashes(/*mailTo = "alfa.alkaaf@gmail.com",*/
@@ -53,7 +47,7 @@ public class App extends Application {
     public static Context context;
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(final Context context, final Intent intent) {
             Log.i("TIME_TICK", "Time is tick tock");
             // auto logout belong here
             Pref pref = new Pref(App.this);
@@ -67,13 +61,16 @@ public class App extends Application {
                             JSONObject ob = new JSONObject(response);
                             if (ob.getInt("status") == 200) {
                                 UserData ud = new Gson().fromJson(ob.getString("data"), UserData.class);
-                                if (ud.sttlogin) {
-                                    // logged in, do nothing
-                                    Log.i("SESSION_VALID", "TRUE");
-                                } else {
-                                    Intent intentLogout = new Intent(BaseActivity.ACTION_GO_LOGOUT);
-                                    sendBroadcast(intentLogout);
-                                }
+                                Intent intentLogout = new Intent(BaseActivity.ACTION_GO_LOGOUT);
+                                intentLogout.putExtra(BaseActivity.STTLOGIN, ud);
+                                sendBroadcast(intentLogout);
+//                                if (ud.sttlogin) {
+//                                    // logged in, do nothing
+//                                    Log.i("SESSION_VALID", "TRUE");
+//                                } else {
+//                                    Intent intentLogout = new Intent(BaseActivity.ACTION_GO_LOGOUT);
+//                                    sendBroadcast(intentLogout);
+//                                }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

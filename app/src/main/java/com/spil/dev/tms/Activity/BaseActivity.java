@@ -14,10 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.Dash;
+import com.spil.dev.tms.Activity.Model.UserData;
 import com.spil.dev.tms.Activity.Util.Pref;
 import com.spil.dev.tms.App;
 
@@ -27,6 +24,7 @@ public class BaseActivity extends AppCompatActivity {
     private int PERM_REQ;
     IntentFilter filter;
     public static final String ACTION_GO_LOGOUT = "lougto kono";
+    public static final String STTLOGIN = "userdata";
 
     public void toast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
@@ -39,7 +37,10 @@ public class BaseActivity extends AppCompatActivity {
     BroadcastReceiver br = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            logout();
+            UserData d = intent.getParcelableExtra(STTLOGIN);
+            if (d != null && !d.sttlogin) {
+                logout();
+            }
         }
     };
 
