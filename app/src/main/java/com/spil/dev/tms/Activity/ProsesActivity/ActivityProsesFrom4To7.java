@@ -67,7 +67,8 @@ public class ActivityProsesFrom4To7 extends BaseActivity {
     Button bTolak;
     @BindView(R.id.tvEstimasiWaktuTitle)
     TextView tvEstimasiWaktuTitle;
-
+    @BindView(R.id.tvEstimasiJarakTitle)
+    TextView tvEstimasiJarakTitle;
     public static final String INTENT_DATA = "datajob3";
     public static final String PREVIEW_ONLY = "justpreview";
     Pref pref;
@@ -193,6 +194,8 @@ public class ActivityProsesFrom4To7 extends BaseActivity {
 
 
                     if(realJob.getJobDeliverStatus() == 14){
+
+                        tvEstimasiJarakTitle.setText("Jarak tempuh");
                         tvEstimasiWaktuTitle.setText("Durasi job");
                         tvEstimasiWaktu.setText(MyTimeUtil.minToStringDuration(realJob.getTotaldurasi()));
                         tvTanggal.setText(realJob.getJob_arrivalmuat());

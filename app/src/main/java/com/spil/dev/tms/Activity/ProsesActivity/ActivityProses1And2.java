@@ -74,7 +74,8 @@ public class ActivityProses1And2 extends BaseActivity {
     TextView tv3;
     @BindView(R.id.tvEstimasiWaktuTitle)
     TextView tvEstimasiWaktuTitle;
-
+    @BindView(R.id.tvEstimasiJarakTitle)
+    TextView tvEstimasiJarakTitle;
     ContainerAdapter adapter;
 
     public static final String INTENT_DATA = "datajob1-2";
@@ -212,6 +213,7 @@ public class ActivityProses1And2 extends BaseActivity {
                     tvTanggal.setText(realJob.parsedPickupDate());
 
                     if(realJob.getJobDeliverStatus() == 14){
+                        tvEstimasiJarakTitle.setText("Jarak tempuh");
                         tvEstimasiWaktuTitle.setText("Durasi job");
                         tvEstimasiWaktu.setText(MyTimeUtil.minToStringDuration(realJob.getTotaldurasi()));
                         tvTanggal.setText(realJob.getJob_arrivalmuat());

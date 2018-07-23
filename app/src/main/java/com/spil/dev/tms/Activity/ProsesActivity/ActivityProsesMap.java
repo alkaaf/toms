@@ -48,6 +48,7 @@ import com.spil.dev.tms.Activity.Model.KendaraanModel;
 import com.spil.dev.tms.Activity.Model.RealJob;
 import com.spil.dev.tms.Activity.Model.RouteModel;
 import com.spil.dev.tms.Activity.Model.SimpleJob;
+import com.spil.dev.tms.Activity.Util.DistanceMatrix;
 import com.spil.dev.tms.Activity.Util.Haversine;
 import com.spil.dev.tms.Activity.Util.Netter;
 import com.spil.dev.tms.Activity.Util.Pref;
@@ -190,11 +191,17 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         }
     }
 
+    long lastTimeDistanceUpdate = 0;
+    static final long TIME_DISTANCE_UPDATE_DELAY = 5L * 1000L;
     BroadcastReceiver br = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(LocationBroadcaster.LOCATION_BROADCAST_ACTION)) {
                 setUpLocation((Location) intent.getParcelableExtra(LocationBroadcaster.LOCATION_DATA));
+                if (realJob != null && System.currentTimeMillis() - lastTimeDistanceUpdate > TIME_DISTANCE_UPDATE_DELAY) {
+                    // update the distance
+                    updateTimeDistance();
+                }
             }
         }
     };
@@ -217,6 +224,18 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
     boolean isFinishOpt = false;
 
     boolean job123;
+
+    public void updateTimeDistance() {
+        DistanceMatrix.get(location.getLatitude(), location.getLongitude(), nextTargetLat, nextTargetLng, new DistanceMatrix.DistanceResult() {
+            @Override
+            public void onResult(String status, String distanceText, long distanceMeter, String durationText, long durationMin) {
+                if(status.equals("OK")){
+                    tvDistance.setText(distanceText);
+                    tvDuration.setText(durationText);
+                }
+            }
+        });
+    }
 
     public void setNextTarget(double lat, double lng) {
         this.nextTargetLat = lat;
@@ -508,7 +527,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         clearMapElement();
 
 
-        if(realJob.getJobDeliverStatus() > 6){
+        if (realJob.getJobDeliverStatus() > 6) {
             bTolak.setText("Lapor");
             bTolak.setOnClickListener(new View.OnClickListener() {
                 @Override

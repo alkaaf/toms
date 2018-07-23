@@ -72,6 +72,8 @@ public class ActivityProsesMoreThan8 extends BaseActivity {
     Button bTolak;
     @BindView(R.id.tvEstimasiWaktuTitle)
     TextView tvEstimasiWaktuTitle;
+    @BindView(R.id.tvEstimasiJarakTitle)
+    TextView tvEstimasiJarakTitle;
 
     public static final String INTENT_DATA = "datajob3";
     public static final String PREVIEW_ONLY = "justpreview";
@@ -195,7 +197,9 @@ public class ActivityProsesMoreThan8 extends BaseActivity {
                     tvEstimasiJarak.setText(realJob.getJobDeliverDistancetext());
                     tvTanggal.setText(realJob.parsedPickupDate());
 
-                    if(realJob.getJobDeliverStatus() == 14){
+                    if (realJob.getJobDeliverStatus() == 14) {
+
+                        tvEstimasiJarakTitle.setText("Jarak tempuh");
                         tvEstimasiWaktuTitle.setText("Durasi job");
                         tvEstimasiWaktu.setText(MyTimeUtil.minToStringDuration(realJob.getTotaldurasi()));
                         tvTanggal.setText(realJob.getJob_arrivalmuat());
@@ -205,7 +209,7 @@ public class ActivityProsesMoreThan8 extends BaseActivity {
                     tvOrderId.setText(realJob.getOrderId());
 
                     tvPickup.setText(realJob.getJobPickupName());
-                    if(realJob.getDetailkontainer().isEmpty()){
+                    if (realJob.getDetailkontainer().isEmpty()) {
                         tvDeliver.setVisibility(View.GONE);
                         tvReturn.setVisibility(View.GONE);
                     }
