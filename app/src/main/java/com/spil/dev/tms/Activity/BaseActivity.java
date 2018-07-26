@@ -1,6 +1,7 @@
 package com.spil.dev.tms.Activity;
 
 import android.Manifest;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -39,6 +40,9 @@ public class BaseActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             UserData d = intent.getParcelableExtra(STTLOGIN);
             if (d != null && !d.sttlogin) {
+                NotificationManager nm = ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE));
+                if (nm != null)
+                    nm.cancelAll();
                 logout();
             }
         }

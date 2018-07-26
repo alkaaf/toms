@@ -16,9 +16,9 @@ import java.util.Map;
 
 public class Netter {
     //    public static final String WS_ADDR = "http://manajemenkendaraan.com/tms2/";
-    public static final String WS_ADDR = "http://toms.app-spil.com/";
-    public static final String BYAMIK = "byamik.asp";
-    public static final String WS = "webservice.asp";
+    public static final String WS_ADDR = "http://dmas.app-spil.com/toms/api/mobile/";
+    public static final String BYAMIK = "";
+    public static final String WS = "";
     Context context;
 
     public enum Byamik {
