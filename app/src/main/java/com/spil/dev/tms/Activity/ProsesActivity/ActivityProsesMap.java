@@ -1131,12 +1131,12 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             }
             case 5: {
                 if (status == 7 && !isFinishFirst) showUploadPrompt(REQ_FIRST);
-                if (status == 10 && !isFinishSecond) showUploadPrompt(REQ_SECOND);
+//                if (status == 10 && !isFinishSecond) showUploadPrompt(REQ_SECOND);
                 break;
             }
             case 6: {
                 if (status == 7 && !isFinishFirst) showUploadPrompt(REQ_FIRST);
-                if (status == 10 && !isFinishSecond) showUploadPrompt(REQ_SECOND);
+//                if (status == 10 && !isFinishSecond) showUploadPrompt(REQ_SECOND);
                 break;
             }
             case 8: {

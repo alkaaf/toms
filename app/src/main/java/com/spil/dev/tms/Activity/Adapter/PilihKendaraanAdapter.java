@@ -167,8 +167,8 @@ public class PilihKendaraanAdapter extends RecyclerView.Adapter<PilihKendaraanAd
                     }), Netter.Webservice.POSTPILIHKENDARAAN, new StringHashMap().putMore("id_kendaraan",
                             kendaraan.getIdKendaraan())
                             .putMore("id_driver", driverModel.getIdDriver())
-                            .putMore("lat", location.getLatitude())
-                            .putMore("lng", location.getLongitude()));
+                            .putMore("lat", location == null ? 0.0 : location.getLatitude())
+                            .putMore("lng", location == null ? 0.0 : location.getLongitude()));
                 }
             });
 
