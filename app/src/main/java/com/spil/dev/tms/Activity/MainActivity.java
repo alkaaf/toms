@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,6 +28,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.spil.dev.tms.Activity.Controller.AuthController;
 import com.spil.dev.tms.Activity.Controller.GoogleController;
 import com.spil.dev.tms.Activity.Fragment.BerandaFragment;
@@ -217,45 +220,57 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
 
     }
 
-    private void signIn(String email, String password, String token) {
-        StringHashMap shm = new StringHashMap()
-                .putMore("email", email)
-                .putMore("password", password)
-                .putMore("tokenreg", token);
-        new Netter(this).byAmik(Request.Method.POST, new Response.Listener<String>() {
+    private void signIn(final String email, final String password, final String token) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            toast("Harak aktifkan GPS anda");
+            return;
+        }
+        LocationServices.getFusedLocationProviderClient(this).getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
-            public void onResponse(String response) {
-                progressDialog.dismiss();
-                try {
-                    JSONObject obj = new JSONObject(response);
-                    int status = obj.getInt("status");
-                    String message = obj.getString("message");
-                    toast(message);
-                    if (status == 200) {
-                        String token = obj.getString("token");
-                        // save login data
-                        DriverModel driver = new Gson().fromJson(obj.getString("data"), DriverModel.class);
-                        driver.setToken(token);
-                        new Pref(MainActivity.this).putModelDriver(driver);
-                        startActivity(new Intent(MainActivity.this, PilihKendaraanActivity.class));
-                        finish();
-                    } else if (status == 101) {
-                        new AlertDialog.Builder(MainActivity.this).setTitle("Kesalahan login")
-                                .setMessage("Anda belum terdaftar dalam sistem. Harap hubungi administrator anda")
-                                .setPositiveButton("Ok", null)
-                                .show();
+            public void onSuccess(Location location) {
+                StringHashMap shm = new StringHashMap()
+                        .putMore("email", email)
+                        .putMore("password", password)
+                        .putMore("tokenreg", token)
+                        .putMore("lat", location.getLatitude())
+                        .putMore("lng", location.getLongitude());
+                new Netter(MainActivity.this).byAmik(Request.Method.POST, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        progressDialog.dismiss();
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            int status = obj.getInt("status");
+                            String message = obj.getString("message");
+                            toast(message);
+                            if (status == 200) {
+                                String token = obj.getString("token");
+                                // save login data
+                                DriverModel driver = new Gson().fromJson(obj.getString("data"), DriverModel.class);
+                                driver.setToken(token);
+                                new Pref(MainActivity.this).putModelDriver(driver);
+                                startActivity(new Intent(MainActivity.this, PilihKendaraanActivity.class));
+                                finish();
+                            } else if (status == 101) {
+                                new AlertDialog.Builder(MainActivity.this).setTitle("Kesalahan login")
+                                        .setMessage("Anda belum terdaftar dalam sistem. Harap hubungi administrator anda")
+                                        .setPositiveButton("Ok", null)
+                                        .show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                }, Netter.getDefaultErrorListener(MainActivity.this, new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                    }
+                }), Netter.Byamik.LOGINAPP, shm);
+                //        queue.add(new StringRequest());
             }
-        }, Netter.getDefaultErrorListener(this, new Runnable() {
-            @Override
-            public void run() {
-                progressDialog.dismiss();
-            }
-        }), Netter.Byamik.LOGINAPP, shm);
-        //        queue.add(new StringRequest());
+        });
+
     }
 
 
