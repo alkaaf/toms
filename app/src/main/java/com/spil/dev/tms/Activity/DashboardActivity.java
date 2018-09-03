@@ -223,7 +223,7 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
         kendaraanModel = pref.getKendaraan();
         filter = new IntentFilter(LocationBroadcaster.LOCATION_BROADCAST_ACTION);
 
-        if (getSupportActionBar() != null) {
+        if (getSupportActionBar() != null && driverModel != null && kendaraanModel != null) {
             getSupportActionBar().setSubtitle(driverModel.getUsername() + " | " + kendaraanModel.getIdNopol());
             getSupportActionBar().setElevation(0);
         }
@@ -334,7 +334,6 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
     }
 
 
-
     @Override
     public void onStart() {
         super.onStart();
@@ -349,9 +348,9 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
 
         if (!TextUtils.isEmpty(driverModel.getLastChangePassword())) {
             long lastChange = DF.parse(driverModel.getLastChangePassword()).getTime();
-            Log.i("DATE_NOW" ,""+ System.currentTimeMillis());
-            Log.i("DATE_LAST" ,""+ (lastChange));
-            Log.i("DATE_Should_EXP" ,""+ (lastChange + FORCE_CHANGE_PASS_THRESHOLD));
+            Log.i("DATE_NOW", "" + System.currentTimeMillis());
+            Log.i("DATE_LAST", "" + (lastChange));
+            Log.i("DATE_Should_EXP", "" + (lastChange + FORCE_CHANGE_PASS_THRESHOLD));
 
             if (lastChange + FORCE_CHANGE_PASS_THRESHOLD <= System.currentTimeMillis()) {
                 View vPass = LayoutInflater.from(this).inflate(R.layout.alert_change_password, null, false);

@@ -232,8 +232,12 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
                         .putMore("email", email)
                         .putMore("password", password)
                         .putMore("tokenreg", token)
-                        .putMore("lat", location.getLatitude())
-                        .putMore("lng", location.getLongitude());
+                        .putMore("lat", "")
+                        .putMore("lng", "");
+                if (location != null) {
+                    shm.putMore("lat", location.getLatitude())
+                            .putMore("lng", location.getLongitude());
+                }
                 new Netter(MainActivity.this).byAmik(Request.Method.POST, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
