@@ -13,8 +13,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.spil.dev.tms.Activity.Maps.LocationBroadcaster;
 import com.spil.dev.tms.Activity.Model.UserData;
 import com.spil.dev.tms.Activity.Util.Pref;
 import com.spil.dev.tms.App;
@@ -61,6 +63,9 @@ public class BaseActivity extends AppCompatActivity {
         super.onStart();
         registerReceiver(br, filter);
         App.blocker(this);
+
+        startService(new Intent(this, LocationBroadcaster.class));
+
     }
 
     @Override
@@ -82,6 +87,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED

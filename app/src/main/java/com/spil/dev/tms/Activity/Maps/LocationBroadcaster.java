@@ -73,52 +73,31 @@ public class LocationBroadcaster extends Service {
                 final double distance = Haversine.calculate(lastKnown, location);
                 long delta = System.currentTimeMillis() - lastUpdate;
                 Log.i("MIN_DISTANCE", "distance " + distance);
-                if ((distance >= SEND_MIN_DISTANCE || delta >= SEND_MIN_MILLIS) && driverModel!=null) {
+                if ((distance >= SEND_MIN_DISTANCE || delta >= SEND_MIN_MILLIS) && driverModel != null) {
 //                    if (location.getProvider().equalsIgnoreCase("gps")) {
-                        new Netter(this).webService(Request.Method.POST, new Response.Listener<String>() {
-                                    @Override
-                                    public void onResponse(String response) {
-                                        try {
-                                            JSONObject obj = new JSONObject(response);
-                                            if (obj.getInt("status") == 200) {
-                                                lastKnown = location;
-                                                lastUpdate = System.currentTimeMillis();
-                                            }
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
+                    new Netter(this).webService(Request.Method.POST, new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    try {
+                                        JSONObject obj = new JSONObject(response);
+                                        if (obj.getInt("status") == 200) {
+                                            lastKnown = location;
+                                            lastUpdate = System.currentTimeMillis();
                                         }
-                                        Log.e("UPDATE_LOC", response+" with distance "+distance);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
-                                }, Netter.getSilentErrorListener(this, null), Netter.Webservice.UPDATELOKASIDRIVER,
-                                new StringHashMap().putMore("idkendaraan", kendaraanModel.getIdKendaraan())
-                                        .putMore("email", driverModel.getEmail())
-                                        .putMore("lat", Double.toString(getLocation().getLatitude()))
-                                        .putMore("lng", Double.toString(getLocation().getLongitude()))
-                                        .putMore("jaraktempuh", distance)
-                        );
-//                        new Netter(this).webService(Request.Method.POST, new Response.Listener<String>() {
-//                                    @Override
-//                                    public void onResponse(String response) {
-//                                        try {
-//                                            JSONObject obj = new JSONObject(response);
-//                                            if (obj.getInt("status") == 200) {
-//                                                lastKnown = location;
-//                                                lastUpdate = System.currentTimeMillis();
-//                                            }
-//                                        } catch (JSONException e) {
-//                                            e.printStackTrace();
-//                                        }
-//                                        Log.e("UPDATE_LOC_DISTANCE", response+" with distance");
-//                                    }
-//                                }, Netter.getSilentErrorListener(this, null), Netter.Webservice.UPDATELOKASIDRIVERWITHDISTANCE,
-//                                new StringHashMap().putMore("idkendaraan", kendaraanModel.getIdKendaraan())
-//                                        .putMore("email", driverModel.getEmail())
-//                                        .putMore("lat", Double.toString(getLocation().getLatitude()))
-//                                        .putMore("lng", Double.toString(getLocation().getLongitude()))
-//                                        .putMore("jaraktempuh", distance)
-//                        );
-                    }
-//                }
+                                    Log.e("UPDATE_LOC", response + " with distance " + distance);
+                                }
+                            }, Netter.getSilentErrorListener(this, null), Netter.Webservice.UPDATELOKASIDRIVER,
+                            new StringHashMap().putMore("idkendaraan", kendaraanModel.getIdKendaraan())
+                                    .putMore("email", driverModel.getEmail())
+                                    .putMore("lat", Double.toString(getLocation().getLatitude()))
+                                    .putMore("lng", Double.toString(getLocation().getLongitude()))
+                                    .putMore("jaraktempuh", distance)
+                                    .putMore("provider", getLocation().getProvider())
+                    );
+                }
             } else {
                 lastKnown = location;
                 lastUpdate = System.currentTimeMillis();

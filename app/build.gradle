@@ -9,6 +9,7 @@ buildscript {
         classpath 'io.fabric.tools:gradle:1.+'
     }
 }
+
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
@@ -24,8 +25,8 @@ android {
         applicationId "com.spil.dev.tms"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 39
-        versionName "1.8.163"
+        versionCode 40
+        versionName "1.9.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
