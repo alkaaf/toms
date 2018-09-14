@@ -287,7 +287,8 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
 
         // Handle notification
         final String id = getIntent().getStringExtra(FcmMessagingService.INTENT_ID_DATA);
-        if (id != null) {
+        String type = getIntent().getStringExtra(FcmMessagingService.NOTIF_TYPE);
+        if (id != null && type.equals("blast")) {
             if (selectedFragment != null && selectedFragment instanceof BerandaFragment) {
                 ((BerandaFragment) selectedFragment).fetchDashboard();
 //                ((BerandaFragment) selectedFragment).fetchListJob();

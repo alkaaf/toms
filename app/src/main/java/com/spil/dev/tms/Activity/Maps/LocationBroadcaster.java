@@ -49,7 +49,7 @@ public class LocationBroadcaster extends Service {
     private static final float LOCATION_DISTANCE = 0;
 
     private static final double SEND_MIN_DISTANCE = 40;
-    private static final double SEND_MIN_MILLIS = 60000;
+    private static final double SEND_MIN_MILLIS = 40000;
 
     public static final String LOCATION_DATA = "location_Data";
     public static final String LOCATION_BROADCAST_ACTION = "location.broadcast.action";

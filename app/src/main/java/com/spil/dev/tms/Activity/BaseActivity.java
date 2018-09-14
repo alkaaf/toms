@@ -27,6 +27,7 @@ public class BaseActivity extends AppCompatActivity {
     private int PERM_REQ;
     IntentFilter filter;
     public static final String ACTION_GO_LOGOUT = "lougto kono";
+    public static final String ACTION_GO_LOGOUT2 = "lougto kono cuk";
     public static final String STTLOGIN = "userdata";
 
     public void toast(String msg) {
@@ -40,11 +41,15 @@ public class BaseActivity extends AppCompatActivity {
     BroadcastReceiver br = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            UserData d = intent.getParcelableExtra(STTLOGIN);
-            if (d != null && !d.sttlogin) {
-                NotificationManager nm = ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE));
-                if (nm != null)
-                    nm.cancelAll();
+            if(intent.getAction().equals(ACTION_GO_LOGOUT)) {
+                UserData d = intent.getParcelableExtra(STTLOGIN);
+                if (d != null && !d.sttlogin) {
+                    NotificationManager nm = ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE));
+                    if (nm != null)
+                        nm.cancelAll();
+                    logout();
+                }
+            } else if(intent.getAction().equals(ACTION_GO_LOGOUT2)){
                 logout();
             }
         }
@@ -63,8 +68,6 @@ public class BaseActivity extends AppCompatActivity {
         super.onStart();
         registerReceiver(br, filter);
         App.blocker(this);
-
-        startService(new Intent(this, LocationBroadcaster.class));
 
     }
 
