@@ -64,13 +64,6 @@ public class App extends Application {
                                 Intent intentLogout = new Intent(BaseActivity.ACTION_GO_LOGOUT);
                                 intentLogout.putExtra(BaseActivity.STTLOGIN, ud);
                                 sendBroadcast(intentLogout);
-//                                if (ud.sttlogin) {
-//                                    // logged in, do nothing
-//                                    Log.i("SESSION_VALID", "TRUE");
-//                                } else {
-//                                    Intent intentLogout = new Intent(BaseActivity.ACTION_GO_LOGOUT);
-//                                    sendBroadcast(intentLogout);
-//                                }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

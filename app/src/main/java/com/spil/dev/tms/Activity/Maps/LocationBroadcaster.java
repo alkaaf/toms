@@ -1,6 +1,7 @@
 package com.spil.dev.tms.Activity.Maps;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -49,7 +50,7 @@ public class LocationBroadcaster extends Service {
     private static final float LOCATION_DISTANCE = 0;
 
     private static final double SEND_MIN_DISTANCE = 40;
-    private static final double SEND_MIN_MILLIS = 60000;
+    private static final double SEND_MIN_MILLIS = 40000;
 
     public static final String LOCATION_DATA = "location_Data";
     public static final String LOCATION_BROADCAST_ACTION = "location.broadcast.action";
@@ -70,54 +71,33 @@ public class LocationBroadcaster extends Service {
         if (driverModel != null) {
             if (lastKnown != null && lastUpdate != 0) {
                 // check the distance
-                double distance = Haversine.calculate(lastKnown, location);
+                final double distance = Haversine.calculate(lastKnown, location);
                 long delta = System.currentTimeMillis() - lastUpdate;
                 Log.i("MIN_DISTANCE", "distance " + distance);
-                if (distance >= SEND_MIN_DISTANCE /*|| delta >= SEND_MIN_MILLIS*/) {
-                    if (location.getProvider().equalsIgnoreCase("gps")) {
-                        new Netter(this).webService(Request.Method.POST, new Response.Listener<String>() {
-                                    @Override
-                                    public void onResponse(String response) {
-                                        try {
-                                            JSONObject obj = new JSONObject(response);
-                                            if (obj.getInt("status") == 200) {
-                                                lastKnown = location;
-                                                lastUpdate = System.currentTimeMillis();
-                                            }
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
+                if ((distance >= SEND_MIN_DISTANCE || delta >= SEND_MIN_MILLIS) && driverModel != null) {
+//                    if (location.getProvider().equalsIgnoreCase("gps")) {
+                    new Netter(this).webService(Request.Method.POST, new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    try {
+                                        JSONObject obj = new JSONObject(response);
+                                        if (obj.getInt("status") == 200) {
+                                            lastKnown = location;
+                                            lastUpdate = System.currentTimeMillis();
                                         }
-                                        Log.e("UPDATE_LOC", response);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
-                                }, Netter.getSilentErrorListener(this, null), Netter.Webservice.UPDATELOKASIDRIVER,
-                                new StringHashMap().putMore("idkendaraan", kendaraanModel.getIdKendaraan())
-                                        .putMore("email", driverModel.getEmail())
-                                        .putMore("lat", Double.toString(getLocation().getLatitude()))
-                                        .putMore("lng", Double.toString(getLocation().getLongitude()))
-                                        .putMore("jaraktempuh", distance)
-                        );
-                        new Netter(this).webService(Request.Method.POST, new Response.Listener<String>() {
-                                    @Override
-                                    public void onResponse(String response) {
-                                        try {
-                                            JSONObject obj = new JSONObject(response);
-                                            if (obj.getInt("status") == 200) {
-                                                lastKnown = location;
-                                                lastUpdate = System.currentTimeMillis();
-                                            }
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                        Log.e("UPDATE_LOC_DISTANCE", response);
-                                    }
-                                }, Netter.getSilentErrorListener(this, null), Netter.Webservice.UPDATELOKASIDRIVERWITHDISTANCE,
-                                new StringHashMap().putMore("idkendaraan", kendaraanModel.getIdKendaraan())
-                                        .putMore("email", driverModel.getEmail())
-                                        .putMore("lat", Double.toString(getLocation().getLatitude()))
-                                        .putMore("lng", Double.toString(getLocation().getLongitude()))
-                                        .putMore("jaraktempuh", distance)
-                        );
-                    }
+                                    Log.e("UPDATE_LOC", response + " with distance " + distance);
+                                }
+                            }, Netter.getSilentErrorListener(this, null), Netter.Webservice.UPDATELOKASIDRIVER,
+                            new StringHashMap().putMore("idkendaraan", kendaraanModel.getIdKendaraan())
+                                    .putMore("email", driverModel.getEmail())
+                                    .putMore("lat", Double.toString(getLocation().getLatitude()))
+                                    .putMore("lng", Double.toString(getLocation().getLongitude()))
+                                    .putMore("jaraktempuh", distance)
+                                    .putMore("provider", getLocation().getProvider())
+                    );
                 }
             } else {
                 lastKnown = location;
@@ -173,29 +153,14 @@ public class LocationBroadcaster extends Service {
         return null;
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "onStartCommand");
         super.onStartCommand(intent, flags, startId);
         initializeLocationManager();
-        try {
-            locationManager.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
-                    mLocationListener[1]);
-        } catch (java.lang.SecurityException ex) {
-            Log.i(TAG, "fail to request location update, ignore", ex);
-        } catch (IllegalArgumentException ex) {
-            Log.d(TAG, "network provider does not exist, " + ex.getMessage());
-        }
-        try {
-            locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
-                    mLocationListener[0]);
-        } catch (java.lang.SecurityException ex) {
-            Log.i(TAG, "fail to request location update, ignore", ex);
-        } catch (IllegalArgumentException ex) {
-            Log.d(TAG, "gps provider does not exist " + ex.getMessage());
-        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,                mLocationListener[0]);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,                mLocationListener[1]);
         return START_STICKY;
     }
 

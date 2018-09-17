@@ -1,19 +1,26 @@
 package com.spil.dev.tms.Activity;
 
 import android.Manifest;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+import com.spil.dev.tms.Activity.Maps.LocationBroadcaster;
 import com.spil.dev.tms.Activity.Model.UserData;
 import com.spil.dev.tms.Activity.Util.Pref;
 import com.spil.dev.tms.App;
@@ -24,6 +31,7 @@ public class BaseActivity extends AppCompatActivity {
     private int PERM_REQ;
     IntentFilter filter;
     public static final String ACTION_GO_LOGOUT = "lougto kono";
+    public static final String ACTION_GO_LOGOUT2 = "lougto kono cuk";
     public static final String STTLOGIN = "userdata";
 
     public void toast(String msg) {
@@ -37,8 +45,15 @@ public class BaseActivity extends AppCompatActivity {
     BroadcastReceiver br = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            UserData d = intent.getParcelableExtra(STTLOGIN);
-            if (d != null && !d.sttlogin) {
+            if (intent.getAction().equals(ACTION_GO_LOGOUT)) {
+                UserData d = intent.getParcelableExtra(STTLOGIN);
+                if (d != null && !d.sttlogin) {
+                    NotificationManager nm = ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE));
+                    if (nm != null)
+                        nm.cancelAll();
+                    logout();
+                }
+            } else if (intent.getAction().equals(ACTION_GO_LOGOUT2)) {
                 logout();
             }
         }
@@ -78,6 +93,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
@@ -86,6 +102,11 @@ public class BaseActivity extends AppCompatActivity {
         }
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         filter = new IntentFilter(ACTION_GO_LOGOUT);
+        LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        boolean statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if(!statusOfGPS){
+            startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+        }
     }
 
     @Override

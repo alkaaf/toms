@@ -345,7 +345,7 @@ public class RealJob implements Parcelable {
         s.put(7, "KIRIM DI PABRIK");
         s.put(8, "SAMPAI DI PABRIK");
         s.put(9, "MULAI BONGKAR");
-        s.put(9, "SELESAI BONGKAR");
+        s.put(10, "SELESAI BONGKAR");
         if (statusKontainerStatus() >= 1) {
             s.put(11, "SELESAI ORDER");
             s.put(14, "TUTUP");

@@ -229,7 +229,7 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         DistanceMatrix.get(location.getLatitude(), location.getLongitude(), nextTargetLat, nextTargetLng, new DistanceMatrix.DistanceResult() {
             @Override
             public void onResult(String status, String distanceText, long distanceMeter, String durationText, long durationMin) {
-                if(status.equals("OK")){
+                if (status.equals("OK")) {
                     tvDistance.setText(distanceText);
                     tvDuration.setText(durationText);
                 }
@@ -1009,7 +1009,8 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
         LocationServices.getFusedLocationProviderClient(this).getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15f));
+                if (location != null)
+                    gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15f));
             }
         });
 
@@ -1130,12 +1131,12 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
             }
             case 5: {
                 if (status == 7 && !isFinishFirst) showUploadPrompt(REQ_FIRST);
-                if (status == 10 && !isFinishSecond) showUploadPrompt(REQ_SECOND);
+//                if (status == 10 && !isFinishSecond) showUploadPrompt(REQ_SECOND);
                 break;
             }
             case 6: {
                 if (status == 7 && !isFinishFirst) showUploadPrompt(REQ_FIRST);
-                if (status == 10 && !isFinishSecond) showUploadPrompt(REQ_SECOND);
+//                if (status == 10 && !isFinishSecond) showUploadPrompt(REQ_SECOND);
                 break;
             }
             case 8: {
