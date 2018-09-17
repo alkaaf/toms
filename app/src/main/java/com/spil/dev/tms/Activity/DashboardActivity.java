@@ -241,8 +241,7 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
         startService(intent);
 
 
-        BottomNavigationView bottomNavigationView = (BottomNavigationView)
-                findViewById(R.id.navigation);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.navigation);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -516,8 +515,7 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
                             public void onClick(
                                     @SuppressWarnings("unused") final DialogInterface dialog,
                                     @SuppressWarnings("unused") final int id) {
-                                startActivity(new Intent(
-                                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                                startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                             }
                         })
                 .setNegativeButton("Cancel",

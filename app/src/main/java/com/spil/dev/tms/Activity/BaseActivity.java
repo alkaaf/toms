@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,6 +17,9 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.spil.dev.tms.Activity.Maps.LocationBroadcaster;
 import com.spil.dev.tms.Activity.Model.UserData;
 import com.spil.dev.tms.Activity.Util.Pref;
@@ -41,7 +45,7 @@ public class BaseActivity extends AppCompatActivity {
     BroadcastReceiver br = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals(ACTION_GO_LOGOUT)) {
+            if (intent.getAction().equals(ACTION_GO_LOGOUT)) {
                 UserData d = intent.getParcelableExtra(STTLOGIN);
                 if (d != null && !d.sttlogin) {
                     NotificationManager nm = ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE));
@@ -49,7 +53,7 @@ public class BaseActivity extends AppCompatActivity {
                         nm.cancelAll();
                     logout();
                 }
-            } else if(intent.getAction().equals(ACTION_GO_LOGOUT2)){
+            } else if (intent.getAction().equals(ACTION_GO_LOGOUT2)) {
                 logout();
             }
         }
@@ -68,7 +72,6 @@ public class BaseActivity extends AppCompatActivity {
         super.onStart();
         registerReceiver(br, filter);
         App.blocker(this);
-
     }
 
     @Override
@@ -99,6 +102,11 @@ public class BaseActivity extends AppCompatActivity {
         }
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         filter = new IntentFilter(ACTION_GO_LOGOUT);
+        LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        boolean statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if(!statusOfGPS){
+            startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+        }
     }
 
     @Override
