@@ -65,6 +65,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Alat berat rusak" />
+        <RadioButton
+            android:id="@+id/rb8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Driver sakit" />
+        <RadioButton
+            android:id="@+id/rb9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kendaraan rusak" />
+        <RadioButton
+            android:id="@+id/rb10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Terlibat kecelakaan" />
 
     </RadioGroup>
 

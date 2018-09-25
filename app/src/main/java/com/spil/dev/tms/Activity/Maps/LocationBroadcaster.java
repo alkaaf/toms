@@ -1,24 +1,21 @@
 package com.spil.dev.tms.Activity.Maps;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
 import com.spil.dev.tms.Activity.ActivitySplash;
 import com.spil.dev.tms.Activity.MainActivity;
 import com.spil.dev.tms.Activity.Model.DriverModel;
@@ -28,15 +25,9 @@ import com.spil.dev.tms.Activity.Util.Netter;
 import com.spil.dev.tms.Activity.Util.Pref;
 import com.spil.dev.tms.Activity.Util.StringHashMap;
 import com.spil.dev.tms.R;
-import com.android.volley.Request;
-import com.android.volley.Response;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by andresual on 2/24/2018.
@@ -49,8 +40,8 @@ public class LocationBroadcaster extends Service {
     private static final int LOCATION_INTERVAL = 0;
     private static final float LOCATION_DISTANCE = 0;
 
-    private static final double SEND_MIN_DISTANCE = 40;
-    private static final double SEND_MIN_MILLIS = 40000;
+    private static final double SEND_MIN_DISTANCE = 30;
+    private static final double SEND_MIN_MILLIS = 30000;
 
     public static final String LOCATION_DATA = "location_Data";
     public static final String LOCATION_BROADCAST_ACTION = "location.broadcast.action";
@@ -159,8 +150,9 @@ public class LocationBroadcaster extends Service {
         Log.i(TAG, "onStartCommand");
         super.onStartCommand(intent, flags, startId);
         initializeLocationManager();
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,                mLocationListener[0]);
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,                mLocationListener[1]);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE, mLocationListener[0]);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE, mLocationListener[1]);
+        startForeground(256, getForegroundNotif());
         return START_STICKY;
     }
 
@@ -191,5 +183,19 @@ public class LocationBroadcaster extends Service {
         if (locationManager == null) {
             locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         }
+    }
+
+    public Notification getForegroundNotif() {
+        Intent notificationIntent = new Intent(this, ActivitySplash.class);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+                notificationIntent, 0);
+        return new NotificationCompat.Builder(this,"chanel")
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("TomS Driver")
+                .setContentText("TomS Driver sedang berjalan")
+                .setAutoCancel(false)
+                .setContentIntent(pendingIntent)
+                .build();
     }
 }

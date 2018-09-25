@@ -13,10 +13,10 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:padding="16dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="16dp">
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
@@ -92,54 +92,54 @@
                             android:id="@+id/rb1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:layout_weight="1"
-                            android:checked="true"
                             android:text="Alat Rusak" />
 
                         <RadioButton
                             android:id="@+id/rb2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginTop="10dp"
-
                             android:text="Macet" />
 
                         <RadioButton
                             android:id="@+id/rb3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginTop="10dp"
-
                             android:text="Demo" />
 
                         <RadioButton
                             android:id="@+id/rb4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginTop="10dp"
-
                             android:text="Banjir" />
 
                         <RadioButton
                             android:id="@+id/rb5"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginTop="10dp"
-
                             android:text="Tidak ada operator" />
 
+                        <RadioButton
+                            android:id="@+id/rb8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Driver sakit" />
+
+                        <RadioButton
+                            android:id="@+id/rb9"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Kendaraan rusak" />
+
+                        <RadioButton
+                            android:id="@+id/rb10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Terlibat kecelakaan" />
 
                         <RadioButton
                             android:id="@+id/rb6"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginTop="10dp"
 
                             android:text="Alasan Lainnya" />
 
@@ -158,11 +158,12 @@
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
+
             <Button
-                android:layout_marginTop="16dp"
                 android:id="@+id/btn_kirim_laporan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:backgroundTint="@color/colorPrimary"
                 android:text="Kirim Laporan"
                 android:textColor="#fff"
@@ -172,7 +173,4 @@
 
         </LinearLayout>
     </ScrollView>
-
-
-
 </android.support.constraint.ConstraintLayout>
