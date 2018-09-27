@@ -187,7 +187,6 @@ public class DashboardActivity extends BaseActivity /*implements*/ {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         mContext = this;
-        toast(Netter.WS_ADDR);
         mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
                 .enableAutoManage(this, 34992, new GoogleApiClient.OnConnectionFailedListener() {

@@ -55,6 +55,8 @@ public class BaseActivity extends AppCompatActivity {
                 }
             } else if (intent.getAction().equals(ACTION_GO_LOGOUT2)) {
                 logout();
+            } else if(intent.getAction().equals(Intent.ACTION_TIME_TICK)){
+                App.blocker(BaseActivity.this);
             }
         }
     };
@@ -102,6 +104,7 @@ public class BaseActivity extends AppCompatActivity {
         }
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         filter = new IntentFilter(ACTION_GO_LOGOUT);
+        filter.addAction(Intent.ACTION_TIME_TICK);
         LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if(!statusOfGPS){
