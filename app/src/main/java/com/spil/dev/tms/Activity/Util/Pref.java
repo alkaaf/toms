@@ -27,8 +27,8 @@ public class Pref {
         return sp;
     }
 
-    public static SharedPreferences instance() {
-        return new Pref(App.getContext()).getSp();
+    public static Pref instance() {
+        return new Pref(App.getContext());
     }
 
     public void putModelDriver(DriverModel driverModel) {

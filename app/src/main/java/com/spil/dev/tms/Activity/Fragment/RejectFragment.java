@@ -50,6 +50,7 @@ public class RejectFragment extends Fragment {
     RadioGroup rg2;
     RadioButton rbDepo;
     RadioButton rbDermaga;
+    RadioButton rbKendaraan;
     EditText etAlasan;
     Button btnKirimLaporan;
     TextView tvTarget;
@@ -107,6 +108,7 @@ public class RejectFragment extends Fragment {
         rg2 = view.findViewById(R.id.rg2);
         rbDepo = view.findViewById(R.id.rb_depo);
         rbDermaga = view.findViewById(R.id.rb_dermaga);
+        rbKendaraan = view.findViewById(R.id.rbKendaraan);
         tvTarget = view.findViewById(R.id.tv_target);
         etAlasan = view.findViewById(R.id.et_alasan);
         btnKirimLaporan = view.findViewById(R.id.btn_kirim_laporan);
@@ -186,7 +188,7 @@ public class RejectFragment extends Fragment {
         return view;
     }
 
-    public void resetUI(){
+    public void resetUI() {
         rg1.clearCheck();
         rg2.clearCheck();
         map.remove("tipelokasi");
@@ -216,6 +218,10 @@ public class RejectFragment extends Fragment {
     }
 
     public void kirimLaporan() {
+        if (rbKendaraan.isChecked() && Pref.instance().getKendaraan() != null) {
+            map.putMore("idkendaraan", Pref.instance().getKendaraan().getIdKendaraan());
+        }
+
         if (loc != null) {
             map.putMore("latitude", Double.toString(loc.getLatitude()));
             map.putMore("longitude", Double.toString(loc.getLongitude()));
@@ -262,7 +268,7 @@ public class RejectFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.action_list_report){
+        if (item.getItemId() == R.id.action_list_report) {
             startActivity(new Intent(getContext(), ReportListActivity.class));
         }
         return super.onOptionsItemSelected(item);

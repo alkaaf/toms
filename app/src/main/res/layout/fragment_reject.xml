@@ -42,7 +42,6 @@
                             android:id="@+id/rb_depo"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="20dp"
                             android:gravity="center"
                             android:text="Depo" />
 
@@ -50,8 +49,15 @@
                             android:id="@+id/rb_dermaga"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
+                            android:layout_marginLeft="10dp"
                             android:text="Dermaga" />
+
+                        <RadioButton
+                            android:id="@+id/rbKendaraan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:text="Kendaraan" />
                     </RadioGroup>
 
                     <TextView
@@ -152,9 +158,7 @@
                         android:ems="10"
                         android:inputType="textMultiLine"
                         android:visibility="gone"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/radioGroup"
-                        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+                        app:layout_constraintEnd_toEndOf="parent" />
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>

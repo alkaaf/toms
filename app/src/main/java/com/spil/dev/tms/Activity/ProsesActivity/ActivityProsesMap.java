@@ -232,9 +232,24 @@ public class ActivityProsesMap extends BaseActivity implements OnMapReadyCallbac
                 if (status.equals("OK")) {
                     tvDistance.setText(distanceText);
                     tvDuration.setText(durationText);
+                    if(simpleJob!=null){
+                        sendEstimate(durationMin);
+                    }
                 }
             }
         });
+    }
+
+    public void sendEstimate(long estimate) {
+        new Netter(this).webService(Request.Method.POST, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                    }
+                }, Netter.getSilentErrorListener(this, null), Netter.Webservice.SEND_TIME_ESTIMATE, new StringHashMap()
+                        .putMore("idjob", simpleJob.getJobId().toString())
+                        .putMore("waktu", Long.toString(estimate))
+        );
     }
 
     public void setNextTarget(double lat, double lng) {

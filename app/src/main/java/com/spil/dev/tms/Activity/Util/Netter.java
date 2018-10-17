@@ -39,6 +39,8 @@ public class Netter {
     }
 
     public enum Webservice {
+        SEND_TIME_ESTIMATE("estimasi_job"),
+
         JOB_ACCEPT("acceptjob"),
         JOB_PICKUP("pickupjob"),
         JOB_READYJOB("readyjob"),
