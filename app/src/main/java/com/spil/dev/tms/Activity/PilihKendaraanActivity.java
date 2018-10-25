@@ -73,11 +73,15 @@ public class PilihKendaraanActivity extends BaseActivity {
 
 
         driverModel = pref.getDriverModel();
-        fetchKendaraan();
+        if(driverModel!=null) {
+            fetchKendaraan();
+        }
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetchKendaraan();
+                if(driverModel!=null) {
+                    fetchKendaraan();
+                }
             }
         });
 

@@ -86,10 +86,10 @@
 
                         <TextView
                             android:id="@+id/tvOrderId"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:layout_toEndOf="@+id/tt"
+                            android:layout_below="@+id/tt"
+                            android:layout_alignParentStart="true"
                             android:text="-"
                             android:textColor="@color/colorPrimary"
                             android:textStyle="bold" />

@@ -91,12 +91,6 @@ public class ActivitySplash extends BaseActivity {
                                             finish();
                                         }
                                     })
-                                    .setNegativeButton("nanti", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            sessionCheck();
-                                        }
-                                    })
                                     .show();
                         } else {
                             tvUpdate.setText("Poof!");

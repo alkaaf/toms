@@ -12,7 +12,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
@@ -118,6 +120,15 @@ public class App extends Application {
             }
         }
     };
+
+    static RequestQueue rq = null;
+
+    public static RequestQueue getRequestQueueInstance() {
+        if (rq == null) {
+            rq = Volley.newRequestQueue(context);
+        }
+        return rq;
+    }
 
     @Override
     public void onCreate() {

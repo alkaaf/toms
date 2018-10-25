@@ -11,6 +11,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.spil.dev.tms.App;
 
 import java.util.Map;
 
@@ -85,7 +86,7 @@ public class Netter {
 
     public void byAmik(int method, Response.Listener<String> listener, Response.ErrorListener errorListener, Byamik func, final StringHashMap param) {
         if (context != null) {
-            RequestQueue queue = Volley.newRequestQueue(context);
+            RequestQueue queue = App.getRequestQueueInstance();
             param.putMore("f", func.func);
 
             queue.add(new StringRequest(method, WS_ADDR + BYAMIK, listener, errorListener) {
@@ -99,7 +100,7 @@ public class Netter {
 
     public void webService(int method, Response.Listener<String> listener, Response.ErrorListener errorListener, Webservice func, final StringHashMap param) {
         if (context != null) {
-            RequestQueue queue = Volley.newRequestQueue(context);
+            RequestQueue queue = App.getRequestQueueInstance();
             param.putMore("f", func.func);
             queue.add(new StringRequest(method, WS_ADDR + WS, listener, errorListener) {
                 @Override
